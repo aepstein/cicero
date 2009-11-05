@@ -1,0 +1,10 @@
+<h2>Listing ballots for <%=h @election %> election</h2>
+
+<table>
+<%= render :partial => 'ballot', :collection => @election.ballots %>
+</table>
+
+<br />
+
+<%= link_to( 'New ballot',
+            new_election_ballot_path( @election ) ) %>

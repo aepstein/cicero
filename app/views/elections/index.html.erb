@@ -1,0 +1,14 @@
+<h2>Listing elections</h2>
+
+<% if @elections.empty? %>
+<em>No elections to display.</em>
+<% else %>
+<ul>
+<%= render :partial => 'election',
+           :collection => @elections %>
+</ul>
+<% end %>
+
+<br />
+
+<%= link_to 'New election', new_election_path %>

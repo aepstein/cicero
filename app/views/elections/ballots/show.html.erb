@@ -1,0 +1,33 @@
+<h2>Ballot of <%=h @ballot.user.name %> for <%=h @ballot.election.name %></h2>
+
+<p><em>General instructions:</em></p>
+
+<p>
+Below you may select and rank candidates for each race in this election.  You are not required to 
+fill out the ballot completely before you cast it, but you may not change your votes after you have 
+cast your ballot.  When you have completed steps below to your satisfaction, please click 
+the following to proceed:
+</p>
+
+<p>
+<%= link_to( 'I have finished making changes and would like to review and cast my ballot.',
+             confirm_election_ballot_path(@ballot.election, @ballot) ) %>
+</p>
+
+<%= render :partial => 'race',
+           :collection => @ballot.election.races.open_to( current_user ),
+           :locals => { :ballot => @ballot } %>
+
+<p>
+If you are ready to review and cast your ballot, please click the following link to proceed:
+</p>
+
+<p>
+<%= link_to( 'I have finished making changes and would like to review and cast my ballot.',
+             confirm_election_ballot_path(@ballot.election, @ballot) ) %>
+</p>
+
+<hr/>
+
+<%= link_to 'Edit', edit_election_ballot_path(@ballot.election, @ballot) %> |
+<%= link_to 'Back', election_ballots_path( @ballot.election ) %>

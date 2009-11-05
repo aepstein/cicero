@@ -1,0 +1,28 @@
+<%- if candidate.may_user?(current_user, :index) -%>
+  <tr>
+    <td><%= link_to 'Edit', edit_election_race_candidate_path(candidate.race.election,
+                                                              candidate.race,
+                                                              candidate) %></td>
+    <td><%= link_to 'Destroy',
+                    election_race_candidate_path(candidate.race.election,
+                                                 candidate.race,
+                                                 candidate),
+                                                 :confirm => 'Are you sure?',
+                                                 :method => :delete %></td>
+<td>
+<%= image_tag( election_race_candidate_path( candidate.race.election,
+                                             candidate.race,
+                                             candidate,
+                                             { :format => :jpg, :size => :thumb } ),
+               :alt => "Picture of #{candidate.name}" ) %>
+<%- if candidate.may_user?(current_user, :show) -%>
+<%= link_to( candidate.name,
+             election_race_candidate_path( candidate.race.election,
+                                           candidate.race,
+                                           candidate ) ) %>
+<%- else -%>
+<%=h candidate.name %>
+<%- end -%>
+</td>
+</tr>
+<%- end -%>

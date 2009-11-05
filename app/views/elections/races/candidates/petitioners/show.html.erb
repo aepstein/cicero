@@ -1,0 +1,20 @@
+<p>
+  <b>Candidate:</b>
+  <%=h @petitioner.candidate_id %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%=h @petitioner.user_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_election_race_candidate_petitioner_path(
+                      @petitioner.candidate.race.election,
+                      @petitioner.candidate.race,
+                      @petitioner.candidate,
+                      @petitioner ) %> |
+<%= link_to 'Back', election_race_candidate_petitioners_path(
+                      @petitioner.candidate.race.election,
+                      @petitioner.candidate.race,
+                      @petitioner.candidate ) %>

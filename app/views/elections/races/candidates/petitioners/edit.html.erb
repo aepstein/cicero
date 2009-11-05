@@ -1,0 +1,22 @@
+<h2>Editing petitioner for <%= @petitioner.candidate %></h2>
+
+<% form_for(@petitioner) do |f| %>
+  <%= f.error_messages %>
+
+<%= render :partial => 'form',
+           :locals => { :f => f } %>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', election_race_candidate_petitioner_path(
+                      @petitioner.candidate.race.election,
+                      @petitioner.candidate.race,
+                      @petitioner.candidate,
+                      @petitioner ) %> |
+<%= link_to 'Back', election_race_candidate_petitioners_path(
+                      @petitioner.candidate.race.election,
+                      @petitioner.candidate.race,
+                      @petitioner.candidate ) %>

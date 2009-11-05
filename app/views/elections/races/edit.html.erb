@@ -1,0 +1,19 @@
+<h2>Editing <%=h @race.name %> for <%=h @race.election.name %> election</h2>
+
+<%= error_messages_for :race %>
+
+<% form_for( :race,
+             @race,
+             :url => election_race_url(@race.election, @race),
+             :html => { :method => :put } ) do |f| %>
+
+<%= render :partial => 'form',
+           :locals => { :f => f } %> 
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+<hr/>
+<%= link_to 'Show', election_race_path(@race.election, @race) %> |
+<%= link_to 'Back', election_races_path(@race.election) %>

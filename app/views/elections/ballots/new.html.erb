@@ -1,0 +1,19 @@
+<h2>Ballot of <%=h @ballot.user %> for <%=h @ballot.election %> election</h2>
+
+<%= error_messages_for :ballot %>
+
+<% form_for( :ballot,
+             @ballot,
+             :url => confirm_new_election_ballots_url( @ballot.election ),
+             :html => { :method => :post } ) do |f| %>
+<% fields_for :choices, @ballot.choices do |choices| %>
+<%= render :partial => 'elections/ballots/set',
+           :collection => @ballot.election.races.sort,
+           :locals => { :ballot => @ballot, :choices => choices } %>
+<% end %>
+  <p>
+    <%= f.submit "Check and confirm my ballot" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', election_ballots_path( @ballot.election ) %>

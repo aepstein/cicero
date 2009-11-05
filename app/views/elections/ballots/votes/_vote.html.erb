@@ -1,0 +1,23 @@
+<%- if vote.may_user?(current_user,:index) -%>
+<li id="vote_<%=vote.id%>">
+<%= link_to( image_tag("action_delete.png", :alt => 'Delete'),
+             election_ballot_vote_path(vote.ballot.election, vote.ballot, vote),
+             { :method => :delete,
+               :confirm => "Are you sure you want to remove #{vote}?" }
+           ) if vote.may_user?(current_user,:delete) && !(lock) %> 
+<% if vote.candidate.race.is_ranked? && vote.may_user?(current_user,:update) %>
+<%= link_to( image_tag("arrow_top.png", :alt => 'Up'),
+             up_election_ballot_vote_path(vote.ballot.election, vote.ballot, vote),
+             { :method => :put } ) unless vote.first? || lock %>
+<%= link_to( image_tag("arrow_down.png", :alt => 'Down'),
+             down_election_ballot_vote_path(vote.ballot.election, vote.ballot, vote),
+             { :method => :put } ) unless vote.last? || lock %>
+<% end %>
+<%= image_tag( election_race_candidate_path( vote.candidate.race.election,
+                                             vote.candidate.race,
+                                             vote.candidate,
+                                             { :format => :jpg, :size => :thumb } ),
+               :align => :center ) %>
+<%=h vote.candidate.name %>
+</li>
+<%- end -%>

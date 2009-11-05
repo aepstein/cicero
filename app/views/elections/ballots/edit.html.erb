@@ -1,0 +1,23 @@
+<h2>Ballot of <%=h @ballot.user %> for <%=h @ballot.election %> election</h2>
+
+<%= error_messages_for :ballot %>
+
+<% form_for( :ballot,
+             @ballot,
+             :url => confirm_new_election_ballot_url( @ballot.election, @ballot ),
+             :html => { :method => :post } ) do |f| %>
+<% if @ballot.warnings.size > 0 %>
+<div class="warnings">
+<ul>
+<%= render :partial => 'warning',
+           :collection => @ballot.warnings %>
+</ul>
+</div>
+<% end %>
+<%= render :partial => 'elections/ballots/set',
+           :collection => @ballot.allowed_races.sort,
+           :locals => { :ballot => @ballot } %>
+  <p>
+    <%= f.submit "Check and confirm my ballot" %>
+  </p>
+<% end %>

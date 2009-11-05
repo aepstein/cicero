@@ -1,0 +1,24 @@
+<h1>Listing tallies</h1>
+
+<table>
+  <tr>
+    <th>Round</th>
+    <th>Candidate</th>
+    <th>Tally</th>
+  </tr>
+
+<% for tally in @tallies %>
+  <tr>
+    <td><%=h tally.round_id %></td>
+    <td><%=h tally.candidate_id %></td>
+    <td><%=h tally.tally %></td>
+    <td><%= link_to 'Show', tally %></td>
+    <td><%= link_to 'Edit', edit_tally_path(tally) %></td>
+    <td><%= link_to 'Destroy', tally, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New tally', new_tally_path %>

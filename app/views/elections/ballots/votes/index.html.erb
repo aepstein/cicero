@@ -1,0 +1,24 @@
+<h2>Listing votes for <%=h @ballot %></h2>
+
+<table>
+  <tr>
+    <th>Ballot</th>
+    <th>Candidate</th>
+    <th>Rank</th>
+  </tr>
+
+<% for vote in @votes %>
+  <tr>
+    <td><%=h vote.ballot_id %></td>
+    <td><%=h vote.candidate_id %></td>
+    <td><%=h vote.rank %></td>
+    <td><%= link_to 'Show', vote %></td>
+    <td><%= link_to 'Edit', edit_vote_path(vote) %></td>
+    <td><%= link_to 'Destroy', vote, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New vote', new_vote_path %>

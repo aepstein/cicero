@@ -1,0 +1,31 @@
+<h2>Confirm ballot of <%=h @ballot.user.name %> for <%=h @ballot.election.name %></h2>
+
+<p>
+Please review the ballot below to assure it correctly reflects your preferences for the election.  
+When you have finished please click the link at the end to cast your ballot.  You may not review or
+further modify your ballot after you have confirmed.
+</p>
+
+<% form_for( :ballot,
+             @ballot,
+             :url => election_ballot_url( @ballot.election, @ballot ),
+             :html => { :method => :put } ) do |f| %>
+<% if @ballot.warnings.size > 0 %>
+<div class="warnings">
+<ul>
+<%= render :partial => 'warning',
+           :collection => @ballot.warnings %>
+</ul>
+</div>
+<% end %>
+<%= render :partial => 'set',
+           :collection => @ballot.allowed_races,
+           :locals => { :ballot => @ballot } %>
+<p>
+Please indicate whether you would like to cast your ballot or go back and make more changes.
+</p>
+
+<%= f.submit 'Cast my vote' %><br/>
+<%= f.submit 'Let me make more changes' %><br/>
+
+<% end %>

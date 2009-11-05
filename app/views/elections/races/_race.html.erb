@@ -1,0 +1,39 @@
+<h3><%= link_to( race.name,
+                     election_race_path(race.election, race)
+                   ) if race.may_user?(current_user, :show) %>
+    (<%=h race.slots%> slots
+    <% if race.is_ranked? %>
+    -- ranked)
+    <% else %>
+    -- unranked)
+    <% end %>
+</h3>
+<p>
+<% if race.may_user?(current_user, :update) %>
+<%= link_to( 'Edit',
+             edit_election_race_path(
+               race.election,
+               race )
+            ) %>
+<br/>
+<% end %>
+<% if race.may_user?(current_user, :delete) %>
+<%= link_to( 'Destroy',
+             election_race_path(race.election, race),
+             :confirm => 'Are you sure?',
+             :method => :delete 
+            )  %>
+<% end %>
+</p>
+<% if (race.rounds.size > 0) && (race.rounds.first.may_user?(current_user,:show) )  %>
+<% if race.candidates.disqualified.size > 0 %>
+<p>The following candidates were disqualified:</p>
+<ul>
+<% race.candidates.disqualified.each do |candidate| %>
+<li><%= candidate.name %></li>
+<% end %>
+</ul>
+<% end %>
+<%= render :partial => 'elections/races/rounds/results',
+           :locals => { :race => race } %>
+<% end %>

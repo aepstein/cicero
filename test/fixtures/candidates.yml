@@ -1,0 +1,50 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+#one:
+#  race_id: 1
+#  name: MyString
+
+alpha:
+  race: ranked
+  name: A - Alpha Jones
+
+beta:
+  race: ranked
+  name: B - Beta Doe
+
+apple:
+  race: unranked
+  name: Apple
+  
+pear:
+  race: unranked
+  name: Pear
+  
+potato:
+  race: vegetable
+  name: Potato
+
+celeriac:
+  race: vegetable
+  name: Celeriac
+
+turnip:
+  race: vegetable
+  name: Turnip
+
+beet:
+  race: vegetable
+  name: Beet
+
+yam:
+  race: vegetable
+  name: Yam
+
+taro:
+  race: vegetable
+  name: Taro Root
+
+carrot:
+  race: vegetable
+  name: Carrot
+  

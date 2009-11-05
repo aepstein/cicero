@@ -1,0 +1,15 @@
+<h2>Verification of submitted ballot</h2>
+
+<p>
+You, <%=h @ballot.user.name %>, successfully cast this ballot in the <%=h @ballot.election %> election on 
+<%=h @ballot.cast_at.strftime('%x at %X') %>.  If you have questions or need further assistance, please email 
+<%=mail_to @ballot.election.contact_email, @ballot.election.contact_name %>.
+</p>
+
+<%=markdown @ballot.election.contact_info %>
+
+<%=markdown @ballot.election.verify_message %>
+
+<p>
+<%= link_to 'Back to my elections', my_elections_path %>
+</p>

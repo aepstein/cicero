@@ -1,0 +1,44 @@
+<p>
+  <b>Race:</b>
+  <%=h @candidate.race_id %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%=h @candidate.name %>
+</p>
+
+<p>
+  <b>Statement:</b>
+</p>
+
+<%=markdown @candidate.statement %>
+
+<p>
+  <b>Linked candidate:</b>
+  <% if @candidate.linked_candidate.nil? %>
+  <em>No linked candidate.</em>
+  <% else %>
+  A vote cast for <em><%= @candidate.linked_candidate.name %></em> will cause a vote to be cast for
+  this candidate.
+  <% end %>
+</p>
+
+<p>
+  <b>Disqualified?</b><br/>
+  <% if @candidate.disqualified? %>
+  Yes
+  <% else %>
+  No
+  <% end %>
+</p>
+
+<p>
+<%= link_to( 'Edit',
+             edit_election_race_candidate_path( @candidate.race.election,
+                                                @candidate.race,
+                                                @candidate )
+           ) + " | " if @candidate.may_user?(current_user,:update) %>
+<%= link_to 'Back', election_race_candidates_path( @candidate.race.election,
+                                                   @candidate.race ) %>
+</p>

@@ -1,0 +1,24 @@
+<h2>New petitioner for <%= @petitioner.candidate %></h2>
+
+<% form_for( :petitioner,
+             @petitioner,
+             :url => election_race_candidate_petitioners_url( 
+               @petitioner.candidate.race.election,
+               @petitioner.candidate.race,
+               @petitioner.candidate ),
+             :html => { :method => :post } ) do |f| %>
+  <%= f.error_messages %>
+
+<%= render :partial => 'form',
+           :locals => { :f => f, :race => @petitioner.candidate.race } %>
+
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', election_race_candidate_petitioners_path(
+                      @petitioner.candidate.race.election,
+                      @petitioner.candidate.race,
+                      @petitioner.candidate
+) %>

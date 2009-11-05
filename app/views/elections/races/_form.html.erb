@@ -1,0 +1,20 @@
+  <p>
+    <b>Name</b><br />
+    <%= f.text_field :name %>
+  </p>
+
+  <p>
+    <b>Slots</b><br />
+    <%= f.text_field :slots %>
+  </p>
+
+  <p>
+    <b>Check here if candidates should be ranked on ballot.</b><br/>
+    <%= f.check_box :is_ranked %>
+  </p>
+  
+  <p>
+  	<b>Voter roll</b><br />
+	<%= f.select :roll_id, f.object.election.rolls.collect { |r| [r.name, r.id] } %>
+  </p>
+  

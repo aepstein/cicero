@@ -1,0 +1,29 @@
+<h2>Listing current elections for <%=h current_user.name %></h2>
+
+<% if @elections.empty? %>
+<p>
+<em>There are no elections remaining for you to vote in at this time.</em>
+</p>
+<% else %>
+<p>
+Please select the election in which you would like to vote.  You will proceed to a ballot.
+</p>
+<ul>
+<%= render :partial => 'my_election',
+           :collection => @elections %>
+</ul>
+<% end %>
+
+<% if current_user.elections.current_closed.size > 0 %>
+<p>
+According to our records, you have voted in <%= pluralize(current_user.ballots.cast.size,'election') %>.
+<%- if current_user.elections.current_closed.size > 0 -%>
+You voted in:
+<%- end -%>
+</p>
+
+<ul>
+<%= render :partial => 'ballot',
+           :collection => current_user.ballots.cast %>
+</ul>
+<% end %>

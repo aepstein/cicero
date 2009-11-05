@@ -1,0 +1,55 @@
+<h3><%=h set.name %></h3>
+
+<% if ballot.warnings[set] %>
+<div class="warnings">
+<strong>Please note these warnings</strong>
+<ul>
+<% ballot.warnings[set].each do |warning| %>
+<li><%=h warning %></li>
+<% end %>
+</ul>
+</div>
+<% end %>
+
+<%if ballot.frozen? %>
+
+<%if set.is_ranked? %>
+<ol>
+<% else %>
+<ul>
+<%end%>
+
+<%= render( :partial => 'elections/ballots/choice',
+            :collection => ballot.votes.for_race(set).sort ) %>
+
+<%if set.is_ranked? %>
+</ol>
+<% else %>
+</ul>
+<%end%>
+
+<% else %>
+
+<p><em>Instructions for this race:</em></p>
+
+<% if set.is_ranked? %>
+<p>
+Please rank <u>all</u> candidates in your order of preference.
+Using the drop down menu next to each option, select "1" for your most preferred choice, "2" for your second most preferred, and so on. 
+If you choose not to include a candidate at all it means you would rather have your vote not
+count than have it count for that candidate.
+</p>
+
+<% else %>
+<p>
+Please select the candidates you would like to elect for this race.  
+You may choose up to <%=h set.available_slots %>.
+</p>
+<% end %>
+
+<ul>
+<%= render( :partial => 'elections/ballots/option',
+            :collection => ballot.votes.for_race(set).sort ) %>
+</ul>
+
+<% end %>

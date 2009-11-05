@@ -1,0 +1,37 @@
+<h2>Listing users</h2>
+
+<p>
+	<%= form_tag users_path, :method => :get %>
+	Search: <%= text_field_tag :search, @search %>
+	<%= submit_tag "Go" %>
+</p>
+
+<br/>
+
+<table>
+  <tr>
+    <th>Net Id</th>
+    <th>First name</th>
+    <th>Last name</th>
+  </tr>
+
+<% for user in @users %>
+  <tr>
+    <td><%=h user.net_id %></td>
+    <td><%=h user.first_name %></td>
+    <td><%=h user.last_name %></td>
+    <td><%= link_to 'Show', user %></td>
+    <td><%= link_to 'Edit', edit_user_path(user) %></td>
+    <td><%= link_to 'Destroy', user, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= will_paginate @users %>
+
+<p>
+<%= link_to 'New user', new_user_path %>
+</p>
+

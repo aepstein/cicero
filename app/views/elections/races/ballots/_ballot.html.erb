@@ -1,0 +1,16 @@
+<%- if ballot.may_user?(current_user, :index) -%>
+  <tr>
+    <td><%= link_to( 'Edit',
+                     edit_election_ballot_path(
+                       ballot.election,
+                       ballot) ) if ballot.may_user?(current_user,:update) %></td>
+    <td><%= link_to( 'Destroy',
+                    election_ballot_path( ballot.election, ballot ),
+                    :confirm => 'Are you sure?',
+                    :method => :delete ) if ballot.may_user?(current_user, :delete) %></td>
+    <td><%= link_to( ballot.user,
+                     election_ballot_path(
+                       ballot.election,
+                       ballot) ) if ballot.may_user?(current_user, :show) %></td>
+  </tr>
+<%- end -%>

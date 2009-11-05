@@ -1,0 +1,63 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+xyz1:
+  net_id: xyz1
+  email: xyz1@example.com
+  first_name: Test
+  last_name: Person
+  
+abc1:
+  net_id: abc1
+  email: xyz1@example.com
+  first_name: Alpha
+  last_name: Bet
+
+admin:
+  net_id: adm1
+  email: xyz1@example.com
+  first_name: An
+  last_name: Administrator
+  admin: true
+
+voter1:
+  net_id: vot1
+  email: xyz1@example.com
+  first_name: First
+  last_name: Voter
+
+voter2:
+  net_id: vot2
+  email: xyz1@example.com
+  first_name: Second
+  last_name: Voter
+
+voter3:
+  net_id: vot3
+  email: xyz1@example.com
+  first_name: Third
+  last_name: Voter
+
+voter4:
+  net_id: vot4
+  email: xyz1@example.com
+  first_name: Fourth
+  last_name: Voter
+
+voter5:
+  net_id: vot5
+  email: xyz1@example.com
+  first_name: Fifth
+  last_name: Voter
+
+voter6:
+  net_id: vot6
+  email: xyz1@example.com
+  first_name: Sixth
+  last_name: Voter
+
+voter7:
+  net_id: vot7
+  email: xyz1@example.com
+  first_name: Seventh
+  last_name: Voter
+

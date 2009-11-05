@@ -1,0 +1,18 @@
+<h2>New roll</h2>
+
+<% form_for(:roll,
+            @roll,
+            :url => election_rolls_url(@roll.election),
+            :html => { :method => :post } ) do |f| %>
+
+<%= render :partial => 'form',
+           :locals => { :f => f } %>
+
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<p>
+<%= link_to 'Back', election_rolls_path(@roll.election) %>
+</p>

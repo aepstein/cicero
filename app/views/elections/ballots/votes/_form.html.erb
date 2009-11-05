@@ -1,0 +1,7 @@
+<%= hidden_field_tag 'race_id', race.id %>
+<strong>Add your vote for a candidate:</strong>
+<%= collection_select( :vote,
+                       :candidate_id,
+                       race.candidates.open_to(user),
+                       :id,
+                       :name ) %>

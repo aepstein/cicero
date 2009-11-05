@@ -1,0 +1,38 @@
+<p>
+  <b>Net Id:</b>
+  <%=h @user.net_id %>
+</p>
+
+<p>
+	<strong>Email:</strong>
+	<%=h @user.email %>
+</p>
+
+<p>
+  <b>First name:</b>
+  <%=h @user.first_name %>
+</p>
+
+<p>
+  <b>Last name:</b>
+  <%=h @user.last_name %>
+</p>
+
+
+<h3>Allowed elections</h3>
+
+  <% Election.allowable(:include => :rolls, :order => 'rolls.name ASC').each do |election| %>
+  <% if @user.rolls.for_election(election).size > 0 %>
+  <h4><%=h election.name %></h4>
+      <ul>
+      <% @user.rolls.for_election(election).each do |roll| %>
+      <li><%=h roll.name %></li>
+      <% end %>
+      </ul>
+  <% end %>
+  <% end %>
+  
+<p>
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Back', users_path %>
+</p>

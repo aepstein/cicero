@@ -1,0 +1,19 @@
+<h2>Listing candidates for <%=h @race %> race in <%=h @race.election %> election</h2>
+
+<table>
+<%= render :partial => 'candidate',
+           :collection => @candidates %>
+</table>
+
+<br />
+<p>
+<%= link_to "New candidate for #{@race} race in #{@race.election}",
+            new_election_race_candidate_path( @race.election,
+                                              @race ) %>
+</p>
+<hr/>
+<p>
+Back to: 
+<%= link_to "#{@race} race", election_race_path( @race.election, @race ) %> | 
+<%= link_to "#{@race.election} election", election_path( @race.election ) %>
+</p>

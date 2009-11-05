@@ -1,0 +1,39 @@
+<h2>Listing petitioners for <%= @candidate %></h2>
+
+<table>
+  <tr>
+    <th>User</th>
+  </tr>
+
+<% for petitioner in @petitioners %>
+  <tr>
+    <td><%=h petitioner.user %></td>
+    <td><%= link_to 'Show',
+                    election_race_candidate_petitioner_path(
+                      petitioner.candidate.race.election,
+                      petitioner.candidate.race,
+                      petitioner.candidate,
+                      petitioner ) %></td>
+    <td><%= link_to 'Edit', edit_election_race_candidate_petitioner_path(
+                              petitioner.candidate.race.election,
+                              petitioner.candidate.race,
+                              petitioner.candidate,
+                              petitioner ) %></td>
+    <td><%= link_to 'Destroy',
+                    election_race_candidate_petitioner_path(
+                      petitioner.candidate.race.election,
+                      petitioner.candidate.race,
+                      petitioner.candidate,
+                      petitioner ),
+                    :confirm => 'Are you sure?',
+                    :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New petitioner',
+            new_election_race_candidate_petitioner_path( @candidate.race.election,
+                                                         @candidate.race,
+                                                         @candidate ) %>

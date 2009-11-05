@@ -1,0 +1,13 @@
+  <p>
+    <%= f.label :net_id %><br/>
+    <%= text_field_with_auto_complete :petitioner,
+                                      :net_id,
+                                      { :size => 15 },
+                                      { :url => election_roll_users_path(
+                                                  race.election,
+                                                  race.roll,
+                                                  { :format => :js }
+                                                ),
+                                        :method => :get,
+                                        :with => "'search=' + element.value" } %>
+  </p>

@@ -1,0 +1,28 @@
+<h2>Confirm ballot of <%=h @ballot.user.name %> for <%=h @ballot.election.name %></h2>
+
+<p>
+Please review the ballot below to assure it correctly reflects your preferences for the election.  
+When you have finished please click the link at the end to cast your ballot.  You may not review or
+further modify your ballot after you have confirmed.
+</p>
+
+<%= render :partial => 'race',
+           :collection => @ballot.election.races.open_to( current_user ),
+           :locals => { :ballot => @ballot } %>
+
+<p>
+Please indicate whether you would like to cast your ballot or go back and make more changes.
+</p>
+
+<p>
+<%= link_to( 'This ballot reflects my preferences, please cast my votes.',
+             cast_election_ballot_path(@ballot.election, @ballot, { :confirmed_at => Time.now }),
+             { :method => :post } ) %>
+<br/>
+<%= link_to( 'I want to make more changes, please let me edit the ballot again.',
+             election_ballot_path(@ballot.election, @ballot) ) %>
+</p>
+<hr/>
+
+<%= link_to 'Edit', edit_election_ballot_path(@ballot.election, @ballot) %> |
+<%= link_to 'Back', election_ballots_path( @ballot.election ) %>

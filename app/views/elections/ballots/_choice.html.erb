@@ -1,0 +1,6 @@
+<li>
+<% fields_for( "vote_#{choice.candidate_id}", choice ) do |choice_fields| %>
+<%= choice.candidate %>
+<%= choice_fields.hidden_field :rank %>
+<% end %>
+</li>

@@ -1,0 +1,19 @@
+<p>
+  <b>Election:</b>
+  <%=h @roll.election_id %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%=h @roll.name %>
+</p>
+
+<h3>Add users to roll</h3>
+
+<%= render :partial => 'elections/rolls/users/form',
+           :locals => { :roll => @roll } %>
+
+<p>
+<%= link_to 'Edit', edit_election_roll_path(@roll.election, @roll) %> |
+<%= link_to 'Back', election_rolls_path(@roll.election) %>
+</p>

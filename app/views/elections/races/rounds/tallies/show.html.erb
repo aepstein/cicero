@@ -1,0 +1,18 @@
+<p>
+  <b>Round:</b>
+  <%=h @tally.round_id %>
+</p>
+
+<p>
+  <b>Candidate:</b>
+  <%=h @tally.candidate_id %>
+</p>
+
+<p>
+  <b>Tally:</b>
+  <%=h @tally.tally %>
+</p>
+
+
+<%= link_to 'Edit', edit_tally_path(@tally) %> |
+<%= link_to 'Back', tallies_path %>
