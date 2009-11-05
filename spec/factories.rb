@@ -9,3 +9,9 @@ Factory.define :election do |f|
   f.contact_info "Additional contact information"
 end
 
+Factory.define :race do |f|
+  f.association :election
+  f.association :roll
+  f.sequence(:name) { |n| "Race #{n}" }
+end
+
