@@ -1,6 +1,6 @@
 class Election < ActiveRecord::Base
   named_scope :allowable, lambda { { :conditions => [ 'elections.voting_ends_at > ?', DateTime.now ] } }
-  
+
   has_many :rolls, :include => [:races], :order => :name, :dependent => :destroy
   has_many :races, :include => [:candidates, :roll], :order => :name, :dependent => :destroy do
     def open_to(user)
@@ -29,32 +29,23 @@ class Election < ActiveRecord::Base
       )
     end
     def cast_size
-      @cast_size ||= Ballot.count( 
+      @cast_size ||= Ballot.count(
         :conditions => "election_id = #{proxy_owner.id} AND cast_at IS NOT NULL"
       )
     end
   end
   has_many :candidates, :through => :races
-  
+
   validates_presence_of :name
-  validates_presence_of :voting_starts_at
-  validates_presence_of :voting_ends_at
+  validates_datetime :voting_starts_at, :before => :voting_ends_at
+  validates_datetime :voting_ends_at, :before => :results_available_at
   validates_presence_of :results_available_at
   validates_uniqueness_of :name
-  validates_each :voting_ends_at, :allow_nil => true do |record, attr, value|
-    unless record.voting_starts_at.nil? || record.voting_starts_at < value
-      record.errors.add( attr, "must occur after voting starts" )
-    end
-  end
-  validates_each :results_available_at, :allow_nil => true do |record, attr, value|
-    unless record.voting_ends_at.nil? || record.voting_ends_at < value
-      record.errors.add( attr, "must occur after voting ends" )
-    end
-  end
+  validates_presence_of :verify_message
   validates_presence_of :contact_name
   validates_presence_of :contact_info
   validates_format_of :contact_email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :allow_nil => false
-  
+
   # Marks and tabulates votes for all races
   def tabulate
     return false if Time.now < voting_ends_at # TODO is this an appropriate place for this?
@@ -65,7 +56,7 @@ class Election < ActiveRecord::Base
     save
     true
   end
-  
+
   # Scrubs tabulated results and unmarks votes for all races
   def untabulate
     races.each do |race|
@@ -74,15 +65,15 @@ class Election < ActiveRecord::Base
     self.tabulated_at = nil
     save
   end
-  
+
   def past?
     voting_ends_at < DateTime.now
   end
-  
+
   def to_s
     name
   end
-  
+
   def may_user?(user,action)
     case action
       when :create, :update, :delete
@@ -95,3 +86,4 @@ class Election < ActiveRecord::Base
     end
   end
 end
+
