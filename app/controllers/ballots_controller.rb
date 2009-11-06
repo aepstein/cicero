@@ -1,32 +1,25 @@
-class Elections::BallotsController < ApplicationController
+class BallotsController < ApplicationController
   # GET /elections/:election_id/ballots
   # GET /elections/:election_id/ballots.xml
+  # GET /races/:race_id/ballots
+  # GET /races/:race_id/ballots.xml
+  # GET /races/:race_id/ballots.blt
   def index
-    @election = Election.find(params[:election_id])
+    @election = Election.find(params[:election_id]) if params[:election_id]
+    @race = Election.find(params[:race_id]) if params[:race_id]
     raise AuthorizationError unless current_user.admin?
     @ballots = @election.ballots
 
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @ballots }
+      format.blt # index.blt.erb
     end
   end
 
-  # GET /elections/:election_id/ballots/:id
-  # GET /elections/:election_id/ballots/:id.xml
-  def show
-    @ballot = Election.find(params[:election_id]).ballots.find(params[:id])
-    raise AuthorizationError unless @ballot.may_user?(current_user,:show)
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @ballot }
-    end
-  end
-
-  # GET /elections/:election_id/ballots/:id/verify
+  # GET /ballots/:id/verify
   def verify
-    @ballot = Election.find(params[:election_id]).ballots.find(params[:id])
+    @ballot = Ballot.find(params[:id])
     raise AuthorizationError unless @ballot.may_user?(current_user,:verify)
 
     respond_to do |format|
@@ -47,30 +40,22 @@ class Elections::BallotsController < ApplicationController
       format.xml  { render :xml => @ballot }
     end
   end
-  
-  # GET /elections/:election_id/ballots/:id/confirm_new
-  def confirm_new
+
+  # GET /elections/:election_id/ballots/new/confirm
+  def confirm
     @ballot = Election.find(params[:election_id]).ballots.find(params[:id])
     raise AuthorizationError unless @ballot.may_user?(current_user,:update)
     @ballot.choices=(params)
-    
+
     respond_to do |format|
       if @ballot.valid?
         @ballot.freeze
-        format.html # confirm_new.html.erb
+        format.html # confirm.html.erb
       else
         @ballot.initialize_options
         format.html { render :action => 'edit' }
       end
     end
-  end
-
-  # GET /elections/:election_id/ballots/:id/edit
-  def edit
-#    @ballot = Election.find(params[:election_id]).ballots.find(params[:id])
-    @ballot = Ballot.find(params[:id])
-    raise AuthorizationError unless @ballot.may_user?(current_user,:update)
-    @ballot.initialize_options
   end
 
   # POST /elections/:election_id/ballots
@@ -92,33 +77,10 @@ class Elections::BallotsController < ApplicationController
     end
   end
 
-  # PUT /elections/:election_id/ballots/:id
-  # PUT /elections/:election_id/ballots/:id.xml
-  def update
-#    @ballot = Election.find(params[:election_id]).ballots.find(params[:id])
-    @ballot = Ballot.find(params[:id])
-    raise AuthorizationError unless @ballot.may_user?(current_user,:update)
-    @ballot.choices=(params)
-
-    respond_to do |format|
-      @ballot.cast_at = DateTime.now
-      if params[:commit] =~ /^Cast/ && @ballot.save
-        flash[:notice] = 'Ballot was successfully cast.'
-        UserMailer.deliver_ballot_verification(@ballot) unless @ballot.user.email.nil?
-        format.html { redirect_to( verify_election_ballot_url(@ballot.election, @ballot) ) }
-        format.xml  { head :ok }
-      else
-        @ballot.initialize_options
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @ballot.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /elections/:election_id/ballots/:id
-  # DELETE /elections/:election_id/ballots/:id.xml
+  # DELETE /ballots/:id
+  # DELETE /ballots/:id.xml
   def destroy
-    @ballot = Election.find(params[:election_id]).ballots.find(params[:id])
+    @ballot = Ballot.find(params[:id])
     raise AuthorizationError unless @ballot.may_user?(current_user,:delete)
     @ballot.destroy
 
@@ -127,7 +89,7 @@ class Elections::BallotsController < ApplicationController
       format.xml  { head :ok }
     end
   end
-  
+
   # GET /elections/:election_id/ballots/my
   # No XML support
   # Redirect user to own ballot and create ballot for user if one does not already exist
@@ -146,3 +108,4 @@ class Elections::BallotsController < ApplicationController
     end
   end
 end
+

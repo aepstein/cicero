@@ -1,4 +1,4 @@
-class Elections::RollsController < ApplicationController
+class RollsController < ApplicationController
   # GET /elections/:id/rolls
   # GET /elections/:id/rolls.xml
   def index
@@ -11,10 +11,10 @@ class Elections::RollsController < ApplicationController
     end
   end
 
-  # GET /elections/:election_id/rolls/:id
-  # GET /elections/:election_id/rolls/:id.xml
+  # GET /rolls/:id
+  # GET /rolls/:id.xml
   def show
-    @roll = Election.find(params[:election_id]).rolls.find(params[:id])
+    @roll = Roll.find(params[:id])
     raise AuthorizationError unless @roll.may_user?(current_user, :show)
 
     respond_to do |format|
@@ -35,9 +35,9 @@ class Elections::RollsController < ApplicationController
     end
   end
 
-  # GET /elections/:election_id/rolls/1/edit
+  # GET /rolls/1/edit
   def edit
-    @roll = Election.find(params[:election_id]).rolls.find(params[:id])
+    @roll = Roll.find(params[:id])
     raise AuthorizationError unless @roll.may_user?(current_user, :update)
   end
 
@@ -59,10 +59,10 @@ class Elections::RollsController < ApplicationController
     end
   end
 
-  # PUT /elections/:election_id/rolls/1
-  # PUT /elections/:election_id/rolls/1.xml
+  # PUT /rolls/1
+  # PUT /rolls/1.xml
   def update
-    @roll = Election.find(params[:election_id]).rolls.find(params[:id])
+    @roll = Roll.find(params[:id])
     raise AuthorizationError unless @roll.may_user?(current_user, :update)
 
     respond_to do |format|
@@ -77,12 +77,12 @@ class Elections::RollsController < ApplicationController
     end
   end
 
-  # DELETE /elections/:election_id/rolls/1
-  # DELETE /elections/:election_id/rolls/1.xml
+  # DELETE /rolls/1
+  # DELETE /rolls/1.xml
   def destroy
-    @roll = Election.find(params[:election_id]).rolls.find(params[:id])
+    @roll = Roll.find(params[:id])
     raise AuthorizationError unless @roll.may_user?(current_user, :delete)
-    
+
     @roll.destroy
 
     respond_to do |format|
@@ -91,3 +91,4 @@ class Elections::RollsController < ApplicationController
     end
   end
 end
+

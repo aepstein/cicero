@@ -1,8 +1,8 @@
 class Elections::Races::CandidatesController < ApplicationController
-  # GET /elections/:election_id/races/:race_id/candidates
-  # GET /elections/:election_id/races/:race_id/candidates.xml
+  # GET /races/:race_id/candidates
+  # GET /races/:race_id/candidates.xml
   def index
-    @race = Election.find(params[:election_id]).races.find(params[:race_id])
+    @race = Race.find(params[:race_id])
     @candidates = @race.candidates
 
     respond_to do |format|
@@ -11,38 +11,31 @@ class Elections::Races::CandidatesController < ApplicationController
     end
   end
 
-  # GET /elections/:election_id/races/:race_id/candidates/:id
-  # GET /elections/:election_id/races/:race_id/candidates/:id.xml
-  # GET /elections/:election_id/races/:race_id/candidates/:id.jpg
+  # GET /candidates/:id
+  # GET /candidates/:id.xml
   def show
-    @candidate = Election.find(params[:election_id]).races.find(params[:race_id]).candidates.find(params[:id])
+    @candidate = Candidate.find(params[:id])
     raise AuthorizationError unless @candidate.may_user?(current_user,:show)
 
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @candidate }
-      format.jpg do
-        send_file( @candidate.picture_path(params[:size] ? params[:size] : :small),
-                   { :type => 'image/jpeg',
-                     :disposition => 'inline' }
-                 )
-      end
     end
   end
-  
-  # GET /elections/:election_id/races/:race_id/candidates/:id/popup
+
+  # GET /candidates/:id/popup
   def popup
-    @candidate = Election.find(params[:election_id]).races.find(params[:race_id]).candidates.find(params[:id])
+    @candidate = Candidate.find(params[:id])
     raise AuthorizationError unless @candidate.may_user?(current_user,:show)
     respond_to do |format|
       format.html { render :layout => false } # popup.html.erb
     end
   end
 
-  # GET /elections/:election_id/races/:race_id/candidates/new
-  # GET /elections/:election_id/races/:race_id/candidates/new.xml
+  # GET /races/:race_id/candidates/new
+  # GET /races/:race_id/candidates/new.xml
   def new
-    @candidate = Election.find(params[:election_id]).races.find(params[:race_id]).candidates.build
+    @candidate = Race.find(params[:race_id]).candidates.build
     raise AuthorizationError unless @candidate.may_user?(current_user,:create)
 
     respond_to do |format|
@@ -51,16 +44,16 @@ class Elections::Races::CandidatesController < ApplicationController
     end
   end
 
-  # GET /elections/:election_id/races/:race_id/candidates/1/edit
+  # GET /candidates/1/edit
   def edit
-    @candidate = Election.find(params[:election_id]).races.find(params[:race_id]).candidates.find(params[:id])
+    @candidate = Candidate.find(params[:id])
     raise AuthorizationError unless @candidate.may_user?(current_user,:update)
   end
 
-  # POST /elections/:election_id/races/:race_id/candidates
-  # POST /elections/:election_id/races/:race_id/candidates.xml
+  # POST /races/:race_id/candidates
+  # POST /races/:race_id/candidates.xml
   def create
-    @candidate = Election.find(params[:election_id]).races.find(params[:race_id]).candidates.build(params[:candidate])
+    @candidate = Race.find(params[:race_id]).candidates.build(params[:candidate])
     raise AuthorizationError unless @candidate.may_user?(current_user,:create)
 
     respond_to do |format|
@@ -78,8 +71,8 @@ class Elections::Races::CandidatesController < ApplicationController
     end
   end
 
-  # PUT /elections/:election_id/races/:race_id/candidates/1
-  # PUT /elections/:election_id/races/:race_id/candidates/1.xml
+  # PUT /candidates/1
+  # PUT /candidates/1.xml
   def update
     @candidate = Candidate.find(params[:id])
     raise AuthorizationError unless @candidate.may_user?(current_user,:update)
@@ -99,8 +92,8 @@ class Elections::Races::CandidatesController < ApplicationController
     end
   end
 
-  # DELETE /elections/:election_id/races/:race_id/candidates/1
-  # DELETE /elections/:election_id/races/:race_id/candidates/1.xml
+  # DELETE /candidates/1
+  # DELETE /candidates/1.xml
   def destroy
     @candidate = Candidate.find(params[:id])
     raise AuthorizationError unless @candidate.may_user?(current_user,:delete)
@@ -114,3 +107,4 @@ class Elections::Races::CandidatesController < ApplicationController
     end
   end
 end
+

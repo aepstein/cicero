@@ -1,6 +1,6 @@
-class Elections::Races::RoundsController < ApplicationController
-  # GET /elections/:election_id/races/:race_id/rounds
-  # GET /elections/:election_id/races/:race_id/rounds.xml
+class RoundsController < ApplicationController
+  # GET /races/:race_id/rounds
+  # GET /races/:race_id/rounds.xml
   def index
     @race = Election.find(params[:election_id]).races.find(params[:race_id])
     @rounds = @race.rounds
@@ -11,8 +11,8 @@ class Elections::Races::RoundsController < ApplicationController
     end
   end
 
-  # GET /elections/:election_id/races/:race_id/rounds/1
-  # GET /elections/:election_id/races/:race_id/rounds/1.xml
+  # GET /rounds/1
+  # GET /rounds/1.xml
   def show
     @round = Election.find(params[:election_id]).races.find(params[:race_id]).rounds.find(params[:id])
     raise AuthorizationError unless @round.may_user?(current_user,:show)
@@ -23,10 +23,10 @@ class Elections::Races::RoundsController < ApplicationController
     end
   end
 
-  # GET /elections/:election_id/races/:race_id/rounds/new
-  # GET /elections/:election_id/races/:race_id/rounds/new.xml
+  # GET /races/:race_id/rounds/new
+  # GET /races/:race_id/rounds/new.xml
   def new
-    @round = Election.find(params[:election_id]).races.find(params[:race_id]).rounds.build
+    @round = Race.find(params[:race_id]).rounds.build
     raise AuthorizationError unless @round.may_user?(current_user,:create)
 
     respond_to do |format|
@@ -35,14 +35,14 @@ class Elections::Races::RoundsController < ApplicationController
     end
   end
 
-  # GET /elections/:election_id/races/:race_id/rounds/1/edit
+  # GET /rounds/1/edit
   def edit
-    @round = Election.find(params[:election_id]).races.find(params[:race_id]).rounds.find(params[:id])
+    @round = Round.find(params[:id])
     raise AuthorizationError unless @round.may_user?(current_user,:update)
   end
 
-  # POST /elections/:election_id/races/:race_id/rounds
-  # POST /elections/:election_id/races/:race_id/rounds.xml
+  # POST /races/:race_id/rounds
+  # POST /races/:race_id/rounds.xml
   def create
     @round = Round.new(params[:round])
     raise AuthorizationError unless @round.may_user?(current_user,:create)
@@ -59,10 +59,10 @@ class Elections::Races::RoundsController < ApplicationController
     end
   end
 
-  # PUT /elections/:election_id/races/:race_id/rounds/1
-  # PUT /elections/:election_id/races/:race_id/rounds/1.xml
+  # PUT /rounds/1
+  # PUT /rounds/1.xml
   def update
-    @round = Election.find(params[:election_id]).races.find(params[:race_id]).rounds.find(params[:id])
+    @round = Round.find(params[:id])
     raise AuthorizationError unless @round.may_user?(current_user,:update)
 
     respond_to do |format|
@@ -77,10 +77,10 @@ class Elections::Races::RoundsController < ApplicationController
     end
   end
 
-  # DELETE /elections/:election_id/races/:race_id/rounds/1
-  # DELETE /elections/:election_id/races/:race_id/rounds/1.xml
+  # DELETE /rounds/1
+  # DELETE /rounds/1.xml
   def destroy
-    @round = Election.find(params[:election_id]).races.find(params[:race_id]).rounds.find(params[:id])
+    @round = Round.find(params[:id])
     raise AuthorizationError unless @round.may_user?(current_user,:delete)
     @round.destroy
 
@@ -90,3 +90,4 @@ class Elections::Races::RoundsController < ApplicationController
     end
   end
 end
+

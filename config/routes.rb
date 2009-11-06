@@ -1,34 +1,21 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :users
-  map.resources( :elections,
-                 :collection => { :my => :get },
-                 :member => { :tabulate => :post } ) do |election|
-    election.resources( :rolls, :controller => 'elections/rolls' ) do |roll|
-      roll.resources( :users,
-                      :controller => 'elections/rolls/users',
-                      :collection => { :bulk_create => :post } )
+  map.resources :elections, :shallow => true, :collection => { :my => :get },
+    :member => { :tabulate => :post } do |election|
+    election.resources :rolls do |roll|
+      roll.resources :users, :only => :create # Needs refactoring in controller
     end
-    election.resources( :races, :controller => 'elections/races' ) do |race|
-      race.resources( :candidates,
-                      :controller => 'elections/races/candidates',
-                      :member => { :popup => :get } ) do |candidate|
-        candidate.resources( :petitioners,
-                             :controller => 'elections/races/candidates/petitioners' )
+    election.resources :races do |race|
+      race.resources :candidates, :member => { :popup => :get } do |candidate|
+        candidate.resources :petitioners
       end
-      race.resources( :rounds,
-                      :controller => 'elections/races/rounds' ) do |round|
-        round.resources( :tallies, :controller => 'elections/races/rounds/tallies' )
-      end
-      race.resources( :ballots,
-                      :controller => 'elections/races/ballots' )
+      race.resources :rounds
+      race.resources :ballots, :only => :index
     end
-    election.resources( :ballots,
-                        :controller => 'elections/ballots',
-                        :collection =>  { :my => :get },
-                        :member => { :confirm_new => :post,
-                                     :verify => :get } )
+    election.resources :ballots, :collection =>  { :my => :get },
+      :member => { :confirm_new => :post, :verify => :get }
   end
-  
+
   map.root :controller => 'elections', :action => 'my'
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -65,3 +52,4 @@ ActionController::Routing::Routes.draw do |map|
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
 end
+

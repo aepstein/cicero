@@ -1,4 +1,4 @@
-class Elections::RacesController < ApplicationController
+class RacesController < ApplicationController
   # GET /elections/:election_id/races
   # GET /elections/:election_id/races.xml
   def index
@@ -11,8 +11,8 @@ class Elections::RacesController < ApplicationController
     end
   end
 
-  # GET /elections/:election_id/races/:id
-  # GET /elections/:election_id/races/:id.xml
+  # GET /races/:id
+  # GET /races/:id.xml
   def show
     @race = Election.find(params[:election_id]).races.find(params[:id])
     raise AuthorizationError unless @race.may_user?(current_user,:show)
@@ -35,9 +35,9 @@ class Elections::RacesController < ApplicationController
     end
   end
 
-  # GET /elections/:election_id/races/:id/edit
+  # GET /races/:id/edit
   def edit
-    @race = Election.find(params[:election_id]).races.find(params[:id])
+    @race = Race.find(params[:id])
     raise AuthorizationError unless @race.may_user?(current_user,:update)
   end
 
@@ -59,10 +59,10 @@ class Elections::RacesController < ApplicationController
     end
   end
 
-  # PUT /elections/:election_id/races/:id
-  # PUT /elections/:election_id/races/:id.xml
+  # PUT /races/:id
+  # PUT /races/:id.xml
   def update
-    @race = Election.find(params[:election_id]).races.find(params[:id])
+    @race = Race.find(params[:id])
     raise AuthorizationError unless @race.may_user?(current_user,:update)
 
     respond_to do |format|
@@ -77,10 +77,10 @@ class Elections::RacesController < ApplicationController
     end
   end
 
-  # DELETE /elections/:election_id/races/:id
-  # DELETE /elections/:election_id/races/:id.xml
+  # DELETE /races/:id
+  # DELETE /races/:id.xml
   def destroy
-    @race = Election.find(params[:election_id]).races.find(params[:id])
+    @race = Race.find(params[:id])
     raise AuthorizationError unless @race.may_user?(current_user,:delete)
     @race.destroy
 
@@ -90,3 +90,4 @@ class Elections::RacesController < ApplicationController
     end
   end
 end
+
