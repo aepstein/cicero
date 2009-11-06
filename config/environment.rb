@@ -5,7 +5,7 @@
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '2.2.2' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.4' unless defined? RAILS_GEM_VERSION
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
@@ -66,11 +66,12 @@ Rails::Initializer.run do |config|
   config.gem 'will_paginate'
   config.gem 'sqlite3-ruby', :lib => 'sqlite3'
   config.gem 'adzap-validates_timeliness', :lib => 'validates_timeliness'
+  config.gem 'paperclip', :source => 'http://gemcutter.org'
 end
 
-if defined? ActiveRecord::ConnectionAdapters::MysqlAdapter
-  require 'ar-extensions/adapters/mysql'
-  require 'ar-extensions/temporary_table/mysql'
-  require 'ar-extensions/import/mysql'
-end
+#if defined? ActiveRecord::ConnectionAdapters::MysqlAdapter
+#  require 'ar-extensions/adapters/mysql'
+#  require 'ar-extensions/temporary_table/mysql'
+#  require 'ar-extensions/import/mysql'
+#end
 

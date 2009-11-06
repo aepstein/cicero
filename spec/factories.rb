@@ -21,3 +21,9 @@ Factory.define :race do |f|
   f.is_ranked false
 end
 
+Factory.define :candidate do |f|
+  f.association :race
+  f.sequence(:name) { |n| "Candidate #{n}" }
+  f.picture { ActionController::TestUploadedFile.new('spec/assets/robin.jpg','image/jpeg') }
+end
+
