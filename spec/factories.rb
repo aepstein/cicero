@@ -27,3 +27,15 @@ Factory.define :candidate do |f|
   f.picture { ActionController::TestUploadedFile.new('spec/assets/robin.jpg','image/jpeg') }
 end
 
+Factory.define :user do |f|
+  f.sequence(:net_id) { |n| "net#{n}" }
+  f.first_name "First"
+  f.last_name "Last"
+  f.email { |user| "#{user.net_id}@cornell.edu" }
+end
+
+Factory.define :ballot do |f|
+  f.association :election
+  f.association :user
+end
+

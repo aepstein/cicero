@@ -17,7 +17,20 @@ class Race < ActiveRecord::Base
   validates_presence_of :election
   validates_numericality_of :slots, :only_integer => true, :greater_than => 0
   validates_presence_of :roll
-  validate :roll_must_belong_to_election
+  validate :roll_must_belong_to_election, :linked_candidates_must_be_in_race_if_roll_changed
+
+  def linked_race_ids
+    candidates.inject([]) { |memo, candidate| memo + candidate.linked_race_ids }.uniq
+  end
+
+  def linked_candidates_must_be_in_race_if_roll_changed
+    if roll_id_changed?
+      ids = linked_race_ids
+      unless ids.empty? || ids == [id]
+        errors.add :roll_id, 'cannot change because there are linked candidates between this and other races.'
+      end
+    end
+  end
 
   def roll_must_belong_to_election
     return unless election && roll

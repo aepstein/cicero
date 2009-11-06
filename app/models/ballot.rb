@@ -55,7 +55,7 @@ class Ballot < ActiveRecord::Base
 #        puts " - Adding vote for #{candidate}"
         new_vote = votes.build( :rank => 1 )
         new_vote.candidate = candidate
-        new_votes<<new_vote
+        new_votes << new_vote
       end
     end
     new_votes.each { |new_vote| build_linked_votes_for(new_vote) }

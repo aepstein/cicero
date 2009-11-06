@@ -39,6 +39,22 @@ describe Candidate do
     @candidate.linked_candidates.possible.should include candidates[:valid]
   end
 
+  it 'should have a linked_race_ids method that returns ids of externally related races' do
+    external = add_externally_linked_candidate(@candidate)
+    @candidate.linked_race_ids.size.should eql 1
+    @candidate.linked_race_ids.should include external.race_id
+    external.linked_race_ids.size.should eql 1
+    external.linked_race_ids.should include @candidate.race_id
+  end
+
+  it 'should have a linked_race_ids method that returns ids of internally related races' do
+    internal = add_internally_linked_candidate(@candidate)
+    @candidate.linked_race_ids.size.should eql 1
+    @candidate.linked_race_ids.should include internal.race_id
+    internal.linked_race_ids.size.should eql 1
+    internal.linked_race_ids.should include @candidate.race_id
+  end
+
   def linked_candidate_samples
     invalid_race = Factory(:race, :election => @candidate.race.election)
     invalid_candidate = Factory(:candidate, :race => invalid_race)
@@ -46,6 +62,15 @@ describe Candidate do
     valid_candidate = Factory(:candidate, :race => valid_race)
     other_candidate = Factory(:candidate)
     { :invalid => invalid_candidate, :valid => valid_candidate, :other => other_candidate }
+  end
+
+  def add_externally_linked_candidate(candidate)
+    external = Factory(:race, :election => candidate.race.election, :roll => candidate.race.roll)
+    external_candidate = Factory(:candidate, :race => external, :linked_candidate => candidate)
+  end
+
+  def add_internally_linked_candidate(candidate)
+    linked_candidate = Factory(:candidate, :race => candidate.race, :linked_candidate => candidate)
   end
 
   after(:each) do

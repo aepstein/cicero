@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
       self.reject { |b| b.cast_at.nil? }
     end
   end
-  has_many :candidates, :finder_sql => 
+  has_many :candidates, :finder_sql =>
     'SELECT DISTINCT candidates.* FROM candidates INNER JOIN votes v INNER JOIN ballots b WHERE ' +
     'candidates.id=v.candidate_id AND v.ballot_id=b.id AND b.user_id=#{id}'
   has_and_belongs_to_many :rolls, :include => :election, :order => 'rolls.name' do
@@ -36,14 +36,18 @@ class User < ActiveRecord::Base
       self.select { |e| e.voting_starts_at > Time.now }
     end
   end
-  
-  validates_uniqueness_of :net_id, :allow_nil => true
+
+  validates_presence_of :net_id
+  validates_presence_of :first_name
+  validates_presence_of :last_name
+  validates_uniqueness_of :net_id
+  validates_presence_of :email
   validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :allow_nil => true
 
   def self.search(term,page)
     User.paginate :page => page,
                   :conditions => [ 'users.net_id LIKE ? ' +
-                                      'OR users.first_name LIKE ? ' + 
+                                      'OR users.first_name LIKE ? ' +
                                       'OR users.last_name LIKE ?',
                                    "%#{term}%","%#{term}%", "%#{term}%" ],
                   :order => "users.last_name, users.first_name, users.net_id"
@@ -52,19 +56,19 @@ class User < ActiveRecord::Base
   def name
     ("#{first_name} #{last_name}").squeeze(' ')
   end
-  
+
   def net_id_name
     "#{net_id} (#{name})"
   end
-  
+
   def may?(action,object)
     object.may_user?(user,action)
   end
-  
+
   def may_user?(user,action)
     user.admin?
   end
-  
+
   def login!
     #update_attribute :last_login_at, Time.now
   end
@@ -73,3 +77,4 @@ class User < ActiveRecord::Base
     name
   end
 end
+

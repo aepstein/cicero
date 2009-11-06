@@ -35,6 +35,12 @@ class Candidate < ActiveRecord::Base
     end
   end
 
+  def linked_race_ids
+    out = linked_candidates.map { |c| c.race_id }
+    out << linked_candidate.race_id if linked_candidate
+    out.uniq
+  end
+
   def to_s
     name
   end
