@@ -39,3 +39,8 @@ Factory.define :ballot do |f|
   f.association :user
 end
 
+Factory.define :vote do |f|
+  f.association :candidate
+  f.ballot { |vote| vote.association :ballot, :election => vote.candidate.race.election }
+end
+

@@ -48,11 +48,9 @@ class Ballot < ActiveRecord::Base
   end
 
   def build_linked_votes_for(vote)
-#    puts "Building linked votes for #{vote}:"
     new_votes = Array.new
     vote.candidate.linked_candidates.each do |candidate|
       unless( candidate.race.is_ranked? || votes.candidates.include?(candidate) )
-#        puts " - Adding vote for #{candidate}"
         new_vote = votes.build( :rank => 1 )
         new_vote.candidate = candidate
         new_votes << new_vote
