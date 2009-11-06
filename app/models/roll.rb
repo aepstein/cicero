@@ -12,19 +12,23 @@ class Roll < ActiveRecord::Base
     end
   end
   has_many :races, :order => 'races.name ASC', :dependent => :destroy
-  
+
+  validates_presence_of :election
+  validates_presence_of :name
+  validates_uniqueness_of :name, :scope => :election_id
+
   def may_user?(user, action)
     election.may_user?(user, action)
   end
-  
+
   def import_users_from_csv_string(string)
     return import_users(FasterCSV.parse(string))
   end
-  
+
   def import_users_from_csv_file(file)
     return import_users(FasterCSV.parse(file.read))
   end
-  
+
   def import_users(values)
     columns = [:net_id, :email, :first_name, :last_name]
     User.import( columns,
@@ -42,8 +46,9 @@ class Roll < ActiveRecord::Base
     TempUser.drop
     return num_inserts
   end
-  
+
   def to_s
     name
   end
 end
+

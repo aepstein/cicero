@@ -14,21 +14,29 @@ class Race < ActiveRecord::Base
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :election_id
-  validates_existence_of :election
-  validates_presence_of :slots
-  validates_numericality_of :slots,
-                            :only_integer => true,
-                            :message => 'is not an integer'
+  validates_presence_of :election
+  validates_numericality_of :slots, :only_integer => true, :greater_than => 0
+  validates_presence_of :roll
+  validate :roll_must_belong_to_election
+
+  def roll_must_belong_to_election
+    return unless election && roll
+    begin
+      election.rolls.find roll.id
+    rescue ActiveRecord::RecordNotFound
+      errors.add :roll_id, 'must be part of the election to which this race belongs.'
+    end
+  end
 
   def max_votes
     return slots unless candidates.size < slots || is_ranked?
     candidates.size
   end
-  
+
   def rank_options
     1..max_votes
   end
-  
+
   def may_user?(user, action)
     case action
       when :create, :update, :delete
@@ -37,7 +45,7 @@ class Race < ActiveRecord::Base
       election.may_user?(user, action)
     end
   end
-  
+
   def available_slots
     return slots if slots < candidates.size
     candidates.size
@@ -46,18 +54,18 @@ class Race < ActiveRecord::Base
   def to_s
     name
   end
-  
+
   def <=>(otherRace)
     name <=> otherRace.name
   end
-  
+
   # Delete rounds for race
   def scrub_rounds
     rounds.reverse_each do |round|
       round.destroy
     end
   end
-  
+
   # Provide blt output
   def to_blt
     output = "#{candidates.size} #{slots}\n"
@@ -75,3 +83,4 @@ class Race < ActiveRecord::Base
     return output
   end
 end
+

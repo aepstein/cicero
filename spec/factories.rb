@@ -9,9 +9,15 @@ Factory.define :election do |f|
   f.contact_info "Additional contact information"
 end
 
+Factory.define :roll do |f|
+  f.association :election
+  f.sequence(:name) { |n| "Roll #{n}" }
+end
+
 Factory.define :race do |f|
   f.association :election
-  f.association :roll
+  f.roll { |race| race.association(:roll, :election => race.election) }
   f.sequence(:name) { |n| "Race #{n}" }
+  f.is_ranked false
 end
 

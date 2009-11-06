@@ -33,21 +33,21 @@ class Round < ActiveRecord::Base
     end
   end
   acts_as_list :scope => :race
-  
+
   after_create :distribute_votes
   before_destroy :scrub_votes
 
-  validates_existence_of :race
+  validates_presence_of :race
   validates_each :race do |record, attr, race|
     record.errors.add( attr, "has not ended yet" ) if race.election.voting_ends_at > Time.now
   end
-  
+
   def may_user?(user,action)
     case action
       when :create, :delete
         user.admin? || election.managers.include?(election)
       when :index, :show
-        (race.election.results_available_at < Time.now) || user.admin? || 
+        (race.election.results_available_at < Time.now) || user.admin? ||
           race.election.managers.include?(election)
     end
   end
@@ -90,7 +90,7 @@ class Round < ActiveRecord::Base
     end
     exhaust_votes if (candidates.remaining.size > race.slots) && race.is_ranked?
   end
-  
+
   # Exhaust votes for this round
   # TODO consider eliminating multiple candidates in a round
   def exhaust_votes
@@ -99,7 +99,7 @@ class Round < ActiveRecord::Base
                     "candidate_id=#{tally.candidate.id} AND exhausted IS NULL")
     race.rounds.create
   end
-  
+
   # Undistribute and unexhaust any votes distributed or exhausted after this round
   def scrub_votes
     Vote.update_all("distributed = NULL",
@@ -114,3 +114,4 @@ class Round < ActiveRecord::Base
                         "exhausted >= #{position})")
   end
 end
+

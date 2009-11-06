@@ -28,25 +28,25 @@ class Ballot < ActiveRecord::Base
       self.collect { |v| v.candidate }
     end
   end
-  
-  validates_existence_of :election
-  validates_existence_of :user
+
+  validates_presence_of :election
+  validates_presence_of :user
   validates_uniqueness_of :user_id, :scope => :election_id
   validates_associated :votes
-  
+
   before_validation :build_linked_votes
-  
+
   def validate
     allowed_races.each { |race| validate_set(race) }
     votes.each do |vote|
       validate_ranked_vote(vote) if vote.candidate.race.is_ranked?
     end
   end
-  
+
   def build_linked_votes
     votes.each { |v| build_linked_votes_for(v) }
   end
-  
+
   def build_linked_votes_for(vote)
 #    puts "Building linked votes for #{vote}:"
     new_votes = Array.new
@@ -60,7 +60,7 @@ class Ballot < ActiveRecord::Base
     end
     new_votes.each { |new_vote| build_linked_votes_for(new_vote) }
  end
-  
+
   def validate_ranked_vote(vote)
     if votes.conflict_with_vote(vote).size > 0
       msg = "You ranked #{vote.candidate} the same as your #{votes.conflict_with_vote(vote).join(', ')}" +
@@ -75,14 +75,14 @@ class Ballot < ActiveRecord::Base
       errors.add_to_base(msg)
     end
   end
-  
+
   # Initialize votes
   def initialize_options
     allowed_candidates.each do |candidate|
       votes.build.candidate = candidate unless votes.for_candidate(candidate)
     end
   end
-  
+
   # Choices
   def choices=(params)
     allowed_candidates.each do |candidate|
@@ -95,7 +95,7 @@ class Ballot < ActiveRecord::Base
       end
     end
   end
-  
+
   def allowed_candidates
     return @allowed_candidates if @allowed_candidates
     @allowed_candidates = Array.new
@@ -104,14 +104,14 @@ class Ballot < ActiveRecord::Base
     end
     allowed_candidates
   end
-  
+
   def allowed_races
     return @allowed_races if @allowed_races
     @allowed_races = Array.new
     election.races.each { |race| @allowed_races<<(race) if user.rolls.include?(race.roll) }
     allowed_races
   end
-  
+
   # Reviews choices and registers error for any candidate with invalid entry
   def validate_set(race)
     race_choices = votes.for_race(race)
@@ -122,7 +122,7 @@ class Ballot < ActiveRecord::Base
                      "You have selected #{difference_for_race(race_choices,race)} for #{race}"
                    ) if race_choices.size < race.max_votes
   end
-  
+
   # Correctly describes number of additional votes allowed
   def difference_for_race(race_choices,race)
     if race_choices.size != race.max_votes
@@ -138,7 +138,7 @@ class Ballot < ActiveRecord::Base
   def warnings
     @warnings ||= Hash.new
   end
-  
+
   # Casts the ballot
   # Will not recast a ballot that has already been cast or was confirmed before last update
   def cast(confirmed_at)
@@ -146,11 +146,11 @@ class Ballot < ActiveRecord::Base
     self.cast_at=Time.now
     save
   end
-  
+
   def to_s
     "ballot of #{user} for #{election}"
   end
-  
+
   def may_user?(user,action)
     case action
       when :show, :update, :cast
@@ -158,8 +158,8 @@ class Ballot < ActiveRecord::Base
       when :verify
         (self.user == user || user.admin?) && cast_at
       when :delete
-        user.admin? || 
-          ( election.managers.include?(user) && Time.now < election.voting_ends_at ) || 
+        user.admin? ||
+          ( election.managers.include?(user) && Time.now < election.voting_ends_at ) ||
           (self.user == user && user.elections.current.include?(election) && cast_at.nil?)
       when :index
         user.admin? || election.managers.include?(user)
@@ -167,10 +167,11 @@ class Ballot < ActiveRecord::Base
         self.user == user && user.elections.current.include?(election)
     end
   end
-  
+
   def to_blt(race)
-    votes.collect { |vote| race.candidate_ids.index(vote.candidate_id) 
+    votes.collect { |vote| race.candidate_ids.index(vote.candidate_id)
 }.map { |ix| ix + 1 }.join(' ')
   end
-  
+
 end
+

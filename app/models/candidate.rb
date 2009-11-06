@@ -15,50 +15,50 @@ class Candidate < ActiveRecord::Base
              def possible
                proxy_owner.race.roll.candidates.reject { |c| c == proxy_owner }
              end
-           end 
+           end
   belongs_to :linked_candidate,
              :class_name => 'Candidate'
-  
+
   named_scope :disqualified, :conditions => { :disqualified => true }
-  
+
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :race_id
   validates_presence_of :picture,
                         :unless => :picture?,
                         :message => 'may not be blank if candidate does not have a picture on file'
-  validates_existence_of :race
-  
+  validates_presence_of :race
+
   def validate
     candidate.errors.add(
       attribute,
       "must be a JPEG file"
     ) if picture.methods.include?('content_type') && picture.content_type != 'image/jpeg'
   end
-  
+
   def to_s
     name
   end
-  
+
   def <=>(other)
     name <=> other.name
   end
-  
+
   after_save :write_picture
   after_destroy :destroy_picture
-  
+
   def picture_path(which=:original)
     path="#{picture_prefix}/#{which}.jpg"
     return path if File.exist?(path)
   end
-  
+
   def picture
     @picture
   end
-  
+
   def picture=(picture_data)
     @picture = picture_data
   end
-  
+
   def write_picture
     unless picture.is_a? String
       logger.info "mkdir -p #{picture_prefix}"
@@ -74,15 +74,15 @@ class Candidate < ActiveRecord::Base
       original.resize_to_fit(100,100).write("#{picture_prefix}/thumb.jpg")
     end
   end
-  
+
   def destroy_picture
     FileUtils.rm_rf(picture_prefix)
   end
-  
+
   def picture_prefix
     "#{RAILS_ROOT}/db/uploads/#{RAILS_ENV}/candidates/#{race.election.id}/#{race.id}/#{self.id}"
   end
-  
+
   def picture?
     return false unless picture_path
     true
@@ -92,3 +92,4 @@ class Candidate < ActiveRecord::Base
     race.may_user?(user,action)
   end
 end
+
