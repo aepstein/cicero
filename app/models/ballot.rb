@@ -1,19 +1,15 @@
 class Ballot < ActiveRecord::Base
   belongs_to :election
   belongs_to :user
-  has_many :votes,
-           :dependent => :delete_all,
-           :include => [ :candidate ],
-           :order => 'votes.rank' do
+  has_many :votes, :dependent => :delete_all, :include => [ :candidate ],
+    :order => 'votes.rank' do
     def for_race( race )
       votes = self.select { |vote| vote.candidate.race == race }
       return votes if race.is_ranked?
-      return votes.sort_by { |vote| vote.candidate }
+      votes.sort_by { |vote| vote.candidate }
     end
     def for_candidate( candidate )
-      vote = self.select { |v| v.candidate == candidate }
-      return vote[0] unless vote.empty?
-      nil
+      self.select { |v| v.candidate == candidate }.first
     end
     def conflict_with_vote( vote )
       self.for_race( vote.candidate.race ).select { |v| (v != vote) && (v.rank == vote.rank) }
@@ -27,6 +23,18 @@ class Ballot < ActiveRecord::Base
     def candidates
       self.collect { |v| v.candidate }
     end
+    def build_linked
+      inject([]) { |memo, vote| memo << build_linked_for(vote) }
+    end
+    def build_linked_for(vote)
+      vote_candidate.linked_candidates.inject([]) do |memo, candidate|
+        unless( candidate.race.is_ranked? || candidates.include?(candidate) )
+          memo << build( :rank => 1 )
+          memo.last.candidate = candidate
+          memo += build_linked_for(memo.last)
+        end
+      end
+    end
   end
 
   validates_presence_of :election
@@ -35,8 +43,10 @@ class Ballot < ActiveRecord::Base
   validates_associated :votes
 
   before_validation :build_linked_votes
+  validate :must_have_valid_votes
 
-  def validate
+
+  def must_have_valid_votes
     allowed_races.each { |race| validate_set(race) }
     votes.each do |vote|
       validate_ranked_vote(vote) if vote.candidate.race.is_ranked?
@@ -44,20 +54,8 @@ class Ballot < ActiveRecord::Base
   end
 
   def build_linked_votes
-    votes.each { |v| build_linked_votes_for(v) }
+    votes.build_linked
   end
-
-  def build_linked_votes_for(vote)
-    new_votes = Array.new
-    vote.candidate.linked_candidates.each do |candidate|
-      unless( candidate.race.is_ranked? || votes.candidates.include?(candidate) )
-        new_vote = votes.build( :rank => 1 )
-        new_vote.candidate = candidate
-        new_votes << new_vote
-      end
-    end
-    new_votes.each { |new_vote| build_linked_votes_for(new_vote) }
- end
 
   def validate_ranked_vote(vote)
     if votes.conflict_with_vote(vote).size > 0

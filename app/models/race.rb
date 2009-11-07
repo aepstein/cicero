@@ -17,7 +17,8 @@ class Race < ActiveRecord::Base
   validates_presence_of :election
   validates_numericality_of :slots, :only_integer => true, :greater_than => 0
   validates_presence_of :roll
-  validate :roll_must_belong_to_election, :linked_candidates_must_be_in_race_if_roll_changed
+  validate :roll_must_belong_to_election
+  validate_on_update :linked_candidates_must_be_in_race_if_roll_changed
 
   def linked_race_ids
     candidates.inject([]) { |memo, candidate| memo + candidate.linked_race_ids }.uniq
