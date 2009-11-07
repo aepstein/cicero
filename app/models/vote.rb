@@ -1,7 +1,7 @@
 class Vote < ActiveRecord::Base
   attr_accessible :rank
 
-  belongs_to :candidate, :include => :race
+  belongs_to :candidate
   belongs_to :ballot
 
   validates_presence_of :candidate

@@ -31,7 +31,7 @@ class Ballot < ActiveRecord::Base
 
   validates_presence_of :election
   validates_presence_of :user
-  validates_uniqueness_of :user_id, :scope => :election_id
+  validates_uniqueness_of :user_id, :scope => [ :election_id ]
   validates_associated :votes
 
   before_validation :build_linked_votes
@@ -106,7 +106,7 @@ class Ballot < ActiveRecord::Base
   def allowed_races
     return @allowed_races if @allowed_races
     @allowed_races = Array.new
-    election.races.each { |race| @allowed_races<<(race) if user.rolls.include?(race.roll) }
+    election.races.each { |race| @allowed_races<<(race) if user.rolls.exists?(race.roll_id) }
     allowed_races
   end
 

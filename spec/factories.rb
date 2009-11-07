@@ -41,6 +41,6 @@ end
 
 Factory.define :vote do |f|
   f.association :candidate
-  f.ballot { |vote| vote.association :ballot, :election => vote.candidate.race.election }
+  f.ballot { |vote| vote.association( :ballot, :election => vote.candidate.race.election ) }
 end
 

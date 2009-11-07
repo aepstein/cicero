@@ -1,4 +1,4 @@
-class Elections::Races::CandidatesController < ApplicationController
+class CandidatesController < ApplicationController
   # GET /races/:race_id/candidates
   # GET /races/:race_id/candidates.xml
   def index

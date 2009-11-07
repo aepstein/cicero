@@ -4,17 +4,14 @@ class Candidate < ActiveRecord::Base
   has_many :ballots, :through => :votes
   has_many :petitioners
   has_many :users, :through => :petitioners
-  has_many :linked_candidates,
-           :class_name => 'Candidate',
-           :foreign_key => 'linked_candidate_id',
-           :include => :race,
+  has_many :linked_candidates, :class_name => 'Candidate',
+           :foreign_key => 'linked_candidate_id', :include => [ :race ],
            :dependent => :nullify do
              def possible
                proxy_owner.race.roll.candidates.reject { |c| c == proxy_owner }
              end
            end
-  belongs_to :linked_candidate,
-             :class_name => 'Candidate'
+  belongs_to :linked_candidate, :class_name => 'Candidate'
 
   named_scope :disqualified, :conditions => { :disqualified => true }
 

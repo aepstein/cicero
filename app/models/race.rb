@@ -33,10 +33,8 @@ class Race < ActiveRecord::Base
   end
 
   def roll_must_belong_to_election
-    return unless election && roll
-    begin
-      election.rolls.find roll.id
-    rescue ActiveRecord::RecordNotFound
+    return unless election && roll_id?
+    unless election.rolls.exists? roll_id
       errors.add :roll_id, 'must be part of the election to which this race belongs.'
     end
   end
