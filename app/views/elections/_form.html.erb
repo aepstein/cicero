@@ -1,12 +1,14 @@
-<ol>
+<%= error_messages_for :election %>
+
+<% form.inputs do %>
 <%= form.input :name %>
-<li><%= form.label :voting_starts_at %> <%= form.calendar_date_select :voting_starts_at %></li>
-<li><%= form.label :voting_ends_at %> <%= form.calendar_date_select :voting_ends_at %></li>
-<li><%= form.label :results_available_at %> <%= form.calendar_date_select :results_available_at %></li>
+<%= form.input :voting_starts_at, :as => :ft_calendar_date_select %>
+<%= form.input :voting_ends_at, :as => :ft_calendar_date_select %>
+<%= form.input :results_available_at, :as => :ft_calendar_date_select %>
 <%= form.input :contact_name %>
 <%= form.input :contact_email %>
 <%= form.input :verify_message %>
-</ol>
+<% end %>
 
 <%= form.buttons %>
 
