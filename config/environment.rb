@@ -68,6 +68,7 @@ Rails::Initializer.run do |config|
   config.gem 'adzap-validates_timeliness', :lib => 'validates_timeliness'
   config.gem 'paperclip', :source => 'http://gemcutter.org'
   config.gem 'justinfrench-formtastic', :lib => 'formtastic', :source => 'http://gems.github.com'
+  config.gem 'authlogic'
 end
 
 #if defined? ActiveRecord::ConnectionAdapters::MysqlAdapter

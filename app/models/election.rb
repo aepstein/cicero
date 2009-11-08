@@ -43,7 +43,6 @@ class Election < ActiveRecord::Base
   validates_uniqueness_of :name
   validates_presence_of :verify_message
   validates_presence_of :contact_name
-  validates_presence_of :contact_info
   validates_format_of :contact_email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :allow_nil => false
 
   # Marks and tabulates votes for all races

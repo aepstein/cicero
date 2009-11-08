@@ -1,4 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resource :user_session, :only => [ :create ]
   map.resources :users
   map.resources :elections, :shallow => true, :collection => { :my => :get },
     :member => { :tabulate => :post } do |election|
@@ -15,6 +16,9 @@ ActionController::Routing::Routes.draw do |map|
     election.resources :ballots, :collection =>  { :my => :get },
       :member => { :confirm_new => :post, :verify => :get }
   end
+
+  map.login 'login', :controller => 'user_sessions', :action => 'new'
+  map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
 
   map.root :controller => 'elections', :action => 'my'
 

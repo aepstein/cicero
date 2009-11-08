@@ -17,23 +17,19 @@
     <b>Results available to public at</b><br />
     <%= f.calendar_date_select :results_available_at %>
   </p>
-  
+
   <p>
   	<strong>Contact name</strong><br />
 	<%= f.text_field :contact_name %>
   </p>
-  
+
   <p>
   	<strong>Contact email</strong><br />
 	<%= f.text_field :contact_email %>
   </p>
-  
-  <p>
-  	<strong>Contact instructions (markdown allowed)</strong><br />
-	<%= f.text_area :contact_info %>
-  </p>
-  
+
   <p>
   	<strong>Verify message (after vote is cast)</strong>
 	<%= f.text_area :verify_message %>
   </p>
+

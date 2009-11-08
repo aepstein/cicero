@@ -7,10 +7,20 @@ module NavigationHelpers
   #
   def path_to(page_name)
     case page_name
-    
+
     when /the home\s?page/
       '/'
-    
+
+    when /the login page/
+      login_url
+
+    when /the logout page/
+      logout_path
+
+    when /the new election page/
+      new_election_path
+
+
     # Add more mappings here.
     # Here is a more fancy example:
     #
@@ -25,3 +35,4 @@ module NavigationHelpers
 end
 
 World(NavigationHelpers)
+

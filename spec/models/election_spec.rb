@@ -52,11 +52,6 @@ describe Election do
     @election.save.should eql false
   end
 
-  it "should not save without contact info" do
-    @election.contact_info = nil
-    @election.save.should eql false
-  end
-
   it "should not save without verify message" do
     @election.verify_message = nil
     @election.save.should eql false

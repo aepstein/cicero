@@ -37,6 +37,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  acts_as_authentic do |c|
+    c.login_field :net_id
+  end
+
   validates_presence_of :net_id
   validates_presence_of :first_name
   validates_presence_of :last_name
