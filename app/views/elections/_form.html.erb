@@ -1,35 +1,12 @@
-  <p>
-    <b>Name</b><br />
-    <%= f.text_field :name %>
-  </p>
+<ol>
+<%= form.input :name %>
+<li><%= form.label :voting_starts_at %> <%= form.calendar_date_select :voting_starts_at %></li>
+<li><%= form.label :voting_ends_at %> <%= form.calendar_date_select :voting_ends_at %></li>
+<li><%= form.label :results_available_at %> <%= form.calendar_date_select :results_available_at %></li>
+<%= form.input :contact_name %>
+<%= form.input :contact_email %>
+<%= form.input :verify_message %>
+</ol>
 
-  <p>
-    <b>Voting starts at</b><br />
-    <%= f.calendar_date_select :voting_starts_at %>
-  </p>
-
-  <p>
-    <b>Voting ends at</b><br />
-    <%= f.calendar_date_select :voting_ends_at %>
-  </p>
-
-  <p>
-    <b>Results available to public at</b><br />
-    <%= f.calendar_date_select :results_available_at %>
-  </p>
-
-  <p>
-  	<strong>Contact name</strong><br />
-	<%= f.text_field :contact_name %>
-  </p>
-
-  <p>
-  	<strong>Contact email</strong><br />
-	<%= f.text_field :contact_email %>
-  </p>
-
-  <p>
-  	<strong>Verify message (after vote is cast)</strong>
-	<%= f.text_area :verify_message %>
-  </p>
+<%= form.buttons %>
 

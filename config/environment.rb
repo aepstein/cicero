@@ -69,7 +69,10 @@ Rails::Initializer.run do |config|
   config.gem 'paperclip', :source => 'http://gemcutter.org'
   config.gem 'justinfrench-formtastic', :lib => 'formtastic', :source => 'http://gems.github.com'
   config.gem 'authlogic'
+  config.gem 'calendar_date_select'
 end
+
+CalendarDateSelect.format = :hyphen_ampm
 
 #if defined? ActiveRecord::ConnectionAdapters::MysqlAdapter
 #  require 'ar-extensions/adapters/mysql'

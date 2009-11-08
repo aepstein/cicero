@@ -1,4 +1,4 @@
-@wip
+
 Feature: Manage elections
   In order to set up, monitor, and manage elections
   As an administrator
@@ -11,17 +11,17 @@ Feature: Manage elections
     And I fill in "Voting starts at" with "2008-11-04 00:00:01"
     And I fill in "Voting ends at" with "2009-11-04 23:59:59"
     And I fill in "Results available at" with "2009-11-05 12:00:00"
-    And I fill in "Verify message" with "Thank you for voting."
     And I fill in "Contact name" with "Board of Elections"
     And I fill in "Contact email" with "elections@example.com"
+    And I fill in "Verify message" with "Thank you for voting."
     And I press "Create"
     Then I should see "Name: 2008 Election"
-    And I should see "Voting starts at: "
-    And I should see "Voting ends at: "
-    And I should see "Results available at:"
-    And I should see "Thank you for voting."
+    And I should see "Voting starts at: 2008-11-04 00:00:01"
+    And I should see "Voting ends at: 2009-11-04 23:59:59"
+    And I should see "Results available at: 2009-11-05 12:00:00"
     And I should see "Contact name: Board of Elections"
     And I should see "Contact email: elections@example.com"
+    And I should see "Thank you for voting."
 
   Scenario: Delete election
     Given I logged in as the administrator

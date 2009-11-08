@@ -1,41 +1,29 @@
 <p>
-  <b>Name:</b>
-  <%=h @election.name %>
+  <b>Name:</b> <%=h @election.name %>
 </p>
 
 <p>
-  <b>Voting starts at:</b>
-  <%=h @election.voting_starts_at %>
+  <b>Voting starts at:</b> <%=h @election.voting_starts_at %>
 </p>
 
 <p>
-  <b>Voting ends at:</b>
-  <%=h @election.voting_ends_at %>
+  <b>Voting ends at:</b> <%=h @election.voting_ends_at %>
 </p>
 
 <p>
-  <b>Results available at:</b>
-  <%=h @election.results_available_at %>
+  <b>Results available at:</b> <%=h @election.results_available_at %>
 </p>
 
 <p>
-  <strong>Contact name:</strong>
-  <%=h @election.contact_name %>
+  <strong>Contact name:</strong> <%=h @election.contact_name %>
 </p>
 
 <p>
-	<strong>Contact email:</strong>
-	<%=mail_to @election.contact_email, @election.contact_name, :encode => true %>
+	<strong>Contact email:</strong> <%=h @election.contact_email %>
 </p>
 
 <p>
-	<strong>Contact info</strong>
-</p>
-
-	<%=markdown @election.contact_info%>
-
-<p>
-  <strong>Verify message</strong>
+  <strong>Verify message:</strong>
 </p>
   <%=markdown @election.verify_message %>
 
@@ -86,3 +74,4 @@
              edit_election_path(@election) ) if @election.may_user?(current_user, :update) %> |
 <%= link_to 'Back', elections_path %>
 </p>
+

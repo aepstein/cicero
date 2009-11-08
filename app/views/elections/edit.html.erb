@@ -2,18 +2,14 @@
 
 <%= error_messages_for :election %>
 
-<% form_for(@election) do |f| %>
+<% semantic_form_for(@election) do |f| %>
 
-<%= render :partial => 'form',
-           :locals => { :f => f } %> 
+<%= render :partial => 'form', :object => f %>
 
-  <p>
-    <%= f.submit "Update" %>
-  </p>
 <% end %>
 
-<hr/>
 <p>
 <%= link_to 'Show', @election %> |
 <%= link_to 'Back', elections_path %>
 </p>
+

@@ -1,13 +1,12 @@
-<%- if election.may_user?(current_user, :index) -%>
-<li>
-<%= link_to( 'Edit',
-             edit_election_path(election) ) if election.may_user?(current_user,:update) %>
-<%= link_to( 'Destroy',
-             election,
-             :confirm => 'Are you sure?',
-             :method => :delete ) if election.may_user?(current_user, :delete) %>
-<%= link_to( election.name + " from #{election.voting_starts_at} until " + 
-             "#{election.voting_ends_at}",
-             election_url(election) ) if current_user.may_user?(current_user, :show) %>
-</li>
-<%- end -%>
+<tr>
+  <td><%=h election %></td>
+  <td>
+  <%= link_to( 'Show',
+        election_url(election) ) if current_user.may_user?(current_user, :show) %>
+  <%= link_to( 'Edit',
+        edit_election_path(election) ) if election.may_user?(current_user,:update) %>
+  <%= link_to( 'Destroy', election, :confirm => 'Are you sure?',
+        :method => :delete ) if election.may_user?(current_user, :delete) %>
+  </td>
+</tr>
+
