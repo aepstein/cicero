@@ -1,0 +1,14 @@
+To support calendar_date_select:
+
+Add declaration on load:
+
+module Formtastic
+  class SemanticFormBuilder < ActionView::Helpers::FormBuilder
+    def calendar_date_select_input(method, options)
+      input_simple(:calendar_date_select, method, options)
+    end
+  end
+end
+
+This will allow it to correctly utilize calendar_date_select with appropriate override.
+
