@@ -1,20 +1,12 @@
-  <p>
-    <b>Name</b><br />
-    <%= f.text_field :name %>
-  </p>
+<%= error_messages_for :race %>
 
-  <p>
-    <b>Slots</b><br />
-    <%= f.text_field :slots %>
-  </p>
+<% form.inputs do %>
+  <%= form.input :name %>
+  <%= form.input :slots %>
+  <%= form.input :is_ranked, :as => :radio %>
+  <%= form.input :roll %>
+  <%= form.input :description %>
+<% end %>
 
-  <p>
-    <b>Check here if candidates should be ranked on ballot.</b><br/>
-    <%= f.check_box :is_ranked %>
-  </p>
-  
-  <p>
-  	<b>Voter roll</b><br />
-	<%= f.select :roll_id, f.object.election.rolls.collect { |r| [r.name, r.id] } %>
-  </p>
-  
+<%= form.buttons %>
+

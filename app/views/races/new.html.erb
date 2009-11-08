@@ -1,18 +1,12 @@
 <h2>New race for <%=h @race.election.name %> election</h2>
 
-<%= error_messages_for :race %>
+<% semantic_form_for :race, @race, :url => election_races_url(@race.election) do |f| %>
 
-<% form_for(:race,
-            @race,
-            :url => election_races_url(@race.election),
-            :html => { :method => :post } ) do |f| %>
+<%= render :partial => 'form', :object => f %>
 
-<%= render :partial => 'form',
-           :locals => { :f => f } %> 
-
-  <p>
-    <%= f.submit "Create" %>
-  </p>
 <% end %>
 
+<p>
 <%= link_to 'Back', election_races_path( @race.election ) %>
+</p>
+

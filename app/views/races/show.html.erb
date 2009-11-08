@@ -1,49 +1,28 @@
 <p>
-  <b>Name:</b>
-  <%=h @race.name %>
+  <b>Name:</b> <%=h @race.name %>
 </p>
 
 <p>
-  <b>Slots:</b>
-  <%=h @race.slots %>
+  <b>Slots:</b> <%=h @race.slots %>
 </p>
 
 <p>
-  <b>Roll:</b>
-  <%=link_to @race.roll, election_roll_path(@race.election, @race.roll) %>
+  <b>Roll:</b> <%=link_to @race.roll, roll_path( @race.roll ) %>
 </p>
 
 <p>
-  <b>Ranked candidates?</b>
-  <% if @race.is_ranked? %>
-  Candidates are ranked.
-  <% else %>
-  Candidates are <em>not</em> ranked.
-  <% end %>
+  <b>Is ranked?</b> <%= @race.is_ranked? ? 'Yes': 'No'  %>
 </p>
-
-<h3>Candidates</h3>
-<% if @race.candidates.empty? %>
-<p><em>No candidates yet for this race.</em></p>
-<% else %>
-<table>
-<%= render :partial => 'elections/races/candidates/candidate',
-           :collection => @race.candidates %>
-</table>
-<% end %>
-<p>
-<%= link_to "Add candidate for this race",
-            new_election_race_candidate_path( @race.election,
-                                              @race ) %>
-</p>
-
-<hr/>
 
 <p>
-<%= link_to( 'Edit',
-             edit_election_race_path(
-               @race.election,
-               @race)
-           ) if @race.may_user?(current_user,:update) %> |
-<%= link_to 'Back', election_races_path( @race.election ) %>
+  <b>Description:</b> <i>To appear on the ballot.</i>
 </p>
+
+<%= markdown(@race.description) %>
+
+<p>
+<%= link_to( 'Edit', edit_race_path( @race ) ) if @race.may_user?(current_user,:update) %> |
+<%= link_to 'Back', election_races_path( @race.election ) %> |
+<%= link_to 'Candidates', race_candidates_path(@race) %>
+</p>
+

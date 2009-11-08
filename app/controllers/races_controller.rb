@@ -14,7 +14,7 @@ class RacesController < ApplicationController
   # GET /races/:id
   # GET /races/:id.xml
   def show
-    @race = Election.find(params[:election_id]).races.find(params[:id])
+    @race = Race.find(params[:id])
     raise AuthorizationError unless @race.may_user?(current_user,:show)
 
     respond_to do |format|
@@ -50,7 +50,7 @@ class RacesController < ApplicationController
     respond_to do |format|
       if @race.save
         flash[:notice] = 'Race was successfully created.'
-        format.html { redirect_to( election_race_url(@race.election, @race) ) }
+        format.html { redirect_to @race }
         format.xml  { render :xml => @race, :status => :created, :location => @race }
       else
         format.html { render :action => "new" }
