@@ -11,6 +11,9 @@ module NavigationHelpers
     when /the home\s?page/
       '/'
 
+    when /^the new roll page for #{capture_model}$/
+      new_election_roll_path(model($1))
+
     when /^the new race page for #{capture_model}$/
       new_election_race_path(model($1))
 

@@ -1,18 +1,13 @@
-<h2>Editing roll <%=h @roll.name %></h2>
+<h2>Editing roll</h2>
 
-<% form_for(:roll,
-            @roll,
-            :url => election_roll_url(@roll.election, @roll),
-            :html => { :method => :put } ) do |f| %>
+<% semantic_form_for @roll do |f| %>
 
-<%=render :partial => 'form',
-          :locals => { :f => f } %>
-  <p>
-    <%= f.submit "Update" %>
-  </p>
+<%= render :partial => 'form', :object => f %>
+
 <% end %>
 
 <p>
-<%= link_to 'Show', election_roll_path(@roll.election, @roll) %> |
-<%= link_to 'Back', election_rolls_path(@roll.election) %>
+<%= link_to 'Show', roll_path( @roll ) %> |
+<%= link_to 'Back', election_rolls_path( @roll.election ) %>
 </p>
+

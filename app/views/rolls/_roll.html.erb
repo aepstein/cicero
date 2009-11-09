@@ -1,5 +1,9 @@
-  <li>
-  	<%= link_to 'Edit', edit_election_roll_path(@election, roll) %>
-    <%= link_to 'Destroy', election_roll_path(@election, roll), :confirm => 'Are you sure?', :method => :delete %>
-    <%= link_to roll.name, election_roll_path(@election, roll) %>
-  </li>
+<tr>
+  <td><%=h roll.name %></td>
+  <td>
+    <%= link_to 'Show', roll_path( roll ) %>
+    <%= link_to 'Edit', edit_roll_path( roll ) %>
+    <%= link_to 'Destroy', roll_path( roll ), :confirm => 'Are you sure?', :method => :delete %>
+  </td>
+</tr>
+

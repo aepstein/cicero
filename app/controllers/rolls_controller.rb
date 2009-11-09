@@ -50,7 +50,7 @@ class RollsController < ApplicationController
     respond_to do |format|
       if @roll.save
         flash[:notice] = 'Roll was successfully created.'
-        format.html { redirect_to( election_roll_url( @roll.election, @roll) ) }
+        format.html { redirect_to @roll }
         format.xml  { render :xml => @roll, :status => :created, :location => @roll }
       else
         format.html { render :action => "new" }
