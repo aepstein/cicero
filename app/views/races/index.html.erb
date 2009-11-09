@@ -1,13 +1,22 @@
 <h2>Listing races for <%=h @election %> election</h2>
 
 <table>
+<thead>
+<tr>
+<td>Name</td>
+<td>Slots</td>
+<td>Ranked?</td>
+<td>Roll</td>
+</tr>
+</thead>
 <tbody>
-<%= render :partial => 'elections/races/race',
-           :collection => @races %>
+<%= render :partial => 'race', :collection => @races %>
 </tbody>
 </table>
 
 <br />
 
-<%= link_to "New race for #{@election.name} election", new_election_race_path(@election) %>
-<hr/> Back to: <%= link_to "#{@election} election", election_path( @election ) %>
+<p>
+<%= link_to "New race for #{@election.name} election", new_election_race_path( @election ) %> |
+<%= link_to "Back", election_path( @election ) %>
+

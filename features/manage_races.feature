@@ -19,18 +19,19 @@ Feature: Manage races
     And I should see "Is ranked? Yes"
     And I should see "Roll: All US Citizens"
     And I should see "This is the most important race on the ballot."
-  @wip
+
   Scenario: Delete race
-    Given the following races exist
-      |name  |slots|is_ranked|roll  |
-      |name 1|1    |false    |roll 1|
-      |name 2|1    |true     |roll 2|
-      |name 3|1    |false    |roll 3|
-      |name 4|1    |true     |roll 4|
-    When I delete the 3rd race
+    Given an election: "2008" exists with name: "2008 General Election"
+    And a roll: "national" exists with name: "All US Citizens", election: election "2008"
+    And a race exists with name: "First", slots: 1, is_ranked: false, roll: roll "national", election: election "2008"
+    And a race exists with name: "Second", slots: 1, is_ranked: false, roll: roll "national", election: election "2008"
+    And a race exists with name: "Third", slots: 1, is_ranked: false, roll: roll "national", election: election "2008"
+    And a race exists with name: "Fourth", slots: 1, is_ranked: false, roll: roll "national", election: election "2008"
+    And I logged in as the administrator
+    When I delete the 3rd race for election "2008"
     Then I should see the following races:
-      |Name  |Slots|Is ranked|Roll  |
-      |name 1|1    |false    |roll 1|
-      |name 2|1    |true     |roll 2|
-      |name 4|1    |true     |roll 4|
+      |Name   |Slots|Ranked? |Roll           |
+      |First  |1    |No      |All US Citizens|
+      |Fourth |1    |No      |All US Citizens|
+      |Third  |1    |No      |All US Citizens|
 

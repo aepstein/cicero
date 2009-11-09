@@ -14,6 +14,9 @@ module NavigationHelpers
     when /^the new race page for #{capture_model}$/
       new_election_race_path(model($1))
 
+    when /^the races page for #{capture_model}$/
+      election_races_path(model($1))
+
     when /the login page/
       login_url
 
