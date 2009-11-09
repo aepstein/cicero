@@ -58,7 +58,7 @@ class CandidatesController < ApplicationController
 
     respond_to do |format|
       if @candidate.save
-        flash[:notice] = "Candidate #{@candidate} was successfully created."
+        flash[:notice] = "Candidate was successfully created."
         format.html { redirect_to @candidate }
         format.xml  { render :xml => @candidate, :status => :created, :location => @candidate }
       else
@@ -94,9 +94,7 @@ class CandidatesController < ApplicationController
     @candidate.destroy
 
     respond_to do |format|
-      format.html { redirect_to(election_race_candidates_url(
-        @candidate.race.election,
-        @candidate.race) ) }
+      format.html { redirect_to race_candidates_url( @candidate.race ) }
       format.xml  { head :ok }
     end
   end

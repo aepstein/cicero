@@ -1,6 +1,6 @@
 When /^I delete the (\d+)(?:st|nd|rd|th) candidate for #{capture_model}$/ do |pos, race|
   visit race_candidates_url model race
-  within("table > tbody > tr:nth-child(#{pos.to_i+1})") do
+  within("table > tbody > tr:nth-child(#{pos.to_i})") do
     click_link "Destroy"
   end
 end

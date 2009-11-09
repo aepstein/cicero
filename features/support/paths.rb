@@ -10,9 +10,9 @@ module NavigationHelpers
 
     when /the home\s?page/
       '/'
-    when /the new candidate page/
-      new_candidate_path
 
+    when /^the new candidate page for #{capture_model}$/
+      new_race_candidate_path(model($1))
 
     when /^the new roll page for #{capture_model}$/
       new_election_roll_path(model($1))
