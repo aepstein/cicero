@@ -1,25 +1,15 @@
-  <p>
-    <b>Name</b><br />
-    <%= f.text_field :name %>
-  </p>
-  <p>
-    <b>Picture</b><br />
-    <%= f.file_field( :picture, :accept => 'image/jpeg' )  %>
-  </p>
-  <p>
-    <b>Statement</b> (markdown syntax allowed)<br />
-    <%= f.text_area( :statement ) %>
-  </p>
-  <p>
-    <b>Linked candidate</b>
-    <em>If a vote is cast for the linked candidate, a vote will also be cast for this candidate.</em>
-    <%= f.collection_select( :linked_candidate_id,
-                             @candidate.linked_candidates.possible,
-                             :id,
-                             :name,
-                             { :include_blank => 'No linked candidate' } ) %>
-  </p>
-  <p>
-    <b>Disqualified?</b><br/>
-    <%= f.check_box( :disqualified ) %>
-  </p>
+<%= form.error_messages %>
+
+<% form.inputs do %>
+  <%= form.input :name %>
+  <%= form.input :statement %>
+  <%= form.input :picture %>
+  <%= form.input :linked_candidate, :collection => @candidate.linked_candidates.possible,
+        :include_blank => 'No linked candidate',
+        :hint => 'If specified, a vote cast for the linked candidate will cause ' +
+                 'this candidate to receive a vote as well.' %>
+  <%= form.input :disqualified, :as => :radio %>
+<% end %>
+
+<%= form.buttons %>
+

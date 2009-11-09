@@ -59,10 +59,7 @@ class CandidatesController < ApplicationController
     respond_to do |format|
       if @candidate.save
         flash[:notice] = "Candidate #{@candidate} was successfully created."
-        format.html { redirect_to( election_race_candidate_url(
-          @candidate.race.election,
-          @candidate.race,
-          @candidate) ) }
+        format.html { redirect_to @candidate }
         format.xml  { render :xml => @candidate, :status => :created, :location => @candidate }
       else
         format.html { render :action => "new" }
@@ -80,10 +77,7 @@ class CandidatesController < ApplicationController
     respond_to do |format|
       if @candidate.update_attributes(params[:candidate])
         flash[:notice] = 'Candidate was successfully updated.'
-        format.html { redirect_to( election_race_candidate_url(
-          @candidate.race.election,
-          @candidate.race,
-          @candidate) ) }
+        format.html { redirect_to @candidate }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
