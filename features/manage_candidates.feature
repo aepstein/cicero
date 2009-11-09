@@ -7,7 +7,7 @@ Feature: Manage candidates
     Given an election: "2008" exists with name: "2008 General"
     And a roll: "national" exists with name: "All US Citizens", election: election "2008"
     And a race: "potus" exists with name: "President of the United States", election: election "2008", roll: roll "national"
-  @wip
+
   Scenario: Register new candidate
     Given a candidate: "dem" exists with name: "Barack Obama", race: race "potus"
     And a race: "vpotus" exists with name: "Vice President of the United States", election: election "2008", roll: roll "national"
