@@ -26,10 +26,11 @@ class Ballot < ActiveRecord::Base
       self.collect { |v| v.candidate }
     end
     def build_linked
-      inject([]) { |memo, vote| memo << build_linked_for(vote) }
+      inject([]) { |memo, vote| memo + build_linked_for(vote) }
     end
     def build_linked_for(vote)
-      vote_candidate.linked_candidates.inject([]) do |memo, candidate|
+      return [] if vote.candidate.nil?
+      vote.candidate.linked_candidates.inject([]) do |memo, candidate|
         unless( candidate.race.is_ranked? || candidates.include?(candidate) )
           memo << build( :rank => 1 )
           memo.last.candidate = candidate
@@ -39,7 +40,7 @@ class Ballot < ActiveRecord::Base
     end
   end
 
-  accepts_nested_attributes_for :votes
+  accepts_nested_attributes_for :votes, :reject_if => proc { |a| a['candidate_id'].blank? || a['rank'].blank? || a['rank'].to_i < 1 }
 
   validates_presence_of :election
   validates_presence_of :user
