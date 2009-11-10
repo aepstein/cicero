@@ -1,4 +1,6 @@
 class Ballot < ActiveRecord::Base
+  attr_accessor :confirmation
+
   belongs_to :election
   belongs_to :user
   has_many :votes, :dependent => :delete_all, :include => [ :candidate ],
@@ -36,6 +38,8 @@ class Ballot < ActiveRecord::Base
       end
     end
   end
+
+  accepts_nested_attributes_for :votes
 
   validates_presence_of :election
   validates_presence_of :user

@@ -2,18 +2,20 @@
 
 <%= error_messages_for :ballot %>
 
-<% form_for( :ballot,
-             @ballot,
-             :url => confirm_new_election_ballots_url( @ballot.election ),
-             :html => { :method => :post } ) do |f| %>
-<% fields_for :choices, @ballot.choices do |choices| %>
-<%= render :partial => 'elections/ballots/set',
-           :collection => @ballot.election.races.sort,
-           :locals => { :ballot => @ballot, :choices => choices } %>
-<% end %>
-  <p>
-    <%= f.submit "Check and confirm my ballot" %>
-  </p>
+<% semantic_form_for( :ballot, @ballot, :url => confirm_new_election_ballot_url( @ballot.election ) ) do |f| %>
+
+  <%= f.error_messages %>
+
+  <% f.inputs do  %>
+    <%= render :partial => 'form', :object => f %>
+  <% end %>
+
+  <% f.buttons do %>
+    <%= f.commit_button 'Continue'%>
+  <% end %>
 <% end %>
 
+<p>
 <%= link_to 'Back', election_ballots_path( @ballot.election ) %>
+</p>
+

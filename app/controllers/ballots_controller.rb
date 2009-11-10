@@ -30,8 +30,7 @@ class BallotsController < ApplicationController
   # GET /elections/:election_id/ballots/new
   # GET /elections/:election_id/ballots/new.xml
   def new
-    @ballot = Election.find(params[:election_id]).ballots
-    @ballot.user = current_user
+    @ballot = Election.find(params[:election_id]).ballots.build(:user => current_user)
     raise AuthorizationError unless @ballot.may_user?(current_user,:create)
     @ballot.initialize_options
 
@@ -43,9 +42,9 @@ class BallotsController < ApplicationController
 
   # GET /elections/:election_id/ballots/new/confirm
   def confirm
-    @ballot = Election.find(params[:election_id]).ballots.find(params[:id])
+    @ballot = Election.find(params[:election_id]).ballots.build(params[:ballot])
+    @ballot.user = current_user
     raise AuthorizationError unless @ballot.may_user?(current_user,:update)
-    @ballot.choices=(params)
 
     respond_to do |format|
       if @ballot.valid?
@@ -53,7 +52,7 @@ class BallotsController < ApplicationController
         format.html # confirm.html.erb
       else
         @ballot.initialize_options
-        format.html { render :action => 'edit' }
+        format.html { render :action => 'new' }
       end
     end
   end
@@ -66,11 +65,12 @@ class BallotsController < ApplicationController
     raise AuthorizationError unless @ballot.may_user?(current_user,:create)
 
     respond_to do |format|
-      if @ballot.save
+      if @ballot.confirmation && @ballot.save
         flash[:notice] = 'Ballot was successfully created.'
         format.html { redirect_to( election_ballot_url(@ballot.election, @ballot) ) }
         format.xml  { render :xml => @ballot, :status => :created, :location => @ballot }
       else
+        @ballot.initialize_options
         format.html { render :action => "new" }
         format.xml  { render :xml => @ballot.errors, :status => :unprocessable_entity }
       end

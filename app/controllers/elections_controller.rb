@@ -9,18 +9,18 @@ class ElectionsController < ApplicationController
       format.xml  { render :xml => @elections }
     end
   end
-  
+
   # GET /elections/my
   # GET /elections/my.xml
   def my
     @elections = current_user.elections.current_open
-    
+
     respond_to do |format|
       if @elections.size == 1
-        format.html { redirect_to my_election_ballots_url( @elections[0] ) }
+        format.html { redirect_to new_election_ballot_url( @elections.first ) }
       else
         format.html # index.html.erb
-      end 
+      end
       format.xml { render :xml => @elections }
     end
   end
@@ -90,7 +90,7 @@ class ElectionsController < ApplicationController
       end
     end
   end
-  
+
   # POST /elections/:id/tabulate
   def tabulate
     @election = Election.find(params[:id])
@@ -118,3 +118,4 @@ class ElectionsController < ApplicationController
     end
   end
 end
+

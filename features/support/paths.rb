@@ -11,6 +11,9 @@ module NavigationHelpers
     when /the home\s?page/
       '/'
 
+    when /^the new ballot page for #{capture_model}$/
+      new_election_ballot_path(model($1))
+
     when /^the new candidate page for #{capture_model}$/
       new_race_candidate_path(model($1))
 
