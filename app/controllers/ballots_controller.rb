@@ -17,13 +17,13 @@ class BallotsController < ApplicationController
     end
   end
 
-  # GET /ballots/:id/verify
-  def verify
+  # GET /ballots/:id/show
+  def show
     @ballot = Ballot.find(params[:id])
-    raise AuthorizationError unless @ballot.may_user?(current_user,:verify)
+    raise AuthorizationError unless @ballot.may_user?(current_user,:show)
 
     respond_to do |format|
-      format.html # verify.html.erb
+      format.html # show.html.erb
     end
   end
 
@@ -68,7 +68,7 @@ class BallotsController < ApplicationController
     respond_to do |format|
       if @ballot.confirmation && @ballot.save
         flash[:notice] = 'Ballot was successfully created.'
-        format.html { redirect_to( election_ballot_url(@ballot.election, @ballot) ) }
+        format.html { redirect_to @ballot }
         format.xml  { render :xml => @ballot, :status => :created, :location => @ballot }
       else
         @ballot.initialize_options

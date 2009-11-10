@@ -48,8 +48,13 @@ class Ballot < ActiveRecord::Base
   validates_associated :votes
 
   before_validation :build_linked_votes
+  before_validation_on_create :initialize_votes
   validate :must_have_valid_votes
 
+
+  def initialize_votes
+    votes.each { |vote| vote.ballot = self }
+  end
 
   def must_have_valid_votes
     allowed_races.each { |race| validate_set(race) }

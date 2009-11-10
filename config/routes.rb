@@ -13,7 +13,7 @@ ActionController::Routing::Routes.draw do |map|
       race.resources :rounds
       race.resources :ballots, :only => :index
     end
-    election.resources :ballots, :new => [ :confirm ], :except => [ :show, :edit, :update ]
+    election.resources :ballots, :new => [ :confirm ], :except => [ :edit, :update ]
   end
 
   map.login 'login', :controller => 'user_sessions', :action => 'new'
