@@ -1,6 +1,9 @@
 Given /^#{capture_model} is a current election$/ do |election|
-  model(election).update_attributes( :voting_starts_at => (DateTime.now - 1.days),
-    :voting_ends_at => (DateTime.now + 1.days), :results_available_at => (DateTime.now + 2.days) )
+  election = model(election)
+  election.voting_starts_at = DateTime.now - 1.weeks
+  election.voting_ends_at = election.voting_starts_at + 2.weeks
+  election.results_available_at = election.voting_ends_at + 1.days
+  election.save!
 end
 
 When /^I delete the (\d+)(?:st|nd|rd|th) election$/ do |pos|

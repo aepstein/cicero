@@ -30,7 +30,8 @@ class BallotsController < ApplicationController
   # GET /elections/:election_id/ballots/new
   # GET /elections/:election_id/ballots/new.xml
   def new
-    @ballot = Election.find(params[:election_id]).ballots.build(:user => current_user)
+    @ballot = Election.find(params[:election_id]).ballots.build
+    @ballot.user = current_user
     raise AuthorizationError unless @ballot.may_user?(current_user,:create)
     @ballot.initialize_options
 

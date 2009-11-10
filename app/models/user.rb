@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   has_many :candidates, :finder_sql =>
     'SELECT DISTINCT candidates.* FROM candidates INNER JOIN votes v INNER JOIN ballots b WHERE ' +
     'candidates.id=v.candidate_id AND v.ballot_id=b.id AND b.user_id=#{id}'
-  has_and_belongs_to_many :rolls, :include => :election, :order => 'rolls.name' do
+  has_and_belongs_to_many :rolls, :order => 'rolls.name' do
     def for_election(election)
       self.select { |r| r.election == election }
     end

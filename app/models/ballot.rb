@@ -109,7 +109,7 @@ class Ballot < ActiveRecord::Base
     return @allowed_races if @allowed_races
     @allowed_races = Array.new
     election.races.each { |race| @allowed_races<<(race) if user.rolls.exists?(race.roll_id) }
-    allowed_races
+    @allowed_races
   end
 
   # Reviews choices and registers error for any candidate with invalid entry
