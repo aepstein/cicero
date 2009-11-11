@@ -14,8 +14,8 @@ describe Vote do
     @vote.save.should eql false
   end
 
-  it 'should not save without a ballot' do
-    @vote.ballot = nil
+  it 'should not save without a section' do
+    @vote.section = nil
     @vote.save.should eql false
   end
 

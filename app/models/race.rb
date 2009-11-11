@@ -1,10 +1,7 @@
 class Race < ActiveRecord::Base
   belongs_to :election
   belongs_to :roll
-  has_many :candidates,
-           :include => [:linked_candidates, :linked_candidate],
-           :order => 'candidates.name ASC',
-           :dependent => :destroy do
+  has_many :candidates, :order => 'candidates.name ASC', :dependent => :destroy do
     def open_to(user)
       self.reject { |c| user.candidates.include?(c) }
     end
@@ -13,8 +10,8 @@ class Race < ActiveRecord::Base
   has_many :rounds,  :dependent => :destroy, :order => 'position'
 
   named_scope :allowed_for_user, lambda { |user|
-    :joins => 'INNER JOIN rolls_users AS ru',
-    :conditions => [ 'rolls.id = ru.roll_id AND ru.user_id = ?', user.id ]
+    { :joins => 'INNER JOIN rolls_users AS ru',
+      :conditions => [ 'rolls.id = ru.roll_id AND ru.user_id = ?', user.id ] }
   }
 
   validates_presence_of :name

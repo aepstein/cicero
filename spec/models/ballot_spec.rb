@@ -29,11 +29,19 @@ describe Ballot do
     race = add_race_for_ballot( ballot, :is_ranked => false )
     candidate_a = add_candidate_for_race race
     candidate_b = add_candidate_for_race race
-    ballot.votes_attributes = [ { 'candidate_id' => "#{candidate_a.id}", 'rank' => '1' } ]
+    ballot.sections_attributes = [ {
+      'race_id' => race.id,
+      'votes_attributes' => [ {
+        'candidate_id' => "#{candidate_a.id}", 'rank' => '1'
+      } ]
+    } ]
     ballot.save.should eql true
-    ballot.votes.size.should eql 1
-    ballot.votes.first.candidate.should eql candidate_a
-    ballot.votes.first.rank.should eql 1
+    ballot.sections.size.should eql 1
+    section = ballot.sections.first
+    section.race.should eql race
+    section.votes.size.should eql 1
+    section.votes.first.candidate.should eql candidate_a
+    section.votes.first.rank.should eql 1
   end
 
   def add_race_for_ballot(ballot, options = {})

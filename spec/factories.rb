@@ -40,8 +40,13 @@ Factory.define :ballot do |f|
   f.association :user
 end
 
+Factory.define :section do |f|
+  f.association :ballot
+  f.race { |section| section.association(:race, :election => section.ballot.election, :roll => Factory(:roll, :election => section.ballot.election, :users => [ section.ballot.user ] ) ) }
+end
+
 Factory.define :vote do |f|
-  f.association :candidate
-  f.ballot { |vote| vote.association( :ballot, :election => vote.candidate.race.election ) }
+  f.association :section
+  f.candidate { |vote| vote.association( :candidate, :race => vote.section.race ) }
 end
 

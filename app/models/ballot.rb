@@ -52,9 +52,7 @@ class Ballot < ActiveRecord::Base
   validate :sections_must_be_unique
 
   before_validation :initialize_sections
-  validate :must_have_valid_sections
-  validate :must_have_valid_votes
-
+  validate :sections_must_be_unique
 
   def sections_must_be_unique
     race_ids = []
@@ -62,12 +60,12 @@ class Ballot < ActiveRecord::Base
       if section.race_id && race_ids.include?(section.race_id)
         section.errors.add :race_id, 'is not unique for the ballot'
       end
-      race_ids << section.race_id unless race_id.nil?
+      race_ids << section.race_id if section.race_id?
     end
   end
 
   def initialize_sections
-    sections.each { section.ballot = self if section.ballot.nil? }
+    sections.each { |section| section.ballot = self if section.ballot.nil? }
   end
 
   # Reviews choices and registers error for any candidate with invalid entry

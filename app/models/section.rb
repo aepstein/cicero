@@ -1,4 +1,6 @@
 class Section < ActiveRecord::Base
+  attr_accessor :warning
+
   belongs_to :ballot
   belongs_to :race
   has_many :votes do
@@ -9,7 +11,9 @@ class Section < ActiveRecord::Base
 
   validates_presence_of :ballot
   validates_presence_of :race
+  validates_uniqueness_of :race_id, :scope => [ :ballot_id ]
   validate :votes_must_be_unique
+  validate :user_must_be_in_race_roll
 
   before_validation :initialize_votes
 
@@ -19,6 +23,13 @@ class Section < ActiveRecord::Base
 
   def initialize_votes
     votes.each { |vote| vote.section = self if vote.section.nil? }
+  end
+
+  def user_must_be_in_race_roll
+    return unless race && ballot
+    unless race.roll.users.exists?(ballot.user_id)
+      errors.add :race_id, 'does not have the user in its roll'
+    end
   end
 
   def votes_must_be_unique
@@ -36,11 +47,19 @@ class Section < ActiveRecord::Base
       ranks << vote.rank
       if vote.candidate_id && candidate_ids.include?(vote.candidate_id)
           vote.errors.add :candidate_id, 'is not unique for the race'
-        end
       end
       candidate_ids << vote.candidate_id unless vote.candidate_id.nil?
       # TODO verify write-in is unique
     end
   end
+
+  def votes_must_not_exceed_maximum
+    if (over = votes.size - race.max_votes) > 0
+      errors.add_to_base "#{over} votes are selected beyond the #{race.max_votes} that are allowed for the race"
+    elsif over < 0
+      self.warning = "#{over} fewer votes are selected than the #{race.max_votes} that are allowed for the race"
+    end
+  end
+
 end
 
