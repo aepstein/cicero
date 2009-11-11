@@ -3,7 +3,22 @@ class Ballot < ActiveRecord::Base
 
   belongs_to :election
   belongs_to :user
-  has_many :sections
+  has_many :sections do
+    def for_race( race )
+      select { |section| section.race_id == race.id }.first
+    end
+    def populate
+      proxy_owner.races.allowed.each do |race|
+        section = for_race(race) || build( :race => race )
+        section.votes.populate
+      end
+    end
+  end
+  has_many :races, :through => :election do
+    def allowed
+      allowed_for_user( proxy_owner.user )
+    end
+  end
   has_many :votes, :dependent => :delete_all, :include => [ :candidate ],
     :order => 'votes.rank' do
     def for_race( race )
@@ -53,64 +68,6 @@ class Ballot < ActiveRecord::Base
 
   def initialize_sections
     sections.each { section.ballot = self if section.ballot.nil? }
-  end
-
-  def must_have_valid_votes
-    allowed_races.each { |race| validate_set(race) }
-    votes.each do |vote|
-      validate_ranked_vote(vote) if vote.candidate.race.is_ranked?
-    end
-  end
-
-  def validate_ranked_vote(vote)
-    if votes.conflict_with_vote(vote).size > 0
-      msg = "You ranked #{vote.candidate} the same as your #{votes.conflict_with_vote(vote).join(', ')}" +
-            " in #{vote.candidate.race}"
-      vote.errors.add(:rank, msg)
-      errors.add_to_base(msg)
-    end
-    if ( (vote.rank != 1) && votes.first_before_vote(vote).nil? )
-      msg = "You have ranked #{vote.candidate} ##{vote.rank} but you have no candidate ranked " +
-            "##{vote.rank - 1} in #{vote.candidate.race}"
-      vote.errors.add(:rank, msg)
-      errors.add_to_base(msg)
-    end
-  end
-
-  # Initialize votes
-  def initialize_options
-    allowed_candidates.each do |candidate|
-      votes.build.candidate = candidate unless votes.for_candidate(candidate)
-    end
-  end
-
-  # Choices
-  def choices=(params)
-    allowed_candidates.each do |candidate|
-      if params.key?("vote_#{candidate.id}")
-        vote_params = params["vote_#{candidate.id}"]
-        unless vote_params["rank"].to_i == 0
-          vote = votes.build(vote_params)
-          vote.candidate = candidate
-        end
-      end
-    end
-  end
-
-  def allowed_candidates
-    return @allowed_candidates if @allowed_candidates
-    @allowed_candidates = Array.new
-    allowed_races.each do |race|
-      @allowed_candidates += race.candidates
-    end
-    allowed_candidates
-  end
-
-  def allowed_races
-    return @allowed_races if @allowed_races
-    @allowed_races = Array.new
-    election.races.each { |race| @allowed_races<<(race) if user.rolls.exists?(race.roll_id) }
-    @allowed_races
   end
 
   # Reviews choices and registers error for any candidate with invalid entry

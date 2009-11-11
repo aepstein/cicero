@@ -6,6 +6,14 @@ class Vote < ActiveRecord::Base
 
   validates_presence_of :candidate
   validates_presence_of :section
+  validate :candidate_must_be_in_section_race
+
+  def candidate_must_be_in_section_race
+    return unless candidate && section && section.race
+    unless section.race.candidates.exists?( candidate.id )
+      errors.add :candidate_id, 'is not in the race for this section'
+    end
+  end
 
   def to_s
     "vote for #{candidate}"

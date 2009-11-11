@@ -12,6 +12,11 @@ class Race < ActiveRecord::Base
   has_many :sections
   has_many :rounds,  :dependent => :destroy, :order => 'position'
 
+  named_scope :allowed_for_user, lambda { |user|
+    :joins => 'INNER JOIN rolls_users AS ru',
+    :conditions => [ 'rolls.id = ru.roll_id AND ru.user_id = ?', user.id ]
+  }
+
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :election_id
   validates_presence_of :election

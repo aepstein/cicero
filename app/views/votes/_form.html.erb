@@ -1,7 +1,9 @@
-<%= hidden_field_tag 'race_id', race.id %>
-<strong>Add your vote for a candidate:</strong>
-<%= collection_select( :vote,
-                       :candidate_id,
-                       race.candidates.open_to(user),
-                       :id,
-                       :name ) %>
+<%= form.input :candidate_id, :as => :hidden %>
+<% if race.is_ranked? -%>
+<%= form.input :rank, :as => :select, :label => vote.candidate.name,
+      :include_blank => true, :collection => vote.candidate.race.rank_options,
+      :label_method => :to_s, :value_method => :to_i %>
+<% else -%>
+<%= form.input :rank, :as => :boolean, :label => vote.candidate.name %>
+<% end -%>
+

@@ -1,0 +1,5 @@
+<%= form.input :race %>
+<% semantic_fields_for :votes do |subform| %>
+  <%= render :partial => 'votes/form', :object => subform %>
+<% end %>
+

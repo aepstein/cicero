@@ -9,11 +9,11 @@ ActionController::Routing::Routes.draw do |map|
       roll.resources :users, :only => :create # Needs refactoring in controller
     end
     election.resources :races do |race|
+      race.resources :sections, :only => [ :index ]
       race.resources :candidates, :member => { :popup => :get } do |candidate|
         candidate.resources :petitioners
       end
       race.resources :rounds
-      race.resources :ballots, :only => :index
     end
     election.resources :ballots, :new => [ :confirm ], :except => [ :edit, :update ]
   end
