@@ -1,0 +1,20 @@
+<h1>Editing section</h1>
+
+<% form_for(@section) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :ballot %><br />
+    <%= f.text_field :ballot %>
+  </p>
+  <p>
+    <%= f.label :race %><br />
+    <%= f.text_field :race %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @section %> |
+<%= link_to 'Back', sections_path %>

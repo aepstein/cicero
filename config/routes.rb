@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :sections
+
   map.resource :user_session, :only => [ :create ]
   map.resources :users
   map.resources :elections, :shallow => true, :collection => { :my => :get },

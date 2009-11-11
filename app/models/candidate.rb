@@ -4,14 +4,6 @@ class Candidate < ActiveRecord::Base
   has_many :ballots, :through => :votes
   has_many :petitioners
   has_many :users, :through => :petitioners
-  has_many :linked_candidates, :class_name => 'Candidate',
-           :foreign_key => 'linked_candidate_id', :include => [ :race ],
-           :dependent => :nullify do
-             def possible
-               proxy_owner.race.roll.candidates.reject { |c| c == proxy_owner }
-             end
-           end
-  belongs_to :linked_candidate, :class_name => 'Candidate'
 
   named_scope :disqualified, :conditions => { :disqualified => true }
 
@@ -23,20 +15,6 @@ class Candidate < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => :race_id
   validates_attachment_presence :picture
   validates_presence_of :race
-  validate :linked_candidate_must_belong_to_same_roll
-
-  def linked_candidate_must_belong_to_same_roll
-    return unless linked_candidate && race
-    unless linked_candidate.race.roll_id == race.roll_id
-      errors.add :linked_candidate_id, 'must be in race with same voter roll as this candidate.'
-    end
-  end
-
-  def linked_race_ids
-    out = linked_candidates.map { |c| c.race_id }
-    out << linked_candidate.race_id if linked_candidate
-    out.uniq
-  end
 
   def to_s
     name

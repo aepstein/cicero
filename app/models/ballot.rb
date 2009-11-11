@@ -3,6 +3,7 @@ class Ballot < ActiveRecord::Base
 
   belongs_to :election
   belongs_to :user
+  has_many :sections
   has_many :votes, :dependent => :delete_all, :include => [ :candidate ],
     :order => 'votes.rank' do
     def for_race( race )
@@ -25,35 +26,33 @@ class Ballot < ActiveRecord::Base
     def candidates
       self.collect { |v| v.candidate }
     end
-    def build_linked
-      inject([]) { |memo, vote| memo + build_linked_for(vote) }
-    end
-    def build_linked_for(vote)
-      return [] if vote.candidate.nil?
-      vote.candidate.linked_candidates.inject([]) do |memo, candidate|
-        unless( candidate.race.is_ranked? || candidates.include?(candidate) )
-          memo << build( :rank => 1 )
-          memo.last.candidate = candidate
-          memo += build_linked_for(memo.last)
-        end
-      end
-    end
   end
 
-  accepts_nested_attributes_for :votes, :reject_if => proc { |a| a['candidate_id'].blank? || a['rank'].blank? || a['rank'].to_i < 1 }
+  accepts_nested_attributes_for :sections
 
   validates_presence_of :election
   validates_presence_of :user
   validates_uniqueness_of :user_id, :scope => [ :election_id ]
   validates_associated :votes
+  validate :sections_must_be_unique
 
-  before_validation :build_linked_votes
-  before_validation_on_create :initialize_votes
+  before_validation :initialize_sections
+  validate :must_have_valid_sections
   validate :must_have_valid_votes
 
 
-  def initialize_votes
-    votes.each { |vote| vote.ballot = self }
+  def sections_must_be_unique
+    race_ids = []
+    sections.each do |section|
+      if section.race_id && race_ids.include?(section.race_id)
+        section.errors.add :race_id, 'is not unique for the ballot'
+      end
+      race_ids << section.race_id unless race_id.nil?
+    end
+  end
+
+  def initialize_sections
+    sections.each { section.ballot = self if section.ballot.nil? }
   end
 
   def must_have_valid_votes
@@ -61,10 +60,6 @@ class Ballot < ActiveRecord::Base
     votes.each do |vote|
       validate_ranked_vote(vote) if vote.candidate.race.is_ranked?
     end
-  end
-
-  def build_linked_votes
-    votes.build_linked
   end
 
   def validate_ranked_vote(vote)

@@ -2,10 +2,10 @@ class Vote < ActiveRecord::Base
   attr_accessible :rank, :candidate_id
 
   belongs_to :candidate
-  belongs_to :ballot
+  belongs_to :section
 
   validates_presence_of :candidate
-  validates_presence_of :ballot
+  validates_presence_of :section
 
   def to_s
     "vote for #{candidate}"
