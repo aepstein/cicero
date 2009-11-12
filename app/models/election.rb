@@ -1,37 +1,20 @@
 class Election < ActiveRecord::Base
   named_scope :allowable, lambda { { :conditions => [ 'elections.voting_ends_at > ?', DateTime.now ] } }
 
+  scope_procedure :past, lambda { voting_ends_at_less_than DateTime.now.utc }
+  scope_procedure :current, lambda { voting_starts_at_less_than(DateTime.now.utc).voting_ends_at_greater_than(DateTime.now.utc) }
+  scope_procedure :future, lambda { voting_starts_at_greater_than(DateTime.now.utc) }
+
   has_many :rolls, :include => [:races], :order => :name, :dependent => :destroy
   has_many :races, :include => [:candidates, :roll], :order => :name, :dependent => :destroy do
     def open_to(user)
-      user.races.select { |r| r.election == proxy_owner }
+      user.races.select { |race| race.election_id == proxy_owner.election_id }
     end
   end
-  has_and_belongs_to_many :managers,
-                          :class_name => 'User',
-                          :join_table => 'elections_managers'
+  has_and_belongs_to_many :managers, :class_name => 'User', :join_table => 'elections_managers'
   has_many :ballots, :dependent => :destroy do
     def for_user(user)
-      @for_user ||= self.find(:first,
-                              :conditions => [ 'ballots.election_id = ? AND ballots.user_id = ?',
-                                               proxy_owner.id, user.id ],
-                              :limit => 1)
-    end
-    def for_race(race)
-      @for_race ||= self.find(:all,
-                              :include => [ :votes ],
-                              :conditions => [ 'votes.candidate_id IN (SELECT candidates.id FROM candidates WHERE candidates.race_id = ?) AND cast_at IS NOT NULL', race.id ],
-                              :order => 'ballots.id ASC, votes.rank ASC')
-    end
-    def uncast_size
-      @uncast_size ||= Ballot.count(
-        :conditions => "election_id = #{proxy_owner.id} AND cast_at IS NULL"
-      )
-    end
-    def cast_size
-      @cast_size ||= Ballot.count(
-        :conditions => "election_id = #{proxy_owner.id} AND cast_at IS NOT NULL"
-      )
+      user_id_equals( user.id ).first
     end
   end
   has_many :candidates, :through => :races

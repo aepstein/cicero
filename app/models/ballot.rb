@@ -3,7 +3,7 @@ class Ballot < ActiveRecord::Base
 
   belongs_to :election
   belongs_to :user
-  has_many :sections do
+  has_many :sections, :dependent => :destroy do
     def with_race_id( race_id )
       self.select { |section| section.race_id == race_id }.first
     end
@@ -19,39 +19,14 @@ class Ballot < ActiveRecord::Base
       allowed_for_user( proxy_owner.user )
     end
   end
-  has_many :votes, :dependent => :delete_all, :include => [ :candidate ],
-    :order => 'votes.rank' do
-    def for_race( race )
-      votes = self.select { |vote| vote.candidate.race == race }
-      return votes if race.is_ranked?
-      votes.sort_by { |vote| vote.candidate }
-    end
-    def for_candidate( candidate )
-      self.select { |v| v.candidate == candidate }.first
-    end
-    def conflict_with_vote( vote )
-      self.for_race( vote.candidate.race ).select { |v| (v != vote) && (v.rank == vote.rank) }
-    end
-    def first_before_vote( vote )
-      self.select { |v| ( v.rank == (vote.rank - 1) ) }.first
-    end
-    def left_for_race( race )
-      race.max_votes - for_race(race).size
-    end
-    def candidates
-      self.collect { |v| v.candidate }
-    end
-  end
 
   accepts_nested_attributes_for :sections
+
+  before_validation :initialize_sections
 
   validates_presence_of :election
   validates_presence_of :user
   validates_uniqueness_of :user_id, :scope => [ :election_id ]
-  validates_associated :votes
-  validate :sections_must_be_unique
-
-  before_validation :initialize_sections
   validate :sections_must_be_unique
 
   def sections_must_be_unique
@@ -69,7 +44,7 @@ class Ballot < ActiveRecord::Base
   end
 
   def to_s
-    "ballot of #{user} for #{election}"
+    user.to_s
   end
 
   def may_user?(user,action)
@@ -85,10 +60,6 @@ class Ballot < ActiveRecord::Base
       when :new, :create
         self.user == user && user.elections.current.include?(election)
     end
-  end
-
-  def to_blt(race)
-    votes.collect { |vote| race.candidate_ids.index(vote.candidate_id) + 1 }.join(' ')
   end
 
 end

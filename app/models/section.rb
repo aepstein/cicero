@@ -69,5 +69,9 @@ class Section < ActiveRecord::Base
     end
   end
 
+  def to_blt
+    votes.collect { |vote| race.candidate_ids.index(vote.candidate_id) + 1 }.join(' ')
+  end
+
 end
 

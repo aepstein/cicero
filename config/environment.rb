@@ -70,6 +70,7 @@ Rails::Initializer.run do |config|
   config.gem 'justinfrench-formtastic', :lib => 'formtastic', :source => 'http://gems.github.com'
   config.gem 'authlogic'
   config.gem 'calendar_date_select'
+  config.gem 'searchlogic'
 end
 
 CalendarDateSelect.format = :hyphen_ampm
