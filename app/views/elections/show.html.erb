@@ -28,8 +28,7 @@
   <%=markdown @election.verify_message %>
 
 <p>
-  <b>Ballots cast so far:</b> <%=h @election.ballots.cast_size %><br/>
-  <b>Ballots started, not cast:</b> <%=h @election.ballots.uncast_size %>
+  <b>Ballots cast so far:</b> <%=h @election.ballots.size %><br/>
 </p>
 
 <% if @election.may_user?(current_user,:tabulate) %>
@@ -68,7 +67,7 @@
 </ul>
 <% end %>
 
-<hr/>
+
 <p>
 <%= link_to( 'Edit',
              edit_election_path(@election) ) if @election.may_user?(current_user, :update) %> |
