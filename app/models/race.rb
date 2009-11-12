@@ -72,8 +72,8 @@ class Race < ActiveRecord::Base
     candidates.disqualified.each do |candidate|
       output += "-#{candidates.index(candidate)}\n"
     end
-    election.ballots.for_race(self).each do |ballot|
-      output += "1 #{ballot.to_blt(self)} 0\n"
+    sections.each do |section|
+      output += "1 #{section.to_blt} 0\n"
     end
     output += "0\n"
     candidates.each do |candidate|
