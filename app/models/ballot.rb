@@ -4,12 +4,12 @@ class Ballot < ActiveRecord::Base
   belongs_to :election
   belongs_to :user
   has_many :sections do
-    def for_race( race )
-      select { |section| section.race_id == race.id }.first
+    def with_race_id( race_id )
+      self.select { |section| section.race_id == race_id }.first
     end
     def populate
       proxy_owner.races.allowed.each do |race|
-        section = for_race(race) || build( :race => race )
+        section = ( with_race_id(race.id) || build( :race => race ) )
         section.votes.populate
       end
     end

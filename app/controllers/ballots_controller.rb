@@ -33,7 +33,7 @@ class BallotsController < ApplicationController
     @ballot = Election.find(params[:election_id]).ballots.build
     @ballot.user = current_user
     raise AuthorizationError unless @ballot.may_user?(current_user,:create)
-    @ballot.initialize_options
+    @ballot.sections.populate
 
     respond_to do |format|
       format.html # new.html.erb
@@ -52,7 +52,7 @@ class BallotsController < ApplicationController
         @ballot.freeze
         format.html # confirm.html.erb
       else
-        @ballot.initialize_options
+        @ballot.sections.populate
         format.html { render :action => 'new' }
       end
     end
@@ -71,7 +71,7 @@ class BallotsController < ApplicationController
         format.html { redirect_to @ballot }
         format.xml  { render :xml => @ballot, :status => :created, :location => @ballot }
       else
-        @ballot.initialize_options
+        @ballot.sections.populate
         format.html { render :action => "new" }
         format.xml  { render :xml => @ballot.errors, :status => :unprocessable_entity }
       end

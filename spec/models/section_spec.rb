@@ -30,5 +30,18 @@ describe Section do
     @section.race = race
     @section.save.should eql false
   end
+
+  it "should have a votes.populate method that generates votes for each candidate" do
+    excluded = Factory(:candidate, :race => Factory( :race, :election => @section.ballot.election ) )
+    included = add_candidate_for_section( @section )
+    @section.votes.populate
+    candidates = @section.votes.map { |vote| vote.candidate }
+    candidates.should include included
+    candidates.should_not include excluded
+  end
+
+  def add_candidate_for_section( section )
+    Factory( :candidate, :race => section.race )
+  end
 end
 

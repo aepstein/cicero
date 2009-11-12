@@ -44,6 +44,15 @@ describe Ballot do
     section.votes.first.rank.should eql 1
   end
 
+  it "should have a races.allowed method that returns only races the user is allowed to vote in" do
+    allowed = add_race_for_ballot(@ballot)
+    not_allowed = Factory(:race, :election => @ballot.election)
+    allowed.should_not eql not_allowed
+    @ballot.races.allowed.size.should == 1
+    @ballot.races.allowed.should include allowed
+    @ballot.races.should include not_allowed
+  end
+
   def add_race_for_ballot(ballot, options = {})
     default_options = { :election => ballot.election, :roll => Factory(:roll, :election => ballot.election) }
     race = Factory(:race, default_options.merge(options) )

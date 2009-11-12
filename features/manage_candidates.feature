@@ -16,7 +16,6 @@ Feature: Manage candidates
     When I fill in "Name" with "Joseph Biden"
     And I fill in "Statement" with "Yes we can!"
     And I choose "candidate_disqualified_false"
-    And I select "Barack Obama" from "Linked candidate"
     And I attach the file at "" to "Picture"
     And I fill in "Picture" with "spec/assets/robin.jpg"
     And I press "Create"
@@ -24,7 +23,6 @@ Feature: Manage candidates
     And I should see "Name: Joseph Biden"
     And I should see "Yes we can!"
     And I should see "Disqualified? No"
-    And I should see "Linked candidate: Barack Obama"
     And I should see "Picture: Yes"
 
   Scenario: Delete candidate

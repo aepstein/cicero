@@ -4,8 +4,16 @@ class Section < ActiveRecord::Base
   belongs_to :ballot
   belongs_to :race
   has_many :votes do
+    def populate
+      proxy_owner.race.candidates.each do |candidate|
+        build(:candidate => candidate) unless candidate_ids.include? candidate.id
+      end
+    end
+    def candidate_ids
+      map { |vote| vote }
+    end
     def ranks
-      select { |vote| vote.rank }
+      map { |vote| vote.rank }
     end
   end
 

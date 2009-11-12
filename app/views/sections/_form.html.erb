@@ -1,5 +1,26 @@
-<%= form.input :race %>
-<% semantic_fields_for :votes do |subform| %>
-  <%= render :partial => 'votes/form', :object => subform %>
+<tr><td><%=h form.object.race %></td></tr>
+<tr>
+<td>
+<%=markdown form.object.race.description %>
+<p><em>Instructions for this race:</em></p>
+<% if form.object.race.is_ranked? %>
+<p>
+Please rank <u>all</u> candidates in your order of preference.
+Using the drop down menu next to each option, select "1" for your most preferred choice,
+"2" for your second most preferred, and so on.
+If you choose not to include a candidate at all it means you would rather have your vote not
+count than have it count for that candidate.
+</p>
+<% else %>
+<p>
+Please select the candidates you would like to elect for this race.
+You may choose up to <%=h form.object.race.available_slots %>.
+</p>
+<% end %>
+</td>
+</tr>
+<%= form.input :race_id, :as => :hidden %>
+<% form.semantic_fields_for :votes do |subform| %>
+  <%= render :partial => 'votes/form', :object => subform, :locals => { :race => form.object.race } %>
 <% end %>
 

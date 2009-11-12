@@ -1,5 +1,5 @@
 class Vote < ActiveRecord::Base
-  attr_accessible :rank, :candidate_id
+  attr_accessible :rank, :candidate_id, :candidate
 
   belongs_to :candidate
   belongs_to :section

@@ -11,7 +11,7 @@ class Race < ActiveRecord::Base
 
   named_scope :allowed_for_user, lambda { |user|
     { :joins => 'INNER JOIN rolls_users AS ru',
-      :conditions => [ 'rolls.id = ru.roll_id AND ru.user_id = ?', user.id ] }
+      :conditions => [ 'races.roll_id = ru.roll_id AND ru.user_id = ?', user.id ] }
   }
 
   validates_presence_of :name

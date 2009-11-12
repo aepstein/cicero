@@ -4,10 +4,6 @@
   <%= form.input :name %>
   <%= form.input :statement %>
   <%= form.input :picture %>
-  <%= form.input :linked_candidate, :collection => @candidate.linked_candidates.possible,
-        :include_blank => 'No linked candidate',
-        :hint => 'If specified, a vote cast for the linked candidate will cause ' +
-                 'this candidate to receive a vote as well.' %>
   <%= form.input :disqualified, :as => :radio %>
 <% end %>
 

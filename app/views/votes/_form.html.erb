@@ -1,9 +1,12 @@
 <%= form.input :candidate_id, :as => :hidden %>
 <% if race.is_ranked? -%>
-<%= form.input :rank, :as => :select, :label => vote.candidate.name,
-      :include_blank => true, :collection => vote.candidate.race.rank_options,
+<%= form.input :rank, :as => :select, :label => form.object.candidate.name,
+      :include_blank => true, :collection => form.object.candidate.race.rank_options,
       :label_method => :to_s, :value_method => :to_i %>
 <% else -%>
-<%= form.input :rank, :as => :boolean, :label => vote.candidate.name %>
+<%= form.input :rank, :as => :boolean, :label => form.object.candidate.name %>
 <% end -%>
+<tr>
+  <td><%= form.object.candidate %></td>
+</tr>
 

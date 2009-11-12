@@ -13,13 +13,6 @@
 <%=markdown @candidate.statement %>
 
 <p>
-  <b>Linked candidate:</b> <%=h @candidate.linked_candidate || 'None' %>
-  <br/>
-  A vote cast for <em><%= @candidate.linked_candidate.name %></em> will cause a vote to be cast for
-  this candidate.
-</p>
-
-<p>
   <b>Disqualified?</b> <%= @candidate.disqualified? ? 'Yes' : 'No' %>
 </p>
 
