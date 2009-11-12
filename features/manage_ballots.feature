@@ -1,4 +1,3 @@
-@wip
 Feature: Manage ballots
   In order to cast votes
   As a an eligible voter
