@@ -51,4 +51,11 @@ Spec::Runner.configure do |config|
   # == Notes
   #
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
+  config.after(:all) do
+    data_directory = File.expand_path(File.dirname(__FILE__) + "../../db/uploads/#{ENV['RAILS_ENV']}")
+    if File.directory?(data_directory)
+      FileUtils.rm_rf data_directory
+    end
+  end
 end
+
