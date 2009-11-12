@@ -68,51 +68,14 @@ class Ballot < ActiveRecord::Base
     sections.each { |section| section.ballot = self if section.ballot.nil? }
   end
 
-  # Reviews choices and registers error for any candidate with invalid entry
-  def validate_set(race)
-    race_choices = votes.for_race(race)
-    errors.add( :votes,
-                "You have selected #{difference_for_race(race_choices,race)} for #{race}"
-              ) if race_choices.size > race.max_votes
-    warnings[race]=(
-                     "You have selected #{difference_for_race(race_choices,race)} for #{race}"
-                   ) if race_choices.size < race.max_votes
-  end
-
-  # Correctly describes number of additional votes allowed
-  def difference_for_race(race_choices,race)
-    if race_choices.size != race.max_votes
-      difference = race.max_votes - race_choices.size
-      qualifier = "fewer" if difference > 0
-      qualifier = "more" if difference < 0
-      qualifier += " than the maximum allowed"
-      return ( (difference.abs == 1) ? '1 vote' : "#{difference.abs} votes" ) + " #{qualifier}"
-    end
-  end
-
-  # Warnings about possibly invalid votes
-  def warnings
-    @warnings ||= Hash.new
-  end
-
-  # Casts the ballot
-  # Will not recast a ballot that has already been cast or was confirmed before last update
-  def cast(confirmed_at)
-    return false if cast_at? || (confirmed_at < updated_at)
-    self.cast_at=Time.now
-    save
-  end
-
   def to_s
     "ballot of #{user} for #{election}"
   end
 
   def may_user?(user,action)
     case action
-      when :show, :update, :cast
-        self.user == user && user.elections.current.include?(election) && cast_at.nil?
-      when :verify
-        (self.user == user || user.admin?) && cast_at
+      when :show
+        (self.user == user || user.admin?)
       when :delete
         user.admin? ||
           ( election.managers.include?(user) && Time.now < election.voting_ends_at ) ||
@@ -125,8 +88,7 @@ class Ballot < ActiveRecord::Base
   end
 
   def to_blt(race)
-    votes.collect { |vote| race.candidate_ids.index(vote.candidate_id)
-}.map { |ix| ix + 1 }.join(' ')
+    votes.collect { |vote| race.candidate_ids.index(vote.candidate_id) + 1 }.join(' ')
   end
 
 end

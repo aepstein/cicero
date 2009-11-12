@@ -10,7 +10,7 @@ class Section < ActiveRecord::Base
       end
     end
     def candidate_ids
-      map { |vote| vote }
+      map { |vote| vote.candidate_id }
     end
     def ranks
       map { |vote| vote.rank }
@@ -20,8 +20,7 @@ class Section < ActiveRecord::Base
   validates_presence_of :ballot
   validates_presence_of :race
   validates_uniqueness_of :race_id, :scope => [ :ballot_id ]
-  validate :votes_must_be_unique
-  validate :user_must_be_in_race_roll
+  validate :votes_must_be_unique, :user_must_be_in_race_roll, :votes_must_not_exceed_maximum
 
   before_validation :initialize_votes
 
@@ -62,6 +61,7 @@ class Section < ActiveRecord::Base
   end
 
   def votes_must_not_exceed_maximum
+    return unless race
     if (over = votes.size - race.max_votes) > 0
       errors.add_to_base "#{over} votes are selected beyond the #{race.max_votes} that are allowed for the race"
     elsif over < 0

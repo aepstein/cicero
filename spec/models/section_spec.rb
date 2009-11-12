@@ -34,7 +34,9 @@ describe Section do
   it "should have a votes.populate method that generates votes for each candidate" do
     excluded = Factory(:candidate, :race => Factory( :race, :election => @section.ballot.election ) )
     included = add_candidate_for_section( @section )
+    @section.reload
     @section.votes.populate
+    @section.votes.size.should eql 1
     candidates = @section.votes.map { |vote| vote.candidate }
     candidates.should include included
     candidates.should_not include excluded
