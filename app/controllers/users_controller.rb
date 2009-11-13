@@ -108,22 +108,22 @@ class UsersController < ApplicationController
   private
 
   def bulk_create
-    @roll = Election.find(params[:election_id]).rolls.find(params[:roll_id])
+    @roll = Roll.find(params[:roll_id])
     raise AuthorizationError unless @roll.may_user?(current_user, :update)
 
     respond_to do |format|
       flash[:notice] = "Processed new voters"
       # Add from form field
       unless params[:users].nil? || params[:users].empty?
-        import_results = @roll.import_users_from_csv_string( params[:users] )
+        import_results = @roll.users.import_from_string( params[:users] )
       end
       # Add from file
       unless params[:users_file].is_a?( String )
-        import_results = @roll.import_users_from_csv_file( params[:users_file] )
+        import_results = @roll.users.import_from_file( params[:users_file] )
       end
       import_results ||= [0,0]
       flash[:notice] += ": #{import_results.first} new voters and #{import_results.last} new users."
-      format.html { redirect_to( election_roll_url(@roll.election, @roll) ) }
+      format.html { redirect_to @roll }
       format.xml { head :ok }
     end
   end

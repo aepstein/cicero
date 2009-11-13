@@ -23,7 +23,6 @@ class Roll < ActiveRecord::Base
 
     def import_from_csv(values)
       original_roll_size = count
-      original_user_size = User.count
 
       # Filter values for correctly formatted rolls only
       values = values.select { |row| row.size == 4 }
@@ -33,17 +32,19 @@ class Roll < ActiveRecord::Base
       # Set up user records for any users not already in database
       current_user_net_ids = connection.select_values "SELECT net_id FROM users WHERE net_id IN (#{import_net_ids_sql})"
       values = values.reject { |row| current_user_net_ids.include?( row[0] ) }
-      values.map! { |row| User.new( :net_id => row[0], :email => row[1], :first_name => row[2], :last_name => row[3] ) }
-      values.each { |user| user.reset_password }
-      User.import( values, :validate => false )
-      values = nil
+      unless values.empty?
+        values.map! { |row| User.new( :net_id => row[0], :email => row[1], :first_name => row[2], :last_name => row[3] ) }
+        values.each { |user| user.reset_password }
+        user_import = User.import( values, :validate => false )
+        values = nil
+      end
 
       # Add users to roll not already in the roll
       connection.insert_sql "INSERT INTO rolls_users ( roll_id, user_id )
         SELECT #{connection.quote proxy_owner.id}, u.id FROM users AS u WHERE
         u.net_id IN (#{import_net_ids_sql}) AND u.id NOT IN
         (SELECT user_id FROM rolls_users AS ru WHERE ru.roll_id = #{connection.quote proxy_owner.id})"
-      [(size - original_roll_size), (User.count - original_user_size)]
+      [(size - original_roll_size), user_import.num_inserts ]
     end
   end
   has_many :races, :order => 'races.name ASC', :dependent => :destroy
