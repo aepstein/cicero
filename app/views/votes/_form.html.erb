@@ -1,12 +1,11 @@
 <%= form.input :candidate_id, :as => :hidden %>
-<% if race.is_ranked? -%>
+<% if form.object.frozen? %>
+<%= form.input :rank, :as => :hidden, :label => form.object.candidate.name %><%=h form.object.candidate %>
+<% elsif race.is_ranked? -%>
 <%= form.input :rank, :as => :select, :label => form.object.candidate.name,
       :include_blank => true, :collection => form.object.candidate.race.rank_options,
-      :label_method => :to_s, :value_method => :to_i %>
+      :label_method => :to_s, :value_method => :to_i, :required => false %>
 <% else -%>
-<%= form.input :rank, :as => :boolean, :label => form.object.candidate.name %>
+<%= form.input :rank, :as => :boolean, :label => form.object.candidate.name, :required => false %>
 <% end -%>
-<tr>
-  <td><%= form.object.candidate %></td>
-</tr>
 

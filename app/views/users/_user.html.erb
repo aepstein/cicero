@@ -1,0 +1,9 @@
+<tr>
+  <td><%=h user.net_id %></td>
+  <td><%=h user.first_name %></td>
+  <td><%=h user.last_name %></td>
+  <td><%= link_to 'Show', user %></td>
+  <td><%= link_to 'Edit', edit_user_path(user) %></td>
+  <td><%= link_to 'Destroy', user, :confirm => 'Are you sure?', :method => :delete %></td>
+</tr>
+

@@ -1,7 +1,5 @@
 <h2>Ballot of <%=h @ballot.user %> for <%=h @ballot.election %> election</h2>
 
-<%= error_messages_for :ballot %>
-
 <% semantic_form_for( :ballot, @ballot, :url => confirm_new_election_ballot_url( @ballot.election ) ) do |f| %>
 
   <%= f.error_messages %>
@@ -14,6 +12,8 @@
     <%= f.commit_button 'Continue'%>
   <% end %>
 <% end %>
+
+<hr/>
 
 <p>
 <%= link_to 'Back', election_ballots_path( @ballot.election ) %>

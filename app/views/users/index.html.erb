@@ -1,7 +1,7 @@
-<h2>Listing users</h2>
+<h2>Listing users <%= "for #{h @roll}" if @roll %></h2>
 
 <p>
-	<%= form_tag users_path, :method => :get %>
+	<%= form_tag (@roll ? roll_users_path( @roll ) : users_path), :method => :get %>
 	Search: <%= text_field_tag :search, @search %>
 	<%= submit_tag "Go" %>
 </p>
@@ -9,22 +9,16 @@
 <br/>
 
 <table>
-  <tr>
-    <th>Net Id</th>
-    <th>First name</th>
-    <th>Last name</th>
-  </tr>
-
-<% for user in @users %>
-  <tr>
-    <td><%=h user.net_id %></td>
-    <td><%=h user.first_name %></td>
-    <td><%=h user.last_name %></td>
-    <td><%= link_to 'Show', user %></td>
-    <td><%= link_to 'Edit', edit_user_path(user) %></td>
-    <td><%= link_to 'Destroy', user, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
+  <thead>
+    <tr>
+      <th>Net id</th>
+      <th>First name</th>
+      <th>Last name</th>
+    </tr>
+  </thead>
+  <tbody>
+  <%= render :partial => 'user', :collection => @users %>
+  </tbody>
 </table>
 
 <br />

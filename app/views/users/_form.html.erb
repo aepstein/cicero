@@ -1,41 +1,29 @@
-  <p>
-    <b>Net Id</b><br />
-    <%= f.text_field :net_id %>
-  </p>
-  
-  <p>
-  	<strong>Email</strong><br />
-	<%= f.text_field :email %>
-  </p>
+<%= form.error_messages %>
 
-  <p>
-    <b>First name</b><br />
-    <%= f.text_field :first_name %>
-  </p>
+<% form.inputs do %>
+  <%= form.input :net_id %>
+  <%= form.input :email %>
+  <%= form.input :first_name %>
+  <%= form.input :last_name %>
+  <%= form.input :admin, :as => :radio if current_user.admin? %>
+  <%= form.input :password %>
+  <%= form.input :password_confirmation, :as => :password %>
+<% end %>
 
-  <p>
-    <b>Last name</b><br />
-    <%= f.text_field :last_name %>
-  </p>
+<h3>Allowed races</h3>
 
-  <p>
-    <b>Check if an elections administrator (use <em>sparingly</em>)</b>
-    <%= f.check_box :admin %>
-  </p>
-  
-  <h3>Allowed races</h3>
-  
-  <p>
-  Please select the rolls in which the user should be listed.
-  </p>
-  
-  <% Election.find(:all, :include => :rolls, :order => 'rolls.name ASC').each do |election| %>
+<p>
+Please select the rolls in which the user should be listed.
+</p>
+
+<% Election.find(:all, :include => :rolls, :order => 'rolls.name ASC').each do |election| %>
   <h4><%=h election.name %></h4>
   <ul>
-  <% election.rolls.each do |roll| %>
-  <li><%= check_box_tag 'user[roll_ids][]',
-                        roll.id,
-                        @user.rolls.include?(roll) %> <%= roll.name %></li>
-  <% end %>
+    <% election.rolls.each do |roll| %>
+    <li><%= check_box_tag 'user[roll_ids][]', roll.id, @user.rolls.include?(roll) %> <%= roll.name %></li>
+    <% end %>
   </ul>
-  <% end %>
+<% end %>
+
+<%= form.buttons %>
+

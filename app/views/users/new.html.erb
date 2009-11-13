@@ -1,15 +1,12 @@
 <h2>New user</h2>
 
-<%= error_messages_for :user %>
+<% semantic_form_for(@user) do |f| %>
 
-<% form_for(@user) do |f| %>
+<%= render :partial => 'form', :object => f %>
 
-<%= render :partial => 'form',
-           :locals => { :f => f } %> 
-
-  <p>
-    <%= f.submit "Create" %>
-  </p>
 <% end %>
 
+<p>
 <%= link_to 'Back', users_path %>
+</p>
+

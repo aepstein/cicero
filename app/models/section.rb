@@ -24,7 +24,7 @@ class Section < ActiveRecord::Base
 
   before_validation :initialize_votes
 
-  accepts_nested_attributes_for :votes
+  accepts_nested_attributes_for :votes, :reject_if => proc { |a| a['rank'].to_i == 0 }
 
   private
 
@@ -62,10 +62,11 @@ class Section < ActiveRecord::Base
 
   def votes_must_not_exceed_maximum
     return unless race
-    if (over = votes.size - race.max_votes) > 0
-      errors.add_to_base "#{over} votes are selected beyond the #{race.max_votes} that are allowed for the race"
+    over = votes.size - race.max_votes
+    if over > 0
+      errors.add_to_base "#{over} votes are selected beyond the #{race.max_votes} that are allowed for the race #{race.name}"
     elsif over < 0
-      self.warning = "#{over} fewer votes are selected than the #{race.max_votes} that are allowed for the race"
+      self.warning = "#{over} fewer votes are selected than the #{race.max_votes} that are allowed for the race #{race.name}"
     end
   end
 

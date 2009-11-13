@@ -27,9 +27,8 @@ class Roll < ActiveRecord::Base
 
       # Filter values for correctly formatted rolls only
       values = values.select { |row| row.size == 4 }
-      # Get list of net ids to use
-      import_net_ids = values.map { |row| row[0] }
-      import_net_ids_sql = import_net_ids.map { |net_id| connection.quote net_id }.join ", "
+      return [0,0] if values.empty?
+      import_net_ids_sql = values.map { |row| connection.quote row[0] }.join ", "
 
       # Set up user records for any users not already in database
       current_user_net_ids = connection.select_values "SELECT net_id FROM users WHERE net_id IN (#{import_net_ids_sql})"

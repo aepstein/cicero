@@ -1,22 +1,20 @@
 <p>
-  <b>Net Id:</b>
-  <%=h @user.net_id %>
+  <b>Net id:</b> <%=h @user.net_id %>
 </p>
 
 <p>
-	<strong>Email:</strong>
-	<%=h @user.email %>
+	<strong>Email:</strong> <%=h @user.email %>
 </p>
 
 <p>
-  <b>First name:</b>
-  <%=h @user.first_name %>
+  <b>First name:</b> <%=h @user.first_name %>
 </p>
 
 <p>
-  <b>Last name:</b>
-  <%=h @user.last_name %>
+  <b>Last name:</b> <%=h @user.last_name %>
 </p>
+
+<p><b>Admin?</b> <%= @user.admin ? 'Yes' : 'No' %> </p>
 
 
 <h3>Allowed elections</h3>
@@ -31,8 +29,9 @@
       </ul>
   <% end %>
   <% end %>
-  
+
 <p>
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>
 </p>
+

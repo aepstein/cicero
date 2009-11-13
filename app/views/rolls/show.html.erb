@@ -8,6 +8,8 @@
 
 <p>
 <%= link_to 'Edit', edit_roll_path( @roll ) %> |
+<%= link_to 'List users', roll_users_path( @roll ) %> |
+<%= link_to 'Import users', bulk_new_roll_user_path(@roll) %> |
 <%= link_to 'Back', election_rolls_path( @roll.election ) %>
 </p>
 
