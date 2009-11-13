@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   # GET /users
   # GET /users.xml
+  # GET /rolls/:roll_id/users
+  # GET /rolls/:roll_id/users
   def index
     @search = params[:search]
     @users = User.search(@search,params[:page])
@@ -35,6 +37,16 @@ class UsersController < ApplicationController
     end
   end
 
+  # GET /rolls/:roll_id/users/new/bulk
+  def bulk
+    @roll = Roll.find(:roll_id)
+    raise AuthorizationError unless @roll.may_user?(current_user, :update)
+
+    respond_to do |format|
+      format.html # bulk.html.erb
+    end
+  end
+
   # GET /users/1/edit
   def edit
     @user = User.find(params[:id])
@@ -44,6 +56,7 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.xml
   def create
+    return bulk_create if params[:users] || params[:users_file]
     @user = User.new(params[:user])
     raise AuthorizationError unless @user.may_user?(current_user,:create)
 
@@ -64,7 +77,7 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     raise AuthorizationError unless @user.may_user?(current_user,:update)
-    
+
     params[:user][:roll_ids] ||= Array.new
 
     respond_to do |format|
@@ -91,4 +104,28 @@ class UsersController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  private
+
+  def bulk_create
+    @roll = Election.find(params[:election_id]).rolls.find(params[:roll_id])
+    raise AuthorizationError unless @roll.may_user?(current_user, :update)
+
+    respond_to do |format|
+      flash[:notice] = "Added voters.\n"
+      # Add from form field
+      unless params[:users].nil? || params[:users].empty?
+        import_results = @roll.import_users_from_csv_string( params[:users] )
+        flash[:notice] += "Submitted form field contained #{import_results} new voters.\n"
+      end
+      # Add from file
+      unless params[:users_file].is_a?( String )
+        import_results = @roll.import_users_from_csv_file( params[:users_file] )
+        flash[:notice] += "Submitted file contained #{import_results} new voters."
+      end
+      format.html { redirect_to( election_roll_url(@roll.election, @roll) ) }
+      format.xml { head :ok }
+    end
+  end
 end
+

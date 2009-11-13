@@ -1,6 +1,5 @@
 <%= form_tag( bulk_create_election_roll_users_url(roll.election, roll),
-             :method => :post,
-             :multipart => true ) %>
+             :html => {:multipart => true } ) %>
 <p>
 You may specify voters to add by listing comma-separated values like this:
 <pre>
@@ -20,3 +19,4 @@ You may also upload a file with such data.
 <br/>
 <%= submit_tag 'Add users to roll' %>
 </form>
+

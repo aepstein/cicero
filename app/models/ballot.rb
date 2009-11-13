@@ -5,7 +5,7 @@ class Ballot < ActiveRecord::Base
   belongs_to :user
   has_many :sections, :dependent => :destroy do
     def with_race_id( race_id )
-      select { |section| section.race_id == race_id }.first
+      to_a.select { |section| section.race_id == race_id }.first
     end
     def populate
       proxy_owner.races.allowed.each do |race|

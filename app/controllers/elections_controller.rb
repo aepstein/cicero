@@ -1,4 +1,6 @@
 class ElectionsController < ApplicationController
+  before_filter :require_user, :only => [ :my ]
+
   # GET /elections
   # GET /elections.xml
   def index

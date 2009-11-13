@@ -1,4 +1,6 @@
 class BallotsController < ApplicationController
+  before_filter :require_user, :only => [ :my ]
+
   # GET /elections/:election_id/ballots
   # GET /elections/:election_id/ballots.xml
   # GET /races/:race_id/ballots
@@ -45,11 +47,10 @@ class BallotsController < ApplicationController
   def confirm
     @ballot = Election.find(params[:election_id]).ballots.build(params[:ballot])
     @ballot.user = current_user
-    raise AuthorizationError unless @ballot.may_user?(current_user,:update)
+    raise AuthorizationError unless @ballot.may_user?(current_user,:create)
 
     respond_to do |format|
       if @ballot.valid?
-        @ballot.freeze
         format.html # confirm.html.erb
       else
         @ballot.sections.populate

@@ -6,7 +6,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :elections, :shallow => true, :collection => { :my => :get },
     :member => { :tabulate => :post } do |election|
     election.resources :rolls do |roll|
-      roll.resources :users, :only => :create # Needs refactoring in controller
+      roll.resources :users, :new => { :bulk => :get }, :only => [ :index, :create ]
     end
     election.resources :races do |race|
       race.resources :sections, :only => [ :index ]

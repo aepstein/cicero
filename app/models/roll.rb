@@ -10,6 +10,43 @@ class Roll < ActiveRecord::Base
                             q,
                             q ] )
     end
+
+    def import_from_string( string )
+      import_from_csv( FasterCSV.parse(string) )
+    end
+
+    def import_from_file( file )
+      import_from_csv( FasterCSV.parse(file.read) )
+    end
+
+    private
+
+    def import_from_csv(values)
+      original_roll_size = count
+      original_user_size = User.count
+
+      # Filter values for correctly formatted rolls only
+      values = values.select { |row| row.size == 4 }
+      # Get list of net ids to use
+      import_net_ids = values.map { |row| row[0] }
+
+      # Set up user records for any users not already in database
+      import_net_ids_sql = import_net_ids.map { |net_id| connection.quote net_id }.join ", "
+      current_user_net_ids = connection.select_values "SELECT net_id FROM users WHERE net_id IN (#{import_net_ids_sql})"
+      import_net_ids_sql = nil
+      values = values.reject { |row| current_user_net_ids.include?( row[0] ) }
+      values.map! { |row| User.new( :net_id => row[0], :email => row[1], :first_name => row[2], :last_name => row[3] ) }
+      values.each { |user| user.reset_password }
+      User.import( values, :validate => false )
+      values = nil
+
+      # Add users to roll not already in the roll
+      self<< User.find( :all, :conditions => [
+        "users.net_id IN (?) AND users.id NOT IN (SELECT user_id FROM rolls_users AS ru WHERE ru.roll_id = ?)",
+        import_net_ids,
+        proxy_owner.id ] )
+      [(self.size - original_roll_size), (User.count - original_user_size)]
+    end
   end
   has_many :races, :order => 'races.name ASC', :dependent => :destroy
 
@@ -19,32 +56,6 @@ class Roll < ActiveRecord::Base
 
   def may_user?(user, action)
     election.may_user?(user, action)
-  end
-
-  def import_users_from_csv_string(string)
-    return import_users(FasterCSV.parse(string))
-  end
-
-  def import_users_from_csv_file(file)
-    return import_users(FasterCSV.parse(file.read))
-  end
-
-  def import_users(values)
-    columns = [:net_id, :email, :first_name, :last_name]
-    User.import( columns,
-                 values,
-                 { :on_duplicate_key_update => [:email, :first_name, :last_name],
-                   :validate => false } )
-    User.create_temporary_table
-    TempUser.import( columns, values, :validate => false )
-    num_inserts = connection.insert_sql(
-      "INSERT INTO rolls_users (rolls_users.roll_id, rolls_users.user_id) " +
-      "SELECT #{id}, users.id FROM users WHERE " +
-      "users.net_id IN (SELECT temp_users.net_id FROM temp_users) AND " +
-      "users.id NOT IN (SELECT rolls_users.user_id FROM rolls_users WHERE roll_id=#{id})"
-    )
-    TempUser.drop
-    return num_inserts
   end
 
   def to_s

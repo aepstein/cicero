@@ -39,38 +39,10 @@
 </p>
 <% end %>
 
-<h3>Races for this election</h3>
-
 <p>
-<%= link_to "Add race for #{@election}",
-            new_election_race_path(@election) %>
-</p>
-
-<% if @election.races.empty? %>
-<p><em>There are no races specified for this election yet.</em></p>
-<% else %>
-<%= render :partial => 'elections/races/race', :collection => @election.races %>
-<% end %>
-
-<p>
-<%= link_to "Add roll for #{@election}",
-            new_election_roll_path(@election) %>
-</p>
-
-<h3>Rolls for this election</h3>
-
-<% if @election.rolls.empty? %>
-<p><em>There are no rolls specified for this election yet.</em></p>
-<% else %>
-<ul>
-<%= render :partial => 'elections/rolls/roll', :collection => @election.rolls %>
-</ul>
-<% end %>
-
-
-<p>
-<%= link_to( 'Edit',
-             edit_election_path(@election) ) if @election.may_user?(current_user, :update) %> |
+<%= link_to( 'Edit', edit_election_path(@election) ) if @election.may_user?(current_user, :update) %> |
+<%= link_to 'List rolls', election_rolls_path(@election) %> |
+<%= link_to 'List races', election_races_path(@election) %> |
 <%= link_to 'Back', elections_path %>
 </p>
 
