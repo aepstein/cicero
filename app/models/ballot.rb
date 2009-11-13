@@ -29,6 +29,13 @@ class Ballot < ActiveRecord::Base
   validates_uniqueness_of :user_id, :scope => [ :election_id ]
   validate :sections_must_be_unique
 
+  named_scope :user_contains, lambda { |q|
+    q = "%#{q}%"
+    { :conditions => ['users.net_id LIKE ? OR users.first_name LIKE ? OR users.last_name LIKE ?', q, q, q],
+      :order => 'users.last_name ASC, users.first_name ASC, users.net_id ASC',
+      :include => [ :user ] }
+  }
+
   def sections_must_be_unique
     race_ids = []
     sections.each do |section|

@@ -1,8 +1,8 @@
 <tr>
   <td><%=h candidate.name %></td>
   <td>
-    <%= link_to( candidate.name, candidate_path( candidate ) ) if candidate.may_user?(current_user, :show) %>
-    <%= link_to 'Edit', edit_candidate_path( candidate ) if candidate.may_user?(current_user, :edit) %>
+    <%= link_to 'Show', candidate if candidate.may_user?(current_user, :show) %>
+    <%= link_to 'Edit', edit_candidate_path( candidate ) if candidate.may_user?(current_user, :update) %>
     <%= link_to( 'Destroy', candidate_path( candidate ), :confirm => 'Are you sure?',
           :method => :delete ) if candidate.may_user?(current_user, :delete) %>
   </td>

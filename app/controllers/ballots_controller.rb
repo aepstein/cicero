@@ -8,14 +8,13 @@ class BallotsController < ApplicationController
   # GET /races/:race_id/ballots.blt
   def index
     @election = Election.find(params[:election_id]) if params[:election_id]
-    @race = Election.find(params[:race_id]) if params[:race_id]
     raise AuthorizationError unless current_user.admin?
-    @ballots = @election.ballots
+    @search = params[:search]
+    @ballots = @election.ballots.user_contains(params[:search]).paginate( :page => params[:page] )
 
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @ballots }
-      format.blt # index.blt.erb
     end
   end
 
@@ -93,22 +92,5 @@ class BallotsController < ApplicationController
     end
   end
 
-  # GET /elections/:election_id/ballots/my
-  # No XML support
-  # Redirect user to own ballot and create ballot for user if one does not already exist
-  def my
-    election = Election.find(params[:election_id])
-    @ballot = election.ballots.for_user( current_user )
-    respond_to do |format|
-      if @ballot.nil?
-        @ballot = election.ballots.build
-        @ballot.user = current_user
-        @ballot.save
-        format.html { redirect_to( edit_election_ballot_url(@ballot.election, @ballot) ) }
-      else
-        format.html { redirect_to( edit_election_ballot_url(@ballot.election, @ballot) ) }
-      end
-    end
-  end
 end
 

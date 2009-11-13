@@ -1,3 +1,4 @@
 <li>
-<%=h ballot.election %> election on <%=h ballot.cast_at.strftime('%x at %X') %>
+<%=h ballot.election %> election on <%=h ballot.created_at.to_s(:us_ordinal) %>
 </li>
+
