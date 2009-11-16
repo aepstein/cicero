@@ -1,0 +1,30 @@
+<h2>Listing ballots for <%=h @election %></h2>
+
+<p>
+	<%= form_tag election_ballots_path(@election), :method => :get %>
+	Search: <%= text_field_tag :search, @search %>
+	<%= submit_tag "Go" %>
+</p>
+
+<%= will_paginate @users %>
+
+<table>
+<thead>
+<tr>
+<th>Net id</th><th>First name</th><th>Last name</th><th>When</th>
+</tr>
+</thead>
+<tbody>
+<%= render :partial => 'ballot', :collection => @ballots %>
+</tbody>
+</table>
+
+
+<%= will_paginate @users %>
+
+<hr />
+
+<p>
+<%= link_to 'Back', election_path(@election) %>
+</p>
+
