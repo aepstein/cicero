@@ -3,11 +3,10 @@ Dear <%=h @ballot.user.first_name %>,
 </p>
 
 <p>
-This email is to confirm that you successfully cast a ballot in the <%=h @ballot.election %> election on 
-<%=h @ballot.cast_at.strftime('%x at %X') %>.  If you believe you are receiving this email in error, please contact 
+This email is to confirm that you successfully cast a ballot in the <%=h @ballot.election %> election on
+<%=h @ballot.created_at.to_s :us_ordinal %>.  If you believe you are receiving this email in error, please contact
 <%=mail_to @ballot.election.contact_email, @ballot.election.contact_name %>.
 </p>
 
-<%=markdown @ballot.election.contact_info %>
-
 <%=markdown @ballot.election.verify_message %>
+

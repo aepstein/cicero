@@ -26,7 +26,7 @@ class Candidate < ActiveRecord::Base
 
   # TODO use to migrate old picture storage to new approach
   def picture_prefix
-    "#{RAILS_ROOT}/db/uploads/#{RAILS_ENV}/candidates/#{race.election.id}/#{race.id}/#{self.id}"
+    "#{RAILS_ROOT}/db/uploads/#{RAILS_ENV}/candidates/#{race.election_id}/#{race_id}/#{self.id}"
   end
 
   def may_user?(user,action)
