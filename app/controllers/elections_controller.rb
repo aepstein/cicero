@@ -15,7 +15,7 @@ class ElectionsController < ApplicationController
   # GET /elections/my
   # GET /elections/my.xml
   def my
-    @elections = current_user.elections.current_open
+    @elections = current_user.elections.allowed
 
     respond_to do |format|
       if @elections.size == 1

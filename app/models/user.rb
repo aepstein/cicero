@@ -1,32 +1,9 @@
 class User < ActiveRecord::Base
-  has_many :ballots, :include => [:election], :dependent => :destroy do
-    def elections
-      map { |ballot| ballot.election }
-    end
-  end
-  has_and_belongs_to_many :rolls, :order => 'rolls.name' do
-    def for_election(election)
-      to_a.select { |r| r.election == election }
-    end
-  end
-  has_many :elections, :finder_sql =>
-    'SELECT DISTINCT elections.* FROM elections INNER JOIN rolls r INNER JOIN rolls_users l ' +
-    'WHERE elections.id=r.election_id AND r.id=l.roll_id AND l.user_id=#{id} ' +
-    'ORDER BY elections.name' do
-    def past
-      to_a.select { |e| e.voting_ends_at < Time.now }
-    end
-    def current
-      to_a.select { |e| e.voting_starts_at < Time.now && e.voting_ends_at > Time.now }
-    end
-    def current_open
-      current - proxy_owner.ballots.elections
-    end
-    def current_closed
-      current & proxy_owner.ballots.elections
-    end
-    def upcoming
-      to_a.select { |e| e.voting_starts_at > Time.now }
+  has_many :ballots, :dependent => :destroy
+  has_and_belongs_to_many :rolls, :order => 'rolls.name'
+  has_many :elections, :through => :ballots do
+    def allowed
+      Election.current.allowed_for_user_id(proxy_owner.id) - self
     end
   end
 
@@ -64,10 +41,6 @@ class User < ActiveRecord::Base
 
   def may_user?(user,action)
     user.admin?
-  end
-
-  def login!
-    #update_attribute :last_login_at, Time.now
   end
 
   def to_s

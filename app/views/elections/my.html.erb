@@ -13,13 +13,13 @@ Please select the election in which you would like to vote.  You will proceed to
 </ul>
 <% end %>
 
-<% if current_user.ballots.size > 0 %>
+<% if current_user.elections.size > 0 %>
 <p>
 You previously voted in these elections:
 </p>
 
 <ul>
-<%= render :partial => 'ballot', :collection => current_user.ballots %>
+<%= render :partial => 'ballot', :collection => current_user.ballots(:include => :election) %>
 </ul>
 <% end %>
 

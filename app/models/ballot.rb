@@ -60,12 +60,11 @@ class Ballot < ActiveRecord::Base
         (self.user == user || user.admin?)
       when :delete
         user.admin? ||
-          ( election.managers.include?(user) && Time.now < election.voting_ends_at ) ||
-          (self.user == user && user.elections.current.include?(election) && cast_at.nil?)
+          ( election.managers.include?(user) && Time.now < election.voting_ends_at )
       when :index
         user.admin? || election.managers.include?(user)
-      when :new, :create
-        self.user == user && user.elections.current.include?(election)
+      when :create
+        self.user == user && user.elections.allowed.include?(election)
     end
   end
 

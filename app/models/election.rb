@@ -1,22 +1,19 @@
 class Election < ActiveRecord::Base
   named_scope :allowable, lambda { { :conditions => [ 'elections.voting_ends_at > ?', DateTime.now ] } }
-
+  named_scope :allowed_for_user_id, lambda { |user_id|
+    { :conditions => [
+        'elections.id IN (SELECT election_id FROM rolls AS r INNER JOIN rolls_users AS ru
+        WHERE r.id = ru.roll_id AND ru.user_id = ?)',
+        user_id ] }
+  }
   scope_procedure :past, lambda { voting_ends_at_less_than DateTime.now.utc }
   scope_procedure :current, lambda { voting_starts_at_less_than(DateTime.now.utc).voting_ends_at_greater_than(DateTime.now.utc) }
   scope_procedure :future, lambda { voting_starts_at_greater_than(DateTime.now.utc) }
 
   has_many :rolls, :include => [:races], :order => :name, :dependent => :destroy
-  has_many :races, :include => [:candidates, :roll], :order => :name, :dependent => :destroy do
-    def open_to(user)
-      user.races.select { |race| race.election_id == proxy_owner.election_id }
-    end
-  end
+  has_many :races, :include => [:candidates, :roll], :order => :name, :dependent => :destroy
   has_and_belongs_to_many :managers, :class_name => 'User', :join_table => 'elections_managers'
-  has_many :ballots, :dependent => :destroy do
-    def for_user(user)
-      user_id_equals( user.id ).first
-    end
-  end
+  has_many :ballots, :dependent => :destroy
   has_many :candidates, :through => :races
 
   validates_presence_of :name
