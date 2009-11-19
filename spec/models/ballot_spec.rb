@@ -53,6 +53,29 @@ describe Ballot do
     @ballot.races.should include not_allowed
   end
 
+  it 'should have a confirmation accessor method' do
+    @ballot.confirmation.should be_nil
+    @ballot.confirmation = true
+    @ballot.confirmation.should eql true
+  end
+
+  it 'should have sections.with_race_id method that returns a section with a particular race_id' do
+    first_race = add_race_for_ballot( @ballot )
+    second_race = add_race_for_ballot( @ballot )
+    second_section = @ballot.sections.build( :race => second_race )
+    first_section = @ballot.sections.build( :race => first_race )
+    @ballot.sections.with_race_id( first_race.id ).race.should eql first_race
+  end
+
+  it 'should have a sections.populate method that creates sections for each race the user can vote in' do
+    allowed_race = add_race_for_ballot( @ballot )
+    disallowed_race = Factory(:race, :election => @ballot.election)
+    @ballot.reload
+    @ballot.sections.populate
+    @ballot.sections.size.should eql 1
+    @ballot.sections.map { |section| section.race }.should include allowed_race
+  end
+
   def add_race_for_ballot(ballot, options = {})
     default_options = { :election => ballot.election, :roll => Factory(:roll, :election => ballot.election) }
     race = Factory(:race, default_options.merge(options) )
