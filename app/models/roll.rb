@@ -5,10 +5,9 @@ class Roll < ActiveRecord::Base
     def find_by_net_id_or_name(search)
       q = "%#{search}%"
       find( :all,
-            :conditions => ['net_id LIKE ? OR first_name LIKE ? OR last_name LIKE ?',
-                            q,
-                            q,
-                            q ] )
+            :conditions => [
+              'net_id LIKE ? OR first_name LIKE ? OR last_name LIKE ?', q, q, q
+      ] )
     end
 
     def import_from_string( string )

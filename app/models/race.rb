@@ -1,4 +1,9 @@
 class Race < ActiveRecord::Base
+  named_scope :allowed_for_user, lambda { |user|
+    { :joins => 'INNER JOIN rolls_users AS ru',
+      :conditions => [ 'races.roll_id = ru.roll_id AND ru.user_id = ?', user.id ] }
+  }
+
   belongs_to :election
   belongs_to :roll
   has_many :candidates, :order => 'candidates.name ASC', :dependent => :destroy do
@@ -7,11 +12,6 @@ class Race < ActiveRecord::Base
     end
   end
   has_many :sections
-
-  named_scope :allowed_for_user, lambda { |user|
-    { :joins => 'INNER JOIN rolls_users AS ru',
-      :conditions => [ 'races.roll_id = ru.roll_id AND ru.user_id = ?', user.id ] }
-  }
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :election_id
