@@ -25,26 +25,6 @@ class Election < ActiveRecord::Base
   validates_presence_of :contact_name
   validates_format_of :contact_email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :allow_nil => false
 
-  # Marks and tabulates votes for all races
-  def tabulate
-    return false if Time.now < voting_ends_at # TODO is this an appropriate place for this?
-    races.each do |race|
-      race.rounds.create if race.rounds.size == 0
-    end
-    self.tabulated_at = Time.now
-    save
-    true
-  end
-
-  # Scrubs tabulated results and unmarks votes for all races
-  def untabulate
-    races.each do |race|
-      race.scrub_rounds
-    end
-    self.tabulated_at = nil
-    save
-  end
-
   def past?
     voting_ends_at < DateTime.now
   end

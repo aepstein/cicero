@@ -7,7 +7,6 @@ class Race < ActiveRecord::Base
     end
   end
   has_many :sections
-  has_many :rounds,  :dependent => :destroy, :order => 'position'
 
   named_scope :allowed_for_user, lambda { |user|
     { :joins => 'INNER JOIN rolls_users AS ru',
@@ -57,13 +56,6 @@ class Race < ActiveRecord::Base
 
   def <=>(otherRace)
     name <=> otherRace.name
-  end
-
-  # Delete rounds for race
-  def scrub_rounds
-    rounds.reverse_each do |round|
-      round.destroy
-    end
   end
 
   # Provide blt output
