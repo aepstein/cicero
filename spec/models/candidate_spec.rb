@@ -25,6 +25,13 @@ describe Candidate do
     duplicate.save.should eql false
   end
 
+  it 'should have a disqualified named scope that gets only disqualified canidates' do
+    @candidate.disqualified.should eql false
+    disqualified = Factory(:candidate, :disqualified => true)
+    Candidate.disqualified.size.should eql 1
+    Candidate.disqualified.should include disqualified
+  end
+
   after(:each) do
     Candidate.all.each { |c| c.destroy }
   end

@@ -39,7 +39,7 @@ class Race < ActiveRecord::Base
   def may_user?(user, action)
     case action
       when :create, :update, :delete
-        user.admin? || (election.voting_starts_at > Time.now && election.managers.include?(user))
+        user.admin? || (election.starts_at > Time.now && election.managers.include?(user))
     else
       election.may_user?(user, action)
     end

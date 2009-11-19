@@ -20,20 +20,20 @@ describe Election do
     duplicate.save.should eql false
   end
 
-  it "should not save without voting_starts_at" do
-    @election.voting_starts_at = nil
+  it "should not save without starts_at" do
+    @election.starts_at = nil
     @election.save.should eql false
   end
 
   it "should not save with start date at or after end date" do
-    @election.voting_starts_at = @election.voting_ends_at
+    @election.starts_at = @election.ends_at
     @election.save.should eql false
-    @election.voting_starts_at += 1.days
+    @election.starts_at += 1.days
     @election.save.should eql false
   end
 
-  it "should not save without voting_ends_at" do
-    @election.voting_ends_at = nil
+  it "should not save without ends_at" do
+    @election.ends_at = nil
     @election.save.should eql false
   end
 
