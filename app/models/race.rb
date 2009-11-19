@@ -1,7 +1,7 @@
 class Race < ActiveRecord::Base
-  named_scope :allowed_for_user, lambda { |user|
+  named_scope :allowed_for_user_id, lambda { |user_id|
     { :joins => 'INNER JOIN rolls_users AS ru',
-      :conditions => [ 'races.roll_id = ru.roll_id AND ru.user_id = ?', user.id ] }
+      :conditions => [ 'races.roll_id = ru.roll_id AND ru.user_id = ?', user_id ] }
   }
 
   belongs_to :election

@@ -16,7 +16,7 @@ class Ballot < ActiveRecord::Base
   end
   has_many :races, :through => :election do
     def allowed
-      allowed_for_user( proxy_owner.user )
+      allowed_for_user_id( proxy_owner.user_id )
     end
   end
 
