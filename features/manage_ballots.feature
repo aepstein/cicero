@@ -2,7 +2,7 @@ Feature: Manage ballots
   In order to cast votes
   As a an eligible voter
   I want to prepare, confirm, and create ballots
-  @wip
+
   Scenario: Cast new ballot
     Given a user: "voter" exists with net_id: "voter", password: "secret"
     And an election: "2008" exists with name: "2008 General"

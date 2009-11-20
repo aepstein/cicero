@@ -9,10 +9,14 @@
 <%= will_paginate @petitioners %>
 
 <table>
+
+<thead>
   <tr>
     <th>User</th>
   </tr>
+</thead>
 
+<tbody>
 <% for petitioner in @petitioners %>
   <tr>
     <td><%=h petitioner.user %></td>
@@ -21,6 +25,8 @@
     <td><%= link_to 'Destroy', petitioner_path( petitioner ), :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
+</tbody>
+
 </table>
 
 <%= will_paginate @petitioners %>

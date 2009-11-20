@@ -10,9 +10,12 @@ module NavigationHelpers
 
     when /the home\s?page/
       '/'
+
     when /the new user page/
       new_user_path
 
+    when /^the new petitioner page for #{capture_model}$/
+      new_candidate_petitioner_path(model($1))
 
     when /^the new ballot page for #{capture_model}$/
       new_election_ballot_path(model($1))

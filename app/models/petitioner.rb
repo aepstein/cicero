@@ -1,4 +1,5 @@
 class Petitioner < ActiveRecord::Base
+  default_scope :include => :user, :order => 'users.last_name ASC, users.first_name ASC, users.net_id ASC'
   belongs_to :user
   belongs_to :candidate
 
