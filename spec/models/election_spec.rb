@@ -56,5 +56,14 @@ describe Election do
     @election.verify_message = nil
     @election.save.should eql false
   end
+
+  it "should have an allowable scope showing elections ending after today" do
+    past = Factory(:past_election)
+    current = @election
+    future = Factory(:future_election)
+    Election.allowable.size.should eql 2
+    Election.allowable.should include current
+    Election.allowable.should include future
+  end
 end
 

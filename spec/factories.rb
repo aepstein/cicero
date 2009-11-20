@@ -8,6 +8,18 @@ Factory.define :election do |f|
   f.contact_email "elections@example.com"
 end
 
+Factory.define :past_election, :parent => :election do |f|
+  f.starts_at DateTime.now - 2.days
+  f.ends_at DateTime.now - 1.days
+  f.results_available_at DateTime.now - 5.minutes
+end
+
+Factory.define :future_election, :parent => :election do |f|
+  f.starts_at DateTime.now + 1.days
+  f.ends_at DateTime.now + 2.days
+  f.results_available_at DateTime.now + 3.days
+end
+
 Factory.define :roll do |f|
   f.association :election
   f.sequence(:name) { |n| "Roll #{n}" }

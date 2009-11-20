@@ -1,11 +1,11 @@
 class Election < ActiveRecord::Base
-  named_scope :allowable, lambda { { :conditions => [ 'elections.ends_at > ?', DateTime.now ] } }
   named_scope :allowed_for_user_id, lambda { |user_id|
     { :conditions => [
         'elections.id IN (SELECT election_id FROM rolls AS r INNER JOIN rolls_users AS ru
         WHERE r.id = ru.roll_id AND ru.user_id = ?)',
         user_id ] }
   }
+  scope_procedure :allowable, lambda { ends_at_greater_than DateTime.now }
   scope_procedure :past, lambda { ends_at_less_than DateTime.now.utc }
   scope_procedure :current, lambda { starts_at_less_than(DateTime.now.utc).ends_at_greater_than(DateTime.now.utc) }
   scope_procedure :future, lambda { starts_at_greater_than(DateTime.now.utc) }
