@@ -58,12 +58,40 @@ describe Election do
   end
 
   it "should have an allowable scope showing elections ending after today" do
-    past = Factory(:past_election)
-    current = @election
-    future = Factory(:future_election)
+    make_past_and_future
     Election.allowable.size.should eql 2
-    Election.allowable.should include current
-    Election.allowable.should include future
+    Election.allowable.should include @election
+    Election.allowable.should include @future
+  end
+
+  it 'should have a past scope' do
+    make_past_and_future
+    Election.past.size.should eql 1
+    Election.past.should include @past
+  end
+
+  it 'should have a current scope' do
+    make_past_and_future
+    Election.current.size.should eql 1
+    Election.current.should include @election
+  end
+
+  it 'should have a future scope' do
+    make_past_and_future
+    Election.future.size.should eql 1
+    Election.future.should include @future
+  end
+
+  it 'should have a past? method' do
+    make_past_and_future
+    @past.past?.should eql true
+    @election.past?.should eql false
+    @future.past?.should eql false
+  end
+
+  def make_past_and_future
+    @past = Factory(:past_election)
+    @future = Factory(:future_election)
   end
 end
 
