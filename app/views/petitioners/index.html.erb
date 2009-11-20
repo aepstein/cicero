@@ -1,5 +1,13 @@
 <h2>Listing petitioners for <%= @candidate %></h2>
 
+<p>
+	<%= form_tag candidate_petitioners_path( @candidate ), :method => :get %>
+	Search: <%= text_field_tag :search, @search %>
+	<%= submit_tag "Go" %>
+</p>
+
+<%= will_paginate @petitioners %>
+
 <table>
   <tr>
     <th>User</th>
@@ -8,32 +16,18 @@
 <% for petitioner in @petitioners %>
   <tr>
     <td><%=h petitioner.user %></td>
-    <td><%= link_to 'Show',
-                    election_race_candidate_petitioner_path(
-                      petitioner.candidate.race.election,
-                      petitioner.candidate.race,
-                      petitioner.candidate,
-                      petitioner ) %></td>
-    <td><%= link_to 'Edit', edit_election_race_candidate_petitioner_path(
-                              petitioner.candidate.race.election,
-                              petitioner.candidate.race,
-                              petitioner.candidate,
-                              petitioner ) %></td>
-    <td><%= link_to 'Destroy',
-                    election_race_candidate_petitioner_path(
-                      petitioner.candidate.race.election,
-                      petitioner.candidate.race,
-                      petitioner.candidate,
-                      petitioner ),
-                    :confirm => 'Are you sure?',
-                    :method => :delete %></td>
+    <td><%= link_to 'Show', petitioner_path( petitioner ) %></td>
+    <td><%= link_to 'Edit', edit_petitioner_path( petitioner ) %></td>
+    <td><%= link_to 'Destroy', petitioner_path( petitioner ), :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
 
+<%= will_paginate @petitioners %>
+
 <br />
 
-<%= link_to 'New petitioner',
-            new_election_race_candidate_petitioner_path( @candidate.race.election,
-                                                         @candidate.race,
-                                                         @candidate ) %>
+<p>
+<%= link_to 'New petitioner', new_candidate_petitioner_path( @candidate ) %>
+</p>
+

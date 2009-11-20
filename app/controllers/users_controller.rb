@@ -5,10 +5,15 @@ class UsersController < ApplicationController
   # GET /rolls/:roll_id/users
   def index
     @search = params[:search]
-    @users = User.search(@search,params[:page])
+    if params[:roll_id]
+      @roll = Roll.find(params[:roll_id])
+      @users = @roll.users.name_like(@search).paginate( :page => params[:page] )
+    end
+    @users ||= User.name_like(@search).paginate( :page =>  params[:page] )
 
     respond_to do |format|
       format.html # index.html.erb
+      format.js # index.js.erb
       format.xml  { render :xml => @users }
     end
   end

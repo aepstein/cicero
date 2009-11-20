@@ -31,14 +31,6 @@
   <b>Ballots cast so far:</b> <%=h @election.ballots.size %><br/>
 </p>
 
-<% if @election.may_user?(current_user,:tabulate) %>
-<p>
-<%= link_to 'Tabulate results',
-            tabulate_election_path(@election),
-            :method => :post %>
-</p>
-<% end %>
-
 <p>
 <%= link_to( 'Edit', edit_election_path(@election) ) if @election.may_user?(current_user, :update) %> |
 <%= link_to 'List rolls', election_rolls_path(@election) %> |

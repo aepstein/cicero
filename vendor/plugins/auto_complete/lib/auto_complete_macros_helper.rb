@@ -95,7 +95,7 @@ module AutoCompleteMacrosHelper
   # auto_complete action if you need to decorate it further.
   def auto_complete_result(entries, field, phrase = nil)
     return unless entries
-    items = entries.map { |entry| content_tag("li", phrase ? highlight(entry.send(field), phrase) : h(entry.send(field))) }
+    items = entries.map { |entry| content_tag("li", phrase ? highlight(entry[field], phrase) : h(entry[field])) }
     content_tag("ul", items.uniq)
   end
   

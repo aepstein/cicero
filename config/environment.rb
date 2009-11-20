@@ -65,19 +65,14 @@ Rails::Initializer.run do |config|
   config.gem 'BlueCloth', :lib => 'bluecloth', :version => '>= 1.0'
   config.gem 'will_paginate'
   config.gem 'sqlite3-ruby', :lib => 'sqlite3'
-  config.gem 'adzap-validates_timeliness', :lib => 'validates_timeliness'
+  config.gem 'validates_timeliness', :lib => 'validates_timeliness'
   config.gem 'paperclip', :source => 'http://gemcutter.org'
   config.gem 'justinfrench-formtastic', :lib => 'formtastic', :source => 'http://gems.github.com'
   config.gem 'authlogic'
   config.gem 'calendar_date_select'
   config.gem 'searchlogic'
+  config.gem 'cornell_netid'
 end
 
 CalendarDateSelect.format = :hyphen_ampm
-
-#if defined? ActiveRecord::ConnectionAdapters::MysqlAdapter
-#  require 'ar-extensions/adapters/mysql'
-#  require 'ar-extensions/temporary_table/mysql'
-#  require 'ar-extensions/import/mysql'
-#end
 

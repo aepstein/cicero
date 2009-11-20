@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  default_scope :order => 'users.last_name ASC, users.first_name ASC, users.net_id ASC'
+  scope_procedure :name_like, lambda { |name| last_name_or_first_name_or_net_id_like name }
+
   has_many :ballots, :dependent => :destroy
   has_and_belongs_to_many :rolls, :order => 'rolls.name'
   has_many :elections, :through => :ballots do

@@ -3,8 +3,8 @@ class PetitionersController < ApplicationController
   # GET /candidates/:candidate_id/petitioners.xml
   def index
     @candidate = Candidate.find(params[:candidate_id])
-    @petitioners = @candidate.petitioners
     raise AuthorizationError unless current_user.admin?
+    @petitioners = @candidate.petitioners.user_name_like(params[:search]).paginate(:page => params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

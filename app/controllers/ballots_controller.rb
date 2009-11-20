@@ -9,8 +9,7 @@ class BallotsController < ApplicationController
   def index
     @election = Election.find(params[:election_id]) if params[:election_id]
     raise AuthorizationError unless current_user.admin?
-    @search = params[:search]
-    @ballots = @election.ballots.user_contains(params[:search]).paginate( :page => params[:page] )
+    @ballots = @election.ballots.user_name_like( params[:search] ).paginate( :page => params[:page] )
 
     respond_to do |format|
       format.html # index.html.erb

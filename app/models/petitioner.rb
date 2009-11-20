@@ -3,7 +3,6 @@ class Petitioner < ActiveRecord::Base
   belongs_to :candidate
 
   delegate :name, :to => :user
-  delegate :net_id, :to => :user
 
   validates_presence_of :user
   validates_presence_of :candidate
@@ -18,15 +17,20 @@ class Petitioner < ActiveRecord::Base
   end
 
   def to_s
-    user.name
+    user.name if user
   end
 
   def may_user?(user,action)
     candidate.may_user?(user,action)
   end
 
+  def net_id
+    user.net_id if user
+  end
+
   def net_id=(net_id)
-     self.user = User.find(:first, :conditions => { :net_id => net_id[/^(\w{2,3}\d{1,4})/] } )
+    return self.user = nil if net_id.nil? || net_id.blank?
+    self.user = User.find_by_net_id net_id[/^(\w{2,4}\d+)/]
   end
 end
 
