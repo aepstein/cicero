@@ -51,10 +51,7 @@ class PetitionersController < ApplicationController
     respond_to do |format|
       if @petitioner.save
         flash[:notice] = 'Petitioner was successfully created.'
-        format.html { redirect_to( election_race_candidate_petitioners_url(
-          @petitioner.candidate.race.election,
-          @petitioner.candidate.race,
-          @petitioner.candidate ) ) }
+        format.html { redirect_to candidate_petitioners_url( @petitioner.candidate ) }
         format.xml  { render :xml => @petitioner, :status => :created, :location => @petitioner }
       else
         format.html { render :action => "new" }
@@ -72,10 +69,7 @@ class PetitionersController < ApplicationController
     respond_to do |format|
       if @petitioner.update_attributes(params[:petitioner])
         flash[:notice] = 'Petitioner was successfully updated.'
-        format.html { redirect_to( election_race_candidate_petitioners_url(
-          @petitioner.candidate.race.election,
-          @petitioner.candidate.race,
-          @petitioner.candidate ) ) }
+        format.html { redirect_to candidate_petitioners_url( @petitioner.candidate ) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -92,10 +86,7 @@ class PetitionersController < ApplicationController
     @petitioner.destroy
 
     respond_to do |format|
-      format.html { redirect_to( election_race_candidate_petitioners_url(
-        @petitioner.candidate.race.election,
-        @petitioner.candidate.race,
-        @petitioner.candidate ) ) }
+      format.html { redirect_to candidate_petitioners_url( @petitioner.candidate ) }
       format.xml  { head :ok }
     end
   end
