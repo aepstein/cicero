@@ -66,7 +66,7 @@ class Section < ActiveRecord::Base
     if over > 0
       errors.add_to_base "#{over} votes are selected beyond the #{race.max_votes} that are allowed for the race #{race.name}"
     elsif over < 0
-      self.warning = "#{over} fewer votes are selected than the #{race.max_votes} that are allowed for the race #{race.name}"
+      self.warning = "#{over.abs} fewer votes are selected than the #{race.max_votes} that are allowed for the race #{race.name}"
     end
   end
 

@@ -49,7 +49,7 @@ class BallotsController < ApplicationController
 
     respond_to do |format|
       if @ballot.valid?
-        @ballot.sections.each { |section| section.votes.each { |vote| vote.freeze } }
+        @ballot.sections.each { |section| section.freeze && section.votes.each { |vote| vote.freeze } }
         format.html # confirm.html.erb
       else
         @ballot.sections.populate

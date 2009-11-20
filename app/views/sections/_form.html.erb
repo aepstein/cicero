@@ -1,7 +1,15 @@
 <li>
 <strong><%=h form.object.race %></strong>
+
 <%= markdown form.object.race.description %>
 
+<% if form.object.warning %>
+<div class="warnings">
+<b>Warning:</b> <%=h form.object.warning %>
+</div>
+<% end %>
+
+<% unless form.object.frozen? %>
 <p><em>Instructions for this race:</em></p>
 
 <% if form.object.race.is_ranked? %>
@@ -22,10 +30,13 @@ You may choose up to <%=h form.object.race.available_slots %>.
 </p>
 
 <% end %>
+<% end %>
 <ol>
 <%= form.input :race_id, :as => :hidden %>
-<% form.semantic_fields_for :votes do |subform| %>
+<% form.object.votes.sort.each do |vote| %>
+<% form.semantic_fields_for :votes, vote do |subform| %>
   <%= render :partial => 'votes/form', :object => subform, :locals => { :race => form.object.race } %>
+<% end %>
 <% end %>
 </ol>
 </li>

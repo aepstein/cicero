@@ -1,6 +1,4 @@
 class Ballot < ActiveRecord::Base
-  attr_accessor :confirmation
-
   belongs_to :election
   belongs_to :user
   has_many :sections, :dependent => :destroy do
@@ -29,13 +27,6 @@ class Ballot < ActiveRecord::Base
   validates_uniqueness_of :user_id, :scope => [ :election_id ]
   validate :sections_must_be_unique
 
-  named_scope :user_contains, lambda { |q|
-    q = "%#{q}%"
-    { :conditions => ['users.net_id LIKE ? OR users.first_name LIKE ? OR users.last_name LIKE ?', q, q, q],
-      :order => 'users.last_name ASC, users.first_name ASC, users.net_id ASC',
-      :include => [ :user ] }
-  }
-
   def sections_must_be_unique
     race_ids = []
     sections.each do |section|
@@ -44,6 +35,17 @@ class Ballot < ActiveRecord::Base
       end
       race_ids << section.race_id if section.race_id?
     end
+  end
+
+  def confirmation
+    @confirmation
+  end
+
+  def confirmation=(value)
+    return @confirmation = false if value == 'false'
+    return @confirmation = true if value == 'true'
+    return @confirmation = value if value == true || value == false
+    @confirmation = nil
   end
 
   def initialize_sections
@@ -67,6 +69,5 @@ class Ballot < ActiveRecord::Base
         self.user == user && user.elections.allowed.include?(election)
     end
   end
-
 end
 

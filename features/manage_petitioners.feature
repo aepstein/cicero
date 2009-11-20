@@ -12,8 +12,6 @@ Feature: Manage petitioners
   Scenario: Register new petitioner
     Given a user: "voter" exists with net_id: "vot123", password: "secret", first_name: "John", last_name: "Doe"
     And the user is in the users of the roll
-    And a candidate: "obama" exists with name: "Barack Obama", race: race "potus"
-    And a candidate: "mccain" exists with name: "John McCain", race: race "potus"
     And I logged in as the administrator
     And I am on the new petitioner page for candidate "obama"
     When I fill in "petitioner[net_id]" with "vot123"

@@ -2,7 +2,7 @@
 
 <p>
 You, <%=h @ballot.user.name %>, successfully cast this ballot in the <%=h @ballot.election %> election on
-<%=h @ballot.created_at.strftime('%x at %X') %>.  If you have questions or need further assistance, please email
+<%=h @ballot.created_at.to_s :us_ordinal %>.  If you have questions or need further assistance, please email
 <%=mail_to @ballot.election.contact_email, @ballot.election.contact_name %>.
 </p>
 
