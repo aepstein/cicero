@@ -47,6 +47,15 @@ Factory.define :user do |f|
   f.password_confirmation { |user| user.password }
 end
 
+Factory.define :petitioner do |f|
+  f.association :user
+  f.candidate { |petitioner|
+    race = Factory(:race)
+    race.roll.users << petitioner.user
+    petitioner.association :candidate, :race => race
+  }
+end
+
 Factory.define :ballot do |f|
   f.association :election
   f.association :user
