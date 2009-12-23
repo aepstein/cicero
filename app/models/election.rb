@@ -1,4 +1,6 @@
 class Election < ActiveRecord::Base
+  default_scope :order => 'elections.name ASC'
+
   named_scope :allowed_for_user_id, lambda { |user_id|
     { :conditions => [
         'elections.id IN (SELECT election_id FROM rolls AS r INNER JOIN rolls_users AS ru

@@ -6,6 +6,6 @@ When /^I delete the (\d+)(?:st|nd|rd|th) roll for #{capture_model}$/ do |pos, el
 end
 
 Then /^I should see the following rolls:$/ do |expected_rolls_table|
-  expected_rolls_table.diff!(table_at('table').to_a)
+  expected_rolls_table.diff!( tableish('table tr','th,td') )
 end
 

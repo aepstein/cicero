@@ -22,18 +22,16 @@ Feature: Manage users
     And I should see "Email: jd1@example.com"
 
   Scenario: Delete user
-    Given the following users exist
-      |net_id  |first_name  |last_name  |
-      |net4    |first_name 4|last_name 4|
-      |net3    |first_name 3|last_name 3|
-      |net2    |first_name 2|last_name 2|
-      |net1    |first_name 1|last_name 1|
+    Given a user exists with net_id: "net4", first_name: "John", last_name: "Doe 4"
+    And a user exists with net_id: "net3", first_name: "John", last_name: "Doe 3"
+    And a user exists with net_id: "net2", first_name: "John", last_name: "Doe 2"
+    And a user exists with net_id: "net1", first_name: "John", last_name: "Doe 1"
     And I logged in as the administrator
     When I delete the 3rd user
     Then I should see the following users:
       |Net id  |First name  |Last name  |
+      |net1    |John        |Doe 1      |
+      |net2    |John        |Doe 2      |
+      |net4    |John        |Doe 4      |
       |admin   |First       |Last       |
-      |net1    |first_name 1|last_name 1|
-      |net2    |first_name 2|last_name 2|
-      |net4    |first_name 4|last_name 4|
 

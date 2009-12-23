@@ -6,6 +6,6 @@ When /^I delete the (\d+)(?:st|nd|rd|th) candidate for #{capture_model}$/ do |po
 end
 
 Then /^I should see the following candidates:$/ do |expected_candidates_table|
-  expected_candidates_table.diff!(table_at('table').to_a)
+  expected_candidates_table.diff!( tableish('table tr','th,td') )
 end
 

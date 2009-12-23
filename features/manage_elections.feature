@@ -24,17 +24,15 @@ Feature: Manage elections
     And I should see "Thank you for voting."
 
   Scenario: Delete election
-    Given I logged in as the administrator
-    And the following elections exist
-      |name  |
-      |name 1|
-      |name 2|
-      |name 3|
-      |name 4|
+    Given an election exists with name: "election 4"
+    And an election exists with name: "election 3"
+    And an election exists with name: "election 2"
+    And an election exists with name: "election 1"
+    And I logged in as the administrator
     When I delete the 3rd election
     Then I should see the following elections:
-      |Name  |
-      |name 1|
-      |name 2|
-      |name 4|
+      |Name      |
+      |election 1|
+      |election 2|
+      |election 4|
 

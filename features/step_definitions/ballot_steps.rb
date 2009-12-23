@@ -6,6 +6,6 @@ When /^I delete the (\d+)(?:st|nd|rd|th) ballot for #{capture_model}$/ do |pos, 
 end
 
 Then /^I should see the following ballots:$/ do |expected_ballots_table|
-  expected_ballots_table.diff!(table_at('table').to_a)
+  expected_ballots_table.diff!( tableish('table tr','th,td') )
 end
 

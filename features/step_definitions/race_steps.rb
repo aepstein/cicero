@@ -6,6 +6,6 @@ When /^I delete the (\d+)(?:st|nd|rd|th) race for #{capture_model}$/ do |pos, el
 end
 
 Then /^I should see the following races:$/ do |expected_races_table|
-  expected_races_table.diff!(table_at('table').to_a)
+  expected_races_table.diff!( tableish('table tr','th,td') )
 end
 

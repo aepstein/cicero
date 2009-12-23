@@ -6,6 +6,6 @@ When /^I delete the (\d+)(?:st|nd|rd|th) petitioner for #{capture_model}$/ do |p
 end
 
 Then /^I should see the following petitioners:$/ do |expected_petitioners_table|
-  expected_petitioners_table.diff!(table_at('table').to_a)
+  expected_petitioners_table.diff!( tableish('table tr','th,td') )
 end
 

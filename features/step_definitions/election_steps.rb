@@ -14,6 +14,6 @@ When /^I delete the (\d+)(?:st|nd|rd|th) election$/ do |pos|
 end
 
 Then /^I should see the following elections:$/ do |expected_elections_table|
-  expected_elections_table.diff!(table_at('table').to_a)
+  expected_elections_table.diff!( tableish('table tr','th,td') )
 end
 
