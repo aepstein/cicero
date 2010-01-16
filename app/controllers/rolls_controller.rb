@@ -68,7 +68,7 @@ class RollsController < ApplicationController
     respond_to do |format|
       if @roll.update_attributes(params[:roll])
         flash[:notice] = "Roll #{@roll.name} was successfully updated."
-        format.html { redirect_to( election_roll_url( @roll.election, @roll) ) }
+        format.html { redirect_to roll_url @roll }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
