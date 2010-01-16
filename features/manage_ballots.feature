@@ -48,3 +48,25 @@ Feature: Manage ballots
     And I press "Continue"
     Then I should see "Ballot was successfully created."
 
+  Scenario: Cast new ballot (ranked)
+    Given a user: "voter" exists with net_id: "voter", password: "secret"
+    And an election: "2008" exists with name: "2008 General"
+    And a roll: "national" exists with name: "United States Citizens", election: election "2008"
+    And the user is in the users of the roll
+    And a race: "potus" exists with name: "President of the United States", roll: roll "national", election: election "2008", is_ranked: true
+    And a candidate: "obama" exists with name: "Barack Obama", race: race "potus"
+    And a candidate: "mccain" exists with name: "John McCain", race: race "potus"
+    And a race: "vpotus" exists with name: "Vice President of the United States", roll: roll "national", election: election "2008", is_ranked: true
+    And a candidate: "biden" exists with name: "Joseph Biden", race: race "vpotus"
+    And a candidate: "palin" exists with name: "Sarah Palin", race: race "vpotus"
+    And the election is a current election
+    And I logged in as "voter" with password "secret"
+    And I select "1" from "Barack Obama"
+    And I select "2" from "John McCain"
+    And I select "1" from "Joseph Biden"
+    And I press "Continue"
+    Then I should see "Warning: 1 fewer votes are selected than the 2 that are allowed for the race Vice President of the United States"
+    And I choose "ballot_confirmation_true"
+    And I press "Continue"
+    Then I should see "Ballot was successfully created."
+
