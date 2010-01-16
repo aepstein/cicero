@@ -3,6 +3,31 @@ Feature: Manage ballots
   As a an eligible voter
   I want to prepare, confirm, and create ballots
 
+  Scenario Outline: Test permissions for candidates controller actions
+    Given an election exists
+    And the election is a current election
+    And a roll exists with election: the election
+    And a user: "voter" exists with net_id: "voter", password: "secret", admin: false
+    And the user is amongst the users of the roll
+    And a ballot exists with election: the election, user: the user
+    And a user: "admin" exists with net_id: "admin", password: "secret", admin: true
+    And a user: "regular" exists with net_id: "regular", password: "secret", admin: false
+    And I logged in as "<user>" with password "secret"
+    Given I am on the page for the ballot
+    Then I should <show>
+    Given I delete on the page for the ballot
+    Then I should <destroy>
+    Given there are no ballots
+    And I am on the new ballot page for the election
+    Then I should <create>
+    Given I post on the ballots page for the election
+    Then I should <create>
+    Examples:
+      | user    | create                 | destroy                | show                   |
+      | admin   | see "Unauthorized"     | not see "Unauthorized" | not see "Unauthorized" |
+      | voter   | not see "Unauthorized" | see "Unauthorized"     | not see "Unauthorized" |
+      | regular | see "Unauthorized"     | see "Unauthorized"     | see "Unauthorized"     |
+
   Scenario: Cast new ballot (unranked)
     Given a user: "voter" exists with net_id: "voter", password: "secret"
     And an election: "2008" exists with name: "2008 General"
