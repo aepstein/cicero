@@ -43,7 +43,13 @@ class User < ActiveRecord::Base
   end
 
   def may_user?(user,action)
-    user.admin?
+    return false unless user
+    case action
+    when :show
+      user.admin? || user == self
+    else
+      user.admin?
+    end
   end
 
   def to_s

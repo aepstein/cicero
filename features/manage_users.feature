@@ -3,6 +3,29 @@ Feature: Manage users
   As a secure process
   I want to create, list, edit, and delete users
 
+  Scenario Outline: Test permissions for candidates controller actions
+    Given a user: "admin" exists with net_id: "admin", password: "secret", admin: true
+    And a user: "regular" exists with net_id: "regular", password: "secret", admin: false
+    And a user exists with net_id: "owner", password: "secret", admin: false
+    And I logged in as "<user>" with password "secret"
+    And I am on the new user page
+    Then I should <create>
+    Given I post on the users page
+    Then I should <create>
+    And I am on the edit page for the user
+    Then I should <update>
+    Given I put on the page for the user
+    Then I should <update>
+    Given I am on the page for the user
+    Then I should <show>
+    Given I delete on the page for the user
+    Then I should <destroy>
+    Examples:
+      | user    | create                 | update                 | destroy                | show                   |
+      | admin   | not see "Unauthorized" | not see "Unauthorized" | not see "Unauthorized" | not see "Unauthorized" |
+      | owner   | see "Unauthorized"     | see "Unauthorized"     | see "Unauthorized"     | not see "Unauthorized" |
+      | regular | see "Unauthorized"     | see "Unauthorized"     | see "Unauthorized"     | see "Unauthorized"     |
+
   Scenario: Register new user
     Given I logged in as the administrator
     And I am on the new user page

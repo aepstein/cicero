@@ -83,7 +83,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     raise AuthorizationError unless @user.may_user?(current_user,:update)
 
-    params[:user][:roll_ids] ||= Array.new
+    params[:user][:roll_ids] ||= Array.new if params[:user]
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
