@@ -8,6 +8,29 @@ Feature: Manage candidates
     And a roll: "national" exists with name: "All US Citizens", election: election "2008"
     And a race: "potus" exists with name: "President of the United States", election: election "2008", roll: roll "national"
 
+  Scenario Outline: Test permissions for candidates controller actions
+    Given a race: "basic" exists
+    And a candidate: "basic" exists with race: race "basic"
+    And a user: "admin" exists with net_id: "admin", password: "secret", admin: true
+    And a user: "regular" exists with net_id: "regular", password: "secret", admin: false
+    And I logged in as "<user>" with password "secret"
+    And I am on the new candidate page for race: "basic"
+    Then I should <create>
+    Given I post on the candidates page for race: "basic"
+    Then I should <create>
+    And I am on the edit page for candidate: "basic"
+    Then I should <update>
+    Given I put on the page for candidate: "basic"
+    Then I should <update>
+    Given I am on the page for candidate: "basic"
+    Then I should <show>
+    Given I delete on the page for candidate: "basic"
+    Then I should <destroy>
+    Examples:
+      | user    | create                 | update                 | destroy                | show                   |
+      | admin   | not see "Unauthorized" | not see "Unauthorized" | not see "Unauthorized" | not see "Unauthorized" |
+      | regular | see "Unauthorized"     | see "Unauthorized"     | see "Unauthorized"     | not see "Unauthorized" |
+
   Scenario: Register new candidate
     Given a candidate: "dem" exists with name: "Barack Obama", race: race "potus"
     And a race: "vpotus" exists with name: "Vice President of the United States", election: election "2008", roll: roll "national"

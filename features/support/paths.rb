@@ -11,26 +11,23 @@ module NavigationHelpers
     when /the home\s?page/
       '/'
 
-    when /the new user page/
-      new_user_path
+    when /^the edit page for #{capture_model}$/
+      edit_polymorphic_path( [model($1)] )
 
-    when /^the new petitioner page for #{capture_model}$/
-      new_candidate_petitioner_path(model($1))
+    when /^the new #{capture_factory} page$/
+      new_polymorphic_path( [$1] )
 
-    when /^the new ballot page for #{capture_model}$/
-      new_election_ballot_path(model($1))
+    when /^the new #{capture_factory} page for #{capture_model}$/
+      new_polymorphic_path( [model($2), $1] )
 
-    when /^the new candidate page for #{capture_model}$/
-      new_race_candidate_path(model($1))
+    when /^the #{capture_plural_factory} page$/
+      polymorphic_path( [$1] )
 
-    when /^the new roll page for #{capture_model}$/
-      new_election_roll_path(model($1))
+    when /^the #{capture_plural_factory} page for #{capture_model}$/
+      polymorphic_path( [model($2), $1] )
 
-    when /^the new race page for #{capture_model}$/
-      new_election_race_path(model($1))
-
-    when /^the races page for #{capture_model}$/
-      election_races_path(model($1))
+    when /^the page for #{capture_model}$/
+      polymorphic_path( [model($1)] )
 
     when /the login page/
       login_url

@@ -3,7 +3,7 @@ Feature: Manage ballots
   As a an eligible voter
   I want to prepare, confirm, and create ballots
 
-  Scenario: Cast new ballot
+  Scenario: Cast new ballot (unranked)
     Given a user: "voter" exists with net_id: "voter", password: "secret"
     And an election: "2008" exists with name: "2008 General"
     And a roll: "national" exists with name: "United States Citizens", election: election "2008"
