@@ -1,4 +1,3 @@
-@wip
 Feature: Manage petitioners
   In order to track users who sign petitions
   As a verifier of petitions
