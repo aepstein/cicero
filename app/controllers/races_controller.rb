@@ -68,7 +68,7 @@ class RacesController < ApplicationController
     respond_to do |format|
       if @race.update_attributes(params[:race])
         flash[:notice] = 'Race was successfully updated.'
-        format.html { redirect_to( election_race_url( @race.election, @race) ) }
+        format.html { redirect_to race_url @race }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

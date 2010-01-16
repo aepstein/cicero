@@ -3,6 +3,29 @@ Feature: Manage races
   As an election manager
   I want to create, show, destroy, and update races
 
+  Scenario Outline: Test permissions for candidates controller actions
+    Given an election exists
+    And a race exists with election: the election
+    And a user: "admin" exists with net_id: "admin", password: "secret", admin: true
+    And a user: "regular" exists with net_id: "regular", password: "secret", admin: false
+    And I logged in as "<user>" with password "secret"
+    And I am on the new race page for the election
+    Then I should <create>
+    Given I post on the races page for the election
+    Then I should <create>
+    And I am on the edit page for the race
+    Then I should <update>
+    Given I put on the page for the race
+    Then I should <update>
+    Given I am on the page for the race
+    Then I should <show>
+    Given I delete on the page for the race
+    Then I should <destroy>
+    Examples:
+      | user    | create                 | update                 | destroy                | show                   |
+      | admin   | not see "Unauthorized" | not see "Unauthorized" | not see "Unauthorized" | not see "Unauthorized" |
+      | regular | see "Unauthorized"     | see "Unauthorized"     | see "Unauthorized"     | not see "Unauthorized" |
+
   Scenario: Register new race
     Given I logged in as the administrator
     And an election: "2008" exists with name: "2008 General Election"

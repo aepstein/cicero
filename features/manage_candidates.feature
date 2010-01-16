@@ -35,7 +35,7 @@ Feature: Manage candidates
     Given a candidate: "dem" exists with name: "Barack Obama", race: race "potus"
     And a race: "vpotus" exists with name: "Vice President of the United States", election: election "2008", roll: roll "national"
     And I logged in as the administrator
-    And I am on the new candidate page for race "vpotus"
+    And I am on the new candidate page for race: "vpotus"
     When I fill in "Name" with "Joseph Biden"
     And I fill in "Statement" with "Yes we can!"
     And I choose "candidate_disqualified_false"
