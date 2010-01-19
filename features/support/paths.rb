@@ -35,9 +35,6 @@ module NavigationHelpers
     when /the logout page/
       logout_path
 
-    when /the new election page/
-      new_election_path
-
 
     # Add more mappings here.
     # Here is a more fancy example:
