@@ -18,7 +18,7 @@ class CreateRolls < ActiveRecord::Migration
       race.roll = race.election.rolls.create( :name => race.name )
       race.save
     end
-    execute( "INSERT INTO rolls_users (rolls_users.roll_id, rolls_users.user_id) " +
+    execute( "INSERT INTO rolls_users (roll_id, user_id) " +
             "SELECT rolls.id, voters.user_id " +
             "FROM rolls INNER JOIN races INNER JOIN voters " +
             "WHERE rolls.id=races.roll_id AND races.id=voters.race_id" )
@@ -33,7 +33,7 @@ class CreateRolls < ActiveRecord::Migration
       t.timestamps
     end
     add_index :voters, [ :user_id, :race_id ], :unique => true
-    execute "INSERT INTO voters (voters.race_id, voters.user_id) " +
+    execute "INSERT INTO voters (race_id, user_id) " +
             "SELECT races.id, rolls_users.user_id " +
             "FROM races INNER JOIN rolls INNER JOIN rolls_users " +
             "WHERE races.roll_id=rolls.id AND rolls.id=rolls_users.roll_id"
@@ -42,3 +42,4 @@ class CreateRolls < ActiveRecord::Migration
     drop_table :rolls
   end
 end
+
