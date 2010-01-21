@@ -15,7 +15,7 @@ class AddPictureToCandidate < ActiveRecord::Migration
         raise "Could not save candidate: #{candidate.errors.join ', '}" unless candidate.save
       end
       Election.all.each do |election|
-        FileUtils.remove_entry_secure "#{base}/#{election.id}"
+        FileUtils.remove_entry_secure "#{base}/#{election.id}" if File.exist? "#{base}/#{election.id}"
       end
     end
   end
