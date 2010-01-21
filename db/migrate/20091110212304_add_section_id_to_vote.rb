@@ -4,9 +4,10 @@ class AddSectionIdToVote < ActiveRecord::Migration
     add_index :votes, [ :section_id, :candidate_id ], :unique => true
     say_with_time "Assigning votes to sections..." do
       connection.execute(
-        "UPDATE candidates AS c, votes AS v, sections AS s " +
-        "SET v.section_id = s.id " +
-        "WHERE v.candidate_id = c.id AND c.race_id = s.race_id AND v.ballot_id = s.ballot_id"
+        "UPDATE votes SET section_id = (SELECT sections.id FROM sections INNER JOIN candidates " +
+        "WHERE sections.race_id = candidates.race_id AND " +
+        "candidates.id = votes.candidate_id AND " +
+        "sections.ballot_id = votes.ballot_id)"
       )
     end
   end
