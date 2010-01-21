@@ -16,7 +16,7 @@
   <b>Disqualified?</b> <%= @candidate.disqualified? ? 'Yes' : 'No' %>
 </p>
 
-<p><b>Picture:</b> <%= @candidate.picture.file? ? 'Yes' : 'No' %></p>
+<p><b>Picture:</b> <%= @candidate.picture.file? ? image_tag(@candidate.picture.url(:original)) : 'No' %></p>
 
 <p>
 <%= link_to( 'Edit', edit_candidate_path( @candidate )) if @candidate.may_user?(current_user,:update) %> |

@@ -71,6 +71,7 @@ Rails::Initializer.run do |config|
   config.gem 'calendar_date_select', :source => 'http://gemcutter.org'
   config.gem 'searchlogic', :source => 'http://gemcutter.org'
   config.gem 'cornell_netid', :source => 'http://gemcutter.org'
+  config.gem 'whenever', :source => 'http://gemcutter.org'
 end
 
 CalendarDateSelect.format = :hyphen_ampm
