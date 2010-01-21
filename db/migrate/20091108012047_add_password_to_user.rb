@@ -1,8 +1,8 @@
 class AddPasswordToUser < ActiveRecord::Migration
   def self.up
-#    add_column :users, :crypted_password, :string
-#    add_column :users, :password_salt, :string
-#    add_column :users, :persistence_token, :string
+    add_column :users, :crypted_password, :string
+    add_column :users, :password_salt, :string
+    add_column :users, :persistence_token, :string
     say_with_time "Setting random passwords for all users" do
       User.reset_column_information
       last = User.last
