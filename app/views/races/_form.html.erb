@@ -4,7 +4,7 @@
   <%= form.input :name %>
   <%= form.input :slots %>
   <%= form.input :is_ranked, :as => :radio %>
-  <%= form.input :roll %>
+  <%= form.input :roll, :collection => form.object.election.rolls %>
   <%= form.input :description %>
 <% end %>
 

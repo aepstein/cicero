@@ -4,7 +4,7 @@
     <%= form.label :net_id %><br/>
     <%= form.text_field_with_auto_complete( :net_id, { },
       { :url => roll_users_path(form.object.candidate.race.roll, { :format => :js }), :method => :get,
-        :with => "'search=' + element.value"
+        :with => "'search[name_like]=' + element.value"
       } ) %>
   </p>
 
