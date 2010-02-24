@@ -68,6 +68,7 @@ class BallotsController < ApplicationController
     respond_to do |format|
       if @ballot.confirmation && @ballot.save
         flash[:notice] = 'Ballot was successfully created.'
+        UserMailer.deliver_ballot_verification @ballot
         format.html { redirect_to @ballot }
         format.xml  { render :xml => @ballot, :status => :created, :location => @ballot }
       else
