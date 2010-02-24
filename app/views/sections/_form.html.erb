@@ -1,5 +1,4 @@
-<li>
-<strong><%=h form.object.race %></strong>
+<% form.inputs :name => form.object.race.name do %>
 
 <%= markdown form.object.race.description %>
 
@@ -40,4 +39,5 @@ You may choose up to <%=h form.object.race.available_slots %>.
 <% end %>
 </ol>
 </li>
+<% end %>
 
