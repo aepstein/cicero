@@ -123,7 +123,7 @@ class UsersController < ApplicationController
         import_results = @roll.users.import_from_string( params[:users] )
       end
       # Add from file
-      unless params[:users_file].is_a?( String )
+      unless params[:users_file].is_a?( String ) || params[:users_file].nil?
         import_results = @roll.users.import_from_file( params[:users_file] )
       end
       import_results ||= [0,0]
