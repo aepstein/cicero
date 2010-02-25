@@ -43,7 +43,7 @@ class Roll < ActiveRecord::Base
         SELECT #{connection.quote proxy_owner.id}, u.id FROM users AS u WHERE
         u.net_id IN (#{import_net_ids_sql}) AND u.id NOT IN
         (SELECT user_id FROM rolls_users AS ru WHERE ru.roll_id = #{connection.quote proxy_owner.id})"
-      [(size - original_roll_size), user_import.num_inserts ]
+      [(size - original_roll_size), (user_import.nil? ? 0 : user_import.num_inserts) ]
     end
   end
   has_many :races, :order => 'races.name ASC', :dependent => :destroy
