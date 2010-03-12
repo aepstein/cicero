@@ -1,12 +1,10 @@
-<tr>
+<% table_row_tag do %>
   <td><%=h election %></td>
-  <td>
-  <%= link_to( 'Show',
-        election_url(election) ) if current_user.may_user?(current_user, :show) %>
-  <%= link_to( 'Edit',
-        edit_election_path(election) ) if election.may_user?(current_user,:update) %>
-  <%= link_to( 'Destroy', election, :confirm => 'Are you sure?',
-        :method => :delete ) if election.may_user?(current_user, :delete) %>
-  </td>
-</tr>
+  <td><%= link_to( 'Show',
+        election_url(election) ) if current_user.may_user?(current_user, :show) %></td>
+  <td><%= link_to( 'Edit',
+        edit_election_path(election) ) if election.may_user?(current_user,:update) %></td>
+  <td><%= link_to( 'Destroy', election, :confirm => 'Are you sure?',
+        :method => :delete ) if election.may_user?(current_user, :delete) %></td>
+<% end %>
 
