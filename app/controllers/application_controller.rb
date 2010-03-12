@@ -9,7 +9,10 @@ class ApplicationController < ActionController::Base
     when AuthorizationError
 #      head :forbidden
       respond_to do |format|
-        format.html { redirect_to( :controller => '/static', :action => 'unauthorized' ) }
+        format.html do
+          flash[:error] = "Unauthorized request: You are not allowed to perform the requested action."
+          redirect_to my_elections_url
+        end
       end
     else
       super(e)
