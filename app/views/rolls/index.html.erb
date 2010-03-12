@@ -1,16 +1,8 @@
 <h2>Listing rolls for <%=h @election %></h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Voters</th>
-    </tr>
-  </thead>
-  <tbody>
-    <%= render :partial => 'roll', :collection => @rolls %>
-  </tbody>
-</table>
+<%= render :partial => "rolls", :object => @rolls %>
+
+<hr/>
 
 <p>
 	<%= link_to "Back to #{@election}", @election %> |

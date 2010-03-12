@@ -1,17 +1,8 @@
 <h2>Listing elections</h2>
 
-<table id="elections">
-  <thead>
-  <tr>
-    <th>Name</th>
-   </tr>
-  </thead>
-  <tbody>
-    <%= render :partial => 'election', :collection => @elections %>
-  </tbody>
-</table>
+<%= render :partial => "elections", :object => @elections %>
 
-<br />
+<hr />
 
 <p>
 <%= link_to 'New election', new_election_path %>

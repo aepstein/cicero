@@ -8,22 +8,10 @@
 
 <%= will_paginate @users %>
 
-<br/>
+<hr/>
 
-<table>
-  <thead>
-    <tr>
-      <th>Net id</th>
-      <th>First name</th>
-      <th>Last name</th>
-    </tr>
-  </thead>
-  <tbody>
-  <%= render :partial => 'user', :collection => @users %>
-  </tbody>
-</table>
-
-<br />
+<%= render :partial => "users", :object => @users %>
+<hr />
 
 <%= will_paginate @users %>
 

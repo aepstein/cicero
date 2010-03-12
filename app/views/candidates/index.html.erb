@@ -1,15 +1,8 @@
 <h2>Listing candidates for <%=h @race %></h2>
 
-<table>
-  <thead>
-    <tr>
-      <td>Name</td>
-    </tr>
-  </thead>
-  <tbody>
-  <%= render :partial => 'candidate', :collection => @candidates %>
-  </tbody>
-</table>
+<%= render :partial => "candidates", :object => @candidates %>
+
+<hr/>
 
 <p>
 <%= link_to( "New candidate", new_race_candidate_path( @race ) ) %> |
