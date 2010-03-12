@@ -1,11 +1,10 @@
-<tr>
+<% table_row_tag do %>
 <td><%=h ballot.user.net_id %></td>
 <td><%=h ballot.user.first_name %></td>
 <td><%=h ballot.user.last_name %></td>
 <td><%=h ballot.created_at.to_s :us_ordinal %></td>
-<td>
-  <%= link_to 'Show', ballot_path(ballot) %>
-  <%= link_to 'Destroy', ballot_path(ballot),:confirm => 'Are you sure?', :method => :delete if ballot.may_user?(current_user, :delete) %>
-</td>
-</tr>
+<td><%= link_to 'Show', ballot_path(ballot) %></td>
+<td><%= link_to 'Destroy', ballot_path(ballot),:confirm => 'Are you sure?',
+  :method => :delete if ballot.may_user?(current_user, :delete) %></td>
+<% end %>
 
