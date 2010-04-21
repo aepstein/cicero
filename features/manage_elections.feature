@@ -57,3 +57,29 @@ Feature: Manage elections
       |election 2|
       |election 4|
 
+  Scenario Outline: I have one current election
+    Given an election: "first" exists with name: "First Election"
+    And an election: "second" exists with name: "Second Election"
+    And a roll: "first" exists with election: election "first"
+    And a roll: "second" exists with election: election "second"
+    And a user: "first" exists with password: "secret", net_id: "first"
+    And a user: "second" exists with password: "secret", net_id: "second"
+    And a user: "both" exists with password: "secret", net_id: "both"
+    And a user: "neither" exists with password: "secret", net_id: "neither"
+    And user: "first" is amongst the users of roll: "first"
+    And user: "both" is amongst the users of roll: "first"
+    And user: "both" is amongst the users of roll: "second"
+    And user: "second" is amongst the users of roll: "second"
+    And a ballot exists with user: user "second", election: election "second"
+    Given I logged in as "<user>" with password "secret"
+    Then I should be on <page>
+    And I <first> see "First Election"
+    And I <second> see "Second Election"
+    And I <none> see "There are no elections remaining for you to vote in at this time."
+    Examples:
+      | user    | page                                      | first      | second     | none       |
+      | first   | the new ballot page for election: "first" | should     | should not | should not |
+      | second  | the home page                             | should not | should     | should     |
+      | both    | the home page                             | should     | should     | should not |
+      | neither | the home page                             | should not | should not | should     |
+

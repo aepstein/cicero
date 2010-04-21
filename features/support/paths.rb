@@ -11,6 +11,9 @@ module NavigationHelpers
     when /the home\s?page/
       '/'
 
+    when /^my elections page$/
+      my_elections_path
+
     when /^the edit page for #{capture_model}$/
       edit_polymorphic_path( [model($1)] )
 
