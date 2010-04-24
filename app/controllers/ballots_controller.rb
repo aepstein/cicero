@@ -29,6 +29,20 @@ class BallotsController < ApplicationController
 
   # GET /elections/:election_id/ballots/new
   # GET /elections/:election_id/ballots/new.xml
+  def preview
+    raise AuthorizationError unless current_user.admin?
+    @ballot = Election.find(params[:election_id]).ballots.build
+    @ballot.user = User.find_by_net_id(params[:net_id]) if params[:net_id]
+    @ballot.user ||= current_user
+    @ballot.sections.populate
+
+    respond_to do |format|
+      format.html { render :action => 'new' }
+    end
+  end
+
+  # GET /elections/:election_id/ballots/new
+  # GET /elections/:election_id/ballots/new.xml
   def new
     @ballot = Election.find(params[:election_id]).ballots.build
     @ballot.user = current_user

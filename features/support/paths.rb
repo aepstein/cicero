@@ -32,6 +32,9 @@ module NavigationHelpers
     when /^the page for #{capture_model}$/
       polymorphic_path( [model($1)] )
 
+    when /^the preview #{capture_factory} page for #{capture_model}$/
+      polymorphic_path( ['preview', 'new', model($2), $1] )
+
     when /the login page/
       login_url
 

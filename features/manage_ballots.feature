@@ -22,11 +22,13 @@ Feature: Manage ballots
     Then I should <create>
     Given I post on the ballots page for the election
     Then I should <create>
+    Given I am on the preview ballot page for the election
+    Then I should <preview>
     Examples:
-      | user    | create                 | destroy                | show                   |
-      | admin   | see "Unauthorized"     | not see "Unauthorized" | not see "Unauthorized" |
-      | voter   | not see "Unauthorized" | see "Unauthorized"     | not see "Unauthorized" |
-      | regular | see "Unauthorized"     | see "Unauthorized"     | see "Unauthorized"     |
+      | user    | create                 | destroy                | show                   | preview                |
+      | admin   | see "Unauthorized"     | not see "Unauthorized" | not see "Unauthorized" | not see "Unauthorized" |
+      | voter   | not see "Unauthorized" | see "Unauthorized"     | not see "Unauthorized" | see "Unauthorized"     |
+      | regular | see "Unauthorized"     | see "Unauthorized"     | see "Unauthorized"     | see "Unauthorized"     |
 
   Scenario: Cast new ballot (unranked)
     Given a user: "voter" exists with net_id: "voter", password: "secret"

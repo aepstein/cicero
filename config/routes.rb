@@ -14,7 +14,7 @@ ActionController::Routing::Routes.draw do |map|
       end
       race.resources :rounds
     end
-    election.resources :ballots, :new => [ :confirm ], :except => [ :edit, :update ]
+    election.resources :ballots, :new => [ :confirm, :preview ], :except => [ :edit, :update ]
   end
 
   map.login 'login', :controller => 'user_sessions', :action => 'new'
