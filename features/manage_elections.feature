@@ -57,7 +57,7 @@ Feature: Manage elections
       |election 2|
       |election 4|
 
-  Scenario Outline: I have one current election
+  Scenario Outline: How my elections should behave depending on how a user may vote
     Given an election: "first" exists with name: "First Election"
     And an election: "second" exists with name: "Second Election"
     And a roll: "first" exists with election: election "first"
