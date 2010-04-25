@@ -3,7 +3,7 @@ class Section < ActiveRecord::Base
 
   belongs_to :ballot
   belongs_to :race
-  has_many :votes do
+  has_many :votes, :order => 'votes.rank' do
     def populate
       proxy_owner.race.candidates.each do |candidate|
         build(:candidate => candidate) unless candidate_ids.include? candidate.id
@@ -25,6 +25,10 @@ class Section < ActiveRecord::Base
   before_validation :initialize_votes
 
   accepts_nested_attributes_for :votes, :reject_if => proc { |a| a['rank'].to_i == 0 }
+
+  def to_blt
+    votes.collect { |vote| race.candidate_ids.index(vote.candidate_id) + 1 }.join(' ')
+  end
 
   private
 
@@ -68,10 +72,6 @@ class Section < ActiveRecord::Base
     elsif over < 0
       self.warning = "#{over.abs} fewer votes are selected than the #{race.max_votes} that are allowed for the race #{race.name}"
     end
-  end
-
-  def to_blt
-    votes.collect { |vote| race.candidate_ids.index(vote.candidate_id) + 1 }.join(' ')
   end
 
 end

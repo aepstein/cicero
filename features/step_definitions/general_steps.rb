@@ -58,3 +58,11 @@ Then /^I should see the following entries in "(.+)":$/ do |table_id, expected_ap
   expected_approvals_table.diff!(table_at("##{table_id}").to_a)
 end
 
+Then /^I should see$/ do |text|
+  if defined?(Spec::Rails::Matchers)
+    response.should contain(text)
+  else
+    assert_contain text
+  end
+end
+

@@ -8,6 +8,7 @@ ActionController::Routing::Routes.draw do |map|
       roll.resources :users, :new => { :bulk => :get }, :only => [ :index, :create ]
     end
     election.resources :races do |race|
+      race.resources :ballots, :only => [ :index ]
       race.resources :sections, :only => [ :index ]
       race.resources :candidates, :member => { :popup => :get } do |candidate|
         candidate.resources :petitioners

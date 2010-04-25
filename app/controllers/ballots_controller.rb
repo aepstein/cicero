@@ -3,17 +3,20 @@ class BallotsController < ApplicationController
 
   # GET /elections/:election_id/ballots
   # GET /elections/:election_id/ballots.xml
-  # GET /races/:race_id/ballots
-  # GET /races/:race_id/ballots.xml
   # GET /races/:race_id/ballots.blt
   def index
     @election = Election.find(params[:election_id]) if params[:election_id]
+    @race = Race.find(params[:race_id]) if params[:race_id]
     raise AuthorizationError unless current_user.admin?
-    @ballots = @election.ballots.user_name_like( params[:search] ).paginate( :page => params[:page] )
+    @ballots = @election.ballots.user_name_like( params[:search] ).paginate( :page => params[:page] ) if @election
 
     respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @ballots }
+      if @election
+        format.html # index.html.erb
+        format.xml  { render :xml => @ballots }
+      else
+        format.blt { send_data @race.to_blt, :type => 'text/blt', :filename => @race.to_s(:file) }
+      end
     end
   end
 

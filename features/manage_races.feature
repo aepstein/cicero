@@ -57,4 +57,33 @@ Feature: Manage races
       |First  |1    |No      |All US Citizens|
       |Fourth |1    |No      |All US Citizens|
       |Third  |1    |No      |All US Citizens|
+@wip
+  Scenario: Display ballots cast for race
+    Given an election: "2008" exists with name: "2008 General Election"
+    And a roll exists with election: the election
+    And a user exists
+    And the user is amongst the users of the roll
+    And a race: "first" exists with name: "Popular, Race", roll: the roll, slots: 1, election: the election
+    And a race exists with election: the election, roll: the roll
+    And a candidate: "bottom" exists with name: "Bottom", race: race "first"
+    And a candidate: "middle" exists with name: "Middle", disqualified: true, race: race "first"
+    And a candidate: "top" exists with name: "Top", race: race "first"
+    And a ballot exists with election: the election, user: the user
+    And a section exists with ballot: the ballot, race: race "first"
+    And a vote exists with section: the section, candidate: candidate "top", rank: 1
+    And a vote exists with section: the section, candidate: candidate "middle", rank: 2
+    And a vote exists with section: the section, candidate: candidate "bottom", rank: 3
+    And I logged in as the administrator
+    And I am on the "blt" ballots page for race: "first"
+    Then I should see
+      """
+3 1
+-2
+1 3 2 1 0
+0
+\"Bottom\"
+\"Middle\"
+\"Top\"
+\"Popular, Race\"
+      """
 
