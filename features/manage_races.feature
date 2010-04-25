@@ -57,7 +57,7 @@ Feature: Manage races
       |First  |1    |No      |All US Citizens|
       |Fourth |1    |No      |All US Citizens|
       |Third  |1    |No      |All US Citizens|
-@wip
+
   Scenario: Display ballots cast for race
     Given an election: "2008" exists with name: "2008 General Election"
     And a roll exists with election: the election
@@ -75,15 +75,12 @@ Feature: Manage races
     And a vote exists with section: the section, candidate: candidate "bottom", rank: 3
     And I logged in as the administrator
     And I am on the "blt" ballots page for race: "first"
-    Then I should see
-      """
-3 1
--2
-1 3 2 1 0
-0
-\"Bottom\"
-\"Middle\"
-\"Top\"
-\"Popular, Race\"
-      """
+    Then I should see "3 1"
+    And I should see "-2"
+    And I should see "1 3 2 1 0"
+    And I should see "0"
+    And I should see "Bottom"
+    And I should see "Middle"
+    And I should see "Top"
+    And I should see "Popular, Race"
 
