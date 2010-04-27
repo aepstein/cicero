@@ -13,7 +13,6 @@ class Candidate < ActiveRecord::Base
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :race_id
-  validates_attachment_presence :picture
   validates_presence_of :race
 
   def to_s
