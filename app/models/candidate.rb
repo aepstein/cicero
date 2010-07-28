@@ -23,8 +23,5 @@ class Candidate < ActiveRecord::Base
     name <=> other.name
   end
 
-  def may_user?(user,action)
-    race.may_user?(user,action)
-  end
 end
 

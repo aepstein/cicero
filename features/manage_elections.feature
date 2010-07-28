@@ -3,43 +3,55 @@ Feature: Manage elections
   As an administrator
   I want to create, edit, list, and delete elections
 
+  Background:
+    Given a user: "admin" exists with admin: true
+    And a user: "regular" exists
+
   Scenario Outline: Test permissions for candidates controller actions
-    Given an election: "basic" exists
-    And a user: "admin" exists with net_id: "admin", password: "secret", admin: true
-    And a user: "regular" exists with net_id: "regular", password: "secret", admin: false
-    And I logged in as "<user>" with password "secret"
+    Given a <when>election: "basic" exists with name: "Vital"
+    And I log in as user: "<user>"
     And I am on the new election page
-    Then I should <create>
+    Then I should <create> authorized
     Given I post on the elections page
-    Then I should <create>
+    Then I should <create> authorized
     And I am on the edit page for election: "basic"
-    Then I should <update>
+    Then I should <update> authorized
     Given I put on the page for election: "basic"
-    Then I should <update>
+    Then I should <update> authorized
     Given I am on the page for election: "basic"
-    Then I should <show>
+    Then I should <show> authorized
+    And I should <update> "Edit"
+    Given I am on the elections page
+    Then I should <show> "Vital"
+    And I should <update> "Edit"
+    And I should <destroy> "Destroy"
+    And I should <create> "New election"
     Given I delete on the page for election: "basic"
-    Then I should <destroy>
+    Then I should <destroy> authorized
     Examples:
-      | user    | create                 | update                 | destroy                | show                   |
-      | admin   | not see "Unauthorized" | not see "Unauthorized" | not see "Unauthorized" | not see "Unauthorized" |
-      | regular | see "Unauthorized"     | see "Unauthorized"     | see "Unauthorized"     | not see "Unauthorized" |
+      | when    | user    | create  | update  | destroy | show     |
+      |         | admin   | see     | see     | see     | see      |
+      |         | regular | not see | not see | not see | see      |
+      | past_   | admin   | see     | see     | see     | see      |
+      | past_   | regular | not see | not see | not see | see      |
+      | future_ | admin   | see     | see     | see     | see      |
+      | future_ | regular | not see | not see | not see | not see  |
 
   Scenario: Register new election
-    Given I logged in as the administrator
+    Given I log in as user: "admin"
     And I am on the new election page
     When I fill in "Name" with "2008 Election"
     And I fill in "Starts at" with "2008-11-04 00:00:01"
-    And I fill in "Ends at" with "2009-11-04 23:59:59"
-    And I fill in "Results available at" with "2009-11-05 12:00:00"
+    And I fill in "Ends at" with "2008-11-04 23:59:59"
+    And I fill in "Results available at" with "2008-11-05 12:00:00"
     And I fill in "Contact name" with "Board of Elections"
     And I fill in "Contact email" with "elections@example.com"
-    And I fill in "Verify message" with "Thank you for voting."
+    And I fill in "Verify message" with "Thank you for *voting*."
     And I press "Create"
     Then I should see "Name: 2008 Election"
-    And I should see "Starts at: 2008-11-04 00:00:01"
-    And I should see "Ends at: 2009-11-04 23:59:59"
-    And I should see "Results available at: 2009-11-05 12:00:00"
+    And I should see "Starts at: November 4th, 2008 12:00am"
+    And I should see "Ends at: November 4th, 2008 11:59pm"
+    And I should see "Results available at: November 5th, 2008 12:00pm"
     And I should see "Contact name: Board of Elections"
     And I should see "Contact email: elections@example.com"
     And I should see "Thank you for voting."
@@ -49,8 +61,8 @@ Feature: Manage elections
     And an election exists with name: "election 3"
     And an election exists with name: "election 2"
     And an election exists with name: "election 1"
-    And I logged in as the administrator
-    When I delete the 3rd election
+    And I log in as user: "admin"
+    When I follow "Destroy" for the 3rd election
     Then I should see the following elections:
       |Name      |
       |election 1|
@@ -71,7 +83,7 @@ Feature: Manage elections
     And user: "both" is amongst the users of roll: "second"
     And user: "second" is amongst the users of roll: "second"
     And a ballot exists with user: user "second", election: election "second"
-    Given I logged in as "<user>" with password "secret"
+    And I log in as user: "<user>"
     Then I should be on <page>
     And I <first> see "First Election"
     And I <second> see "Second Election"

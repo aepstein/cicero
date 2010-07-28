@@ -3,15 +3,15 @@
 </p>
 
 <p>
-  <b>Starts at:</b> <%=h @election.starts_at %>
+  <b>Starts at:</b> <%=h @election.starts_at.to_formatted_s :us_ordinal %>
 </p>
 
 <p>
-  <b>Ends at:</b> <%=h @election.ends_at %>
+  <b>Ends at:</b> <%=h @election.ends_at.to_formatted_s :us_ordinal %>
 </p>
 
 <p>
-  <b>Results available at:</b> <%=h @election.results_available_at %>
+  <b>Results available at:</b> <%=h @election.results_available_at.to_formatted_s :us_ordinal %>
 </p>
 
 <p>
@@ -32,7 +32,7 @@
 </p>
 
 <p>
-<%= link_to( 'Edit', edit_election_path(@election) ) if @election.may_user?(current_user, :update) %> |
+<%= link_to( 'Edit', edit_election_path(@election) ) if permitted_to? :edit, @election %> |
 <%= link_to 'List rolls', election_rolls_path(@election) %> |
 <%= link_to 'List races', election_races_path(@election) %> |
 <%= link_to 'List ballots', election_ballots_path(@election) %> |

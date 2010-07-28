@@ -1,10 +1,10 @@
 <h2>Listing elections</h2>
 
-<%= render :partial => "elections", :object => @elections %>
+<%= render :partial => "elections/elections", :object => @elections %>
 
 <hr />
 
 <p>
-<%= link_to 'New election', new_election_path %>
+<%= link_to( 'New election', new_election_path ) if permitted_to? :create, Election.new %>
 </p>
 

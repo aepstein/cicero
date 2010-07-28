@@ -38,22 +38,11 @@ class User < ActiveRecord::Base
     "#{net_id} (#{name})"
   end
 
-  def may?(action,object)
-    object.may_user?(user,action)
+  def role_symbols
+    return [:admin,:user] if admin?
+    [:user]
   end
 
-  def may_user?(user,action)
-    return false unless user
-    case action
-    when :show
-      user.admin? || user == self
-    else
-      user.admin?
-    end
-  end
-
-  def to_s
-    name
-  end
+  def to_s; name; end
 end
 

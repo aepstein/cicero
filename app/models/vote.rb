@@ -15,18 +15,7 @@ class Vote < ActiveRecord::Base
     end
   end
 
-  def to_s
-    "vote for #{candidate}"
-  end
-
-  def may_user?(user,action)
-    case action
-      when :index
-        ballot.may_user?(user,:show)
-    else
-      ballot.may_user?(user,action)
-    end
-  end
+  def to_s; "vote for #{candidate}"; end
 
   def <=>(aVote)
     return rand<=>rand if rank.nil? && aVote.rank.nil?

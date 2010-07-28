@@ -12,23 +12,23 @@ Feature: Manage ballots
     And a ballot exists with election: the election, user: the user
     And a user: "admin" exists with net_id: "admin", password: "secret", admin: true
     And a user: "regular" exists with net_id: "regular", password: "secret", admin: false
-    And I logged in as "<user>" with password "secret"
-    Given I am on the page for the ballot
-    Then I should <show>
+    And I log in as user: "<user>"
+    And I am on the page for the ballot
+    Then I should <show> authorized
     Given I delete on the page for the ballot
-    Then I should <destroy>
+    Then I should <destroy> authorized
     Given there are no ballots
     And I am on the new ballot page for the election
-    Then I should <create>
+    Then I should <create> authorized
     Given I post on the ballots page for the election
-    Then I should <create>
+    Then I should <create> authorized
     Given I am on the preview ballot page for the election
-    Then I should <preview>
+    Then I should <preview> authorized
     Examples:
-      | user    | create                 | destroy                | show                   | preview                |
-      | admin   | see "Unauthorized"     | not see "Unauthorized" | not see "Unauthorized" | not see "Unauthorized" |
-      | voter   | not see "Unauthorized" | see "Unauthorized"     | not see "Unauthorized" | see "Unauthorized"     |
-      | regular | see "Unauthorized"     | see "Unauthorized"     | see "Unauthorized"     | see "Unauthorized"     |
+      | user    | create  | destroy | show    | preview |
+      | admin   | not see | see     | see     | see     |
+      | voter   | see     | not see | see     | not see |
+      | regular | not see | not see | not see | not see |
 
   Scenario: Cast new ballot (unranked)
     Given a user: "voter" exists with net_id: "voter", password: "secret"

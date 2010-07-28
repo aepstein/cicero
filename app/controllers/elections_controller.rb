@@ -1,11 +1,13 @@
 class ElectionsController < ApplicationController
-  before_filter :require_user, :only => [ :my ]
+  before_filter :require_user
+  before_filter :initialize_context
+  before_filter :initialize_index, :only => [ :index ]
+  before_filter :new_election_from_params, :only => [ :new, :create ]
+  filter_access_to :new, :create, :edit, :update, :destroy, :show, :attribute_check => true
 
   # GET /elections
   # GET /elections.xml
   def index
-    @elections = Election.find(:all)
-
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @elections }
@@ -30,9 +32,6 @@ class ElectionsController < ApplicationController
   # GET /elections/1
   # GET /elections/1.xml
   def show
-    @election = Election.find(params[:id])
-    raise AuthorizationError unless @election.may_user?(current_user,:show)
-
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @election }
@@ -42,9 +41,6 @@ class ElectionsController < ApplicationController
   # GET /elections/new
   # GET /elections/new.xml
   def new
-    @election = Election.new
-    raise AuthorizationError unless @election.may_user?(current_user,:create)
-
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @election }
@@ -53,16 +49,11 @@ class ElectionsController < ApplicationController
 
   # GET /elections/1/edit
   def edit
-    @election = Election.find(params[:id])
-    raise AuthorizationError unless @election.may_user?(current_user,:update)
   end
 
   # POST /elections
   # POST /elections.xml
   def create
-    @election = Election.new(params[:election])
-    raise AuthorizationError unless @election.may_user?(current_user,:create)
-
     respond_to do |format|
       if @election.save
         flash[:notice] = 'Election was successfully created.'
@@ -78,9 +69,6 @@ class ElectionsController < ApplicationController
   # PUT /elections/1
   # PUT /elections/1.xml
   def update
-    @election = Election.find(params[:id])
-    raise AuthorizationError unless @election.may_user?(current_user,:update)
-
     respond_to do |format|
       if @election.update_attributes(params[:election])
         flash[:notice] = 'Election was successfully updated.'
@@ -93,25 +81,9 @@ class ElectionsController < ApplicationController
     end
   end
 
-  # POST /elections/:id/tabulate
-  def tabulate
-    @election = Election.find(params[:id])
-    raise AuthorizationError unless @election.may_user?(current_user,:tabulate)
-    if @election.tabulate
-      respond_to do |format|
-        flash[:notice] = 'Election results successfully tabulated'
-        format.html { redirect_to(@election) }
-      end
-    else
-      format.html { redirect_to(@election) }
-    end
-  end
-
   # DELETE /elections/1
   # DELETE /elections/1.xml
   def destroy
-    @election = Election.find(params[:id])
-    raise AuthorizationError unless @election.may_user?(current_user,:delete)
     @election.destroy
 
     respond_to do |format|
@@ -119,5 +91,22 @@ class ElectionsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  private
+
+  def initialize_context
+    @election = Election.find params[:id] if params[:id]
+  end
+
+  def initialize_index
+    @elections = Election
+    @search = @elections.with_permissions_to(:show).searchlogic( params[:search] )
+    @elections = @search.paginate( :page => params[:page] )
+  end
+
+  def new_election_from_params
+    @election = Election.new( params[:election] )
+  end
+
 end
 

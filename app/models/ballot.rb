@@ -56,18 +56,5 @@ class Ballot < ActiveRecord::Base
     user.to_s
   end
 
-  def may_user?(user,action)
-    case action
-      when :show
-        (self.user == user || user.admin?)
-      when :delete
-        user.admin? ||
-          ( election.managers.include?(user) && Time.now < election.ends_at )
-      when :index
-        user.admin? || election.managers.include?(user)
-      when :create
-        self.user == user && user.elections.allowed.include?(election)
-    end
-  end
 end
 

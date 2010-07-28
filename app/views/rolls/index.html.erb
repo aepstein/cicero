@@ -5,7 +5,9 @@
 <hr/>
 
 <p>
-	<%= link_to "Back to #{@election}", @election %> |
-  <%= link_to 'New roll', new_election_roll_path(@election) %>
+	<%= link_to "Back to #{@election}", @election %>
+<% if permitted_to? :create, @election.rolls.build -%>
+	| <%= link_to 'New roll', new_election_roll_path(@election) %>
+<% end -%>
 </p>
 

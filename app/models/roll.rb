@@ -11,11 +11,11 @@ class Roll < ActiveRecord::Base
     end
 
     def import_from_string( string )
-      import_from_csv( FasterCSV.parse(string) )
+      import_from_csv( CSV.parse(string) )
     end
 
     def import_from_file( file )
-      import_from_csv( FasterCSV.parse(file.read) )
+      import_from_csv( CSV.parse(file.read) )
     end
 
     private
@@ -52,12 +52,6 @@ class Roll < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :election_id
 
-  def may_user?(user, action)
-    election.may_user?(user, action)
-  end
-
-  def to_s
-    name
-  end
+  def to_s; name; end
 end
 

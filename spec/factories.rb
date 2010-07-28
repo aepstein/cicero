@@ -1,23 +1,19 @@
 Factory.define :election do |f|
   f.sequence(:name) { |n| "Election #{n}" }
-  f.starts_at DateTime.now - 1.days
-  f.ends_at DateTime.now + 1.days
-  f.results_available_at DateTime.now + 2.days
+  f.starts_at { |r| Time.zone.now - 1.day }
+  f.ends_at { |r| r.starts_at + 2.days  }
+  f.results_available_at { |r| r.ends_at + 1.week }
   f.verify_message "Congratulations!"
   f.contact_name "Elections Committee"
   f.contact_email "elections@example.com"
 end
 
 Factory.define :past_election, :parent => :election do |f|
-  f.starts_at DateTime.now - 2.days
-  f.ends_at DateTime.now - 1.days
-  f.results_available_at DateTime.now - 5.minutes
+  f.starts_at { |r| Time.zone.now - 1.year }
 end
 
 Factory.define :future_election, :parent => :election do |f|
-  f.starts_at DateTime.now + 1.days
-  f.ends_at DateTime.now + 2.days
-  f.results_available_at DateTime.now + 3.days
+  f.starts_at { |r| Time.zone.now + 1.year }
 end
 
 Factory.define :roll do |f|
@@ -35,7 +31,6 @@ end
 Factory.define :candidate do |f|
   f.association :race
   f.sequence(:name) { |n| "Candidate #{n}" }
-  f.picture { ActionController::TestUploadedFile.new('spec/assets/robin.jpg','image/jpeg') }
 end
 
 Factory.define :user do |f|

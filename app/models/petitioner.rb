@@ -21,10 +21,6 @@ class Petitioner < ActiveRecord::Base
     user.name if user
   end
 
-  def may_user?(user,action)
-    candidate.may_user?(user,action)
-  end
-
   def net_id
     user.net_id if user
   end

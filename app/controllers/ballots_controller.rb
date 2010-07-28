@@ -1,14 +1,44 @@
 class BallotsController < ApplicationController
-  before_filter :require_user, :only => [ :my ]
+  before_filter :require_user
+  before_filter :initialize_context
+  before_filter :initialize_index, :only => [ :index ]
+  before_filter :new_ballot_from_params, :only => [ :new, :create, :preview, :confirm ]
+  filter_access_to :new, :create, :edit, :update, :destroy, :show, :attribute_check => true
+  filter_access_to :index do
+    permitted_to!( :show, @election ) if @election
+    permitted_to!( :show, @race ) if @race
+    permitted_to!( :show, @user ) if @user
+  end
+
+  def initialize_context
+    @ballot = Ballot.find params[:id] if params[:id]
+    @election = Election.find params[:election_id] if params[:election_id]
+    @race = Race.find params[:race_id] if params[:race_id]
+    @user = User.find params[:user_id] if params[:user_id]
+  end
+
+  def initialize_index
+    if @election
+      @ballots = Ballot.scoped( :conditions => { :election_id => @election.id } ) if @election
+    elsif @race
+      @ballots = Ballot.scoped( :conditions => { :race_id => @race.id } ) if @race
+    elsif @user
+      @ballots = Ballot.scoped( :conditions => { :user_id => @user.id } ) if @user
+    end
+    @ballots = @ballots.with_permissions_to(:show)
+  end
+
+  def new_ballot_from_params
+    @ballot = @election.ballots.build params[:ballot]
+    @ballot.user = ( @user ? @user : current_user )
+  end
 
   # GET /elections/:election_id/ballots
   # GET /elections/:election_id/ballots.xml
   # GET /races/:race_id/ballots.blt
   def index
-    @election = Election.find(params[:election_id]) if params[:election_id]
-    @race = Race.find(params[:race_id]) if params[:race_id]
-    raise AuthorizationError unless current_user.admin?
-    @ballots = @election.ballots.user_name_like( params[:search] ).paginate( :page => params[:page] ) if @election
+    @search = @ballots.searchlogic( params[:search] )
+    @ballots = @search.paginate( :page => params[:page] )
 
     respond_to do |format|
       if @election
@@ -22,9 +52,6 @@ class BallotsController < ApplicationController
 
   # GET /ballots/:id/show
   def show
-    @ballot = Ballot.find(params[:id])
-    raise AuthorizationError unless @ballot.may_user?(current_user,:show)
-
     respond_to do |format|
       format.html # show.html.erb
     end
@@ -33,10 +60,6 @@ class BallotsController < ApplicationController
   # GET /elections/:election_id/ballots/new
   # GET /elections/:election_id/ballots/new.xml
   def preview
-    raise AuthorizationError unless current_user.admin?
-    @ballot = Election.find(params[:election_id]).ballots.build
-    @ballot.user = User.find_by_net_id(params[:net_id]) if params[:net_id]
-    @ballot.user ||= current_user
     @ballot.sections.populate
 
     respond_to do |format|
@@ -47,9 +70,6 @@ class BallotsController < ApplicationController
   # GET /elections/:election_id/ballots/new
   # GET /elections/:election_id/ballots/new.xml
   def new
-    @ballot = Election.find(params[:election_id]).ballots.build
-    @ballot.user = current_user
-    raise AuthorizationError unless @ballot.may_user?(current_user,:create)
     @ballot.sections.populate
 
     respond_to do |format|
@@ -60,10 +80,6 @@ class BallotsController < ApplicationController
 
   # GET /elections/:election_id/ballots/new/confirm
   def confirm
-    @ballot = Election.find(params[:election_id]).ballots.build(params[:ballot])
-    @ballot.user = current_user
-    raise AuthorizationError unless @ballot.may_user?(current_user,:create)
-
     respond_to do |format|
       if @ballot.valid?
         @ballot.sections.each { |section| section.freeze && section.votes.each { |vote| vote.freeze } }
@@ -78,10 +94,6 @@ class BallotsController < ApplicationController
   # POST /elections/:election_id/ballots
   # POST /elections/:election_id/ballots.xml
   def create
-    @ballot = Election.find(params[:election_id]).ballots.build(params[:ballot])
-    @ballot.user = current_user
-    raise AuthorizationError unless @ballot.may_user?(current_user,:create)
-
     respond_to do |format|
       if @ballot.confirmation && @ballot.save
         flash[:notice] = 'Ballot was successfully created.'
@@ -99,8 +111,6 @@ class BallotsController < ApplicationController
   # DELETE /ballots/:id
   # DELETE /ballots/:id.xml
   def destroy
-    @ballot = Ballot.find(params[:id])
-    raise AuthorizationError unless @ballot.may_user?(current_user,:delete)
     @ballot.destroy
 
     respond_to do |format|

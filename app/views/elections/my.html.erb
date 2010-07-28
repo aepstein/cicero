@@ -9,7 +9,7 @@
 Please select the election in which you would like to vote.  You will proceed to a ballot.
 </p>
 <ul>
-<%= render :partial => 'my_election', :collection => @elections %>
+<%= render :partial => 'elections/my_election', :collection => @elections %>
 </ul>
 <% end %>
 
@@ -19,7 +19,7 @@ You previously voted in these elections:
 </p>
 
 <ul>
-<%= render :partial => 'ballot', :collection => current_user.ballots(:include => :election) %>
+<%= render :partial => 'elections/ballot', :collection => current_user.ballots(:include => :election) %>
 </ul>
 <% end %>
 

@@ -3,32 +3,44 @@ Feature: Manage rolls
   As a security-minded organization
   I want to create, maintain, show, list, and populate rolls
 
+  Background:
+    Given a user: "admin" exists with admin: true
+    And a user: "regular" exists
+
   Scenario Outline: Test permissions for candidates controller actions
-    Given an election exists
-    And a roll exists with election: the election
-    And a user: "admin" exists with net_id: "admin", password: "secret", admin: true
-    And a user: "regular" exists with net_id: "regular", password: "secret", admin: false
-    And I logged in as "<user>" with password "secret"
-    And I am on the new roll page for the election
-    Then I should <create>
+    Given a <when>election exists
+    And a roll exists with election: the election, name: "Vital"
+    And I log in as user: "<user>"
+    Given am on the page for the roll
+    Then I should <show> authorized
+    And I should <update> "Edit"
+    Given I am on the rolls page for the election
+    Then I should <show> "Vital"
+    And I should <update> "Edit"
+    And I should <destroy> "Destroy"
+    And I should <create> "New roll"
+    Given I am on the new roll page for the election
+    Then I should <create> authorized
     Given I post on the rolls page for the election
-    Then I should <create>
+    Then I should <create> authorized
     And I am on the edit page for the roll
-    Then I should <update>
+    Then I should <update> authorized
     Given I put on the page for the roll
-    Then I should <update>
-    Given I am on the page for the roll
-    Then I should <show>
+    Then I should <update> authorized
     Given I delete on the page for the roll
-    Then I should <destroy>
+    Then I should <destroy> authorized
     Examples:
-      | user    | create                 | update                 | destroy                | show                   |
-      | admin   | not see "Unauthorized" | not see "Unauthorized" | not see "Unauthorized" | not see "Unauthorized" |
-      | regular | see "Unauthorized"     | see "Unauthorized"     | see "Unauthorized"     | not see "Unauthorized" |
+      | when    | user    | create  | update  | destroy | show    |
+      |         | admin   | see     | see     | see     | see     |
+      |         | regular | not see | not see | not see | see     |
+      | past_   | admin   | see     | see     | see     | see     |
+      | past_   | regular | not see | not see | not see | see     |
+      | future_ | admin   | see     | see     | see     | see     |
+      | future_ | regular | not see | not see | not see | not see |
 
   Scenario: Register new roll
     Given an election exists with name: "2008 General"
-    And I logged in as the administrator
+    And I log in as user: "admin"
     And I am on the new roll page for the election
     When I fill in "Name" with "All US Citizens"
     And I press "Create"
@@ -42,17 +54,17 @@ Feature: Manage rolls
     And a roll exists with name: "roll 3", election: election "2008"
     And a roll exists with name: "roll 2", election: election "2008"
     And a roll exists with name: "roll 1", election: election "2008"
-    And I logged in as the administrator
-    When I delete the 3rd roll for the election
+    And I log in as user: "admin"
+    When I follow "Destroy" for the 3rd roll for the election
     Then I should see the following rolls:
-      |Name  |
-      |roll 1|
-      |roll 2|
-      |roll 4|
+      | Name   |
+      | roll 1 |
+      | roll 2 |
+      | roll 4 |
 
   Scenario: Add users to roll in bulk (from csv text)
     Given a roll exists
-    And I logged in as the administrator
+    And I log in as user: "admin"
     And I am on the page for the roll
     And I follow "Import users"
     And I fill in "users" with "jd1,jd1@example.com,John,Doe"
@@ -65,7 +77,7 @@ Feature: Manage rolls
 
   Scenario: Add users to roll in bulk (from csv file)
     Given a roll exists
-    And I logged in as the administrator
+    And I log in as user: "admin"
     And I am on the page for the roll
     And I follow "Import users"
     And I attach the file "spec/assets/users.csv" to "users_file"

@@ -36,15 +36,6 @@ class Race < ActiveRecord::Base
     1..max_votes
   end
 
-  def may_user?(user, action)
-    case action
-      when :create, :update, :delete
-        user.admin? || (election.starts_at > Time.now && election.managers.include?(user))
-    else
-      election.may_user?(user, action)
-    end
-  end
-
   def available_slots
     return slots if slots < candidates.size
     candidates.size

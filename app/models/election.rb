@@ -7,10 +7,10 @@ class Election < ActiveRecord::Base
         WHERE r.id = ru.roll_id AND ru.user_id = ?)',
         user_id ] }
   }
-  scope_procedure :allowable, lambda { ends_at_greater_than DateTime.now }
-  scope_procedure :past, lambda { ends_at_less_than DateTime.now.utc }
-  scope_procedure :current, lambda { starts_at_less_than(DateTime.now.utc).ends_at_greater_than(DateTime.now.utc) }
-  scope_procedure :future, lambda { starts_at_greater_than(DateTime.now.utc) }
+  scope_procedure :allowable, lambda { ends_at_greater_than Time.zone.now }
+  scope_procedure :past, lambda { ends_at_less_than Time.zone.now }
+  scope_procedure :current, lambda { starts_at_less_than(Time.zone.now).ends_at_greater_than(Time.zone.now) }
+  scope_procedure :future, lambda { starts_at_greater_than(Time.zone.now) }
 
   has_many :rolls, :include => [:races], :order => :name, :dependent => :destroy
   has_many :races, :include => [:candidates, :roll], :order => :name, :dependent => :destroy
@@ -27,24 +27,9 @@ class Election < ActiveRecord::Base
   validates_presence_of :contact_name
   validates_format_of :contact_email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :allow_nil => false
 
-  def past?
-    ends_at < DateTime.now
-  end
+  def past?; ends_at < Time.zone.now; end
 
-  def to_s
-    name
-  end
+  def to_s; name; end
 
-  def may_user?(user,action)
-    case action
-      when :create, :update, :delete
-        user.admin?
-      when :show, :index
-        return true if user.admin? || self.managers.include?(user)
-        self.starts_at < Time.now
-      when :tabulate
-        return true if tabulated_at.nil? && user.admin? && (ends_at < Time.now)
-    end
-  end
 end
 

@@ -1,22 +1,11 @@
-class AuthorizationError < StandardError
-end
-
 class ApplicationController < ActionController::Base
   helper_method :current_user, :current_user_session
+  filter_parameter_logging :password, :password_confirmation
+  before_filter :check_authorization
 
-  def rescue_action(e)
-    case e
-    when AuthorizationError
-#      head :forbidden
-      respond_to do |format|
-        format.html do
-          flash[:error] = "Unauthorized request: You are not allowed to perform the requested action."
-          redirect_to my_elections_url
-        end
-      end
-    else
-      super(e)
-    end
+  def permission_denied
+    flash[:error] = "You are not allowed to perform the requested action."
+    redirect_to my_elections_url
   end
 
   # If user has been authenticated with single sign on credentials, logs in immediately
@@ -26,6 +15,7 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
   def current_user_session
     return @current_user_session if defined?(@current_user_session)
     @current_user_session = UserSession.find
@@ -49,6 +39,10 @@ class ApplicationController < ActionController::Base
     if current_user || @current_user
       redirect_to logout_url
     end
+  end
+
+  def check_authorization
+    Authorization.current_user = current_user
   end
 
   def store_location

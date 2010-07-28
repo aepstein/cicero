@@ -60,7 +60,6 @@ Rails::Initializer.run do |config|
   config.time_zone = 'Eastern Time (US & Canada)'
 
   # Configure required gems
-  config.gem 'fastercsv', :source => 'http://gemcutter.org'
   config.gem 'ar-extensions', :source => 'http://gemcutter.org'
   config.gem 'bluecloth', :source => 'http://gemcutter.org'
   config.gem 'will_paginate', :source => 'http://gemcutter.org'
@@ -72,7 +71,6 @@ Rails::Initializer.run do |config|
   config.gem 'searchlogic', :source => 'http://gemcutter.org'
   config.gem 'cornell_netid', :source => 'http://gemcutter.org'
   config.gem 'whenever', :source => 'http://gemcutter.org'
+  config.gem 'declarative_authorization', :source => 'http://gemcutter.org', :version => '>= 0.5'
 end
-
-CalendarDateSelect.format = :hyphen_ampm
 
