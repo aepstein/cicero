@@ -27,26 +27,15 @@ authorization do
       if_attribute :id => is { user.id }
     end
     # Voting
-    has_permission_on [ :rolls ], :to => :vote do
-      if_attribute :user_ids => includes { user.id }
-    end
-    has_permission_on [ :races ], :to => :vote do
-      if_permitted_to :vote, :roll
-    end
     has_permission_on [ :elections ], :to => :vote, :join_by => :and do
-      if_permitted_to :vote, :rolls
-      if_attribute :starts_at => lte { Time.zone.now }, :ends_at => gte { Time.zone.now }
-      if_attribute :id => is_not_in { user.election_ids }
+      if_attribute :id => is_in { user.elections.allowed.map(&:id) }
     end
     has_permission_on [ :ballots ], :to => :create, :join_by => :and do
       if_permitted_to :vote, :election
+      if_attribute :user_id => is { user.id }
     end
-    has_permission_on [ :sections ], :to => :create, :join_by => :and do
-      if_permitted_to :create, :ballot
-      if_permitted_to :vote, :race
-    end
-    has_permission_on [ :votes ], :to => :create do
-      if_permitted_to :create, :section
+    has_permission_on [ :ballots ], :to => :show do
+      if_attribute :user_id => is { user.id }
     end
   end
 end
