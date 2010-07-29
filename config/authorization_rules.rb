@@ -3,6 +3,7 @@ authorization do
     has_permission_on [ :ballots, :candidates, :elections, :petitioners, :races,
       :rolls, :sections, :users ], :to => :manage
     has_permission_on [ :ballots ], :to => :preview
+    has_permission_on [ :users ], :to => [ :bulk, :bulk_create ]
   end
   role :user do
     has_permission_on [ :elections ], :to => :show do
@@ -22,6 +23,9 @@ authorization do
     end
     has_permission_on [ :ballots ], :to => :show do
       if_attribute :user_id => is { user.id }
+    end
+    has_permission_on [ :users ], :to => :show do
+      if_attribute :id => is { user.id }
     end
     # Voting
     has_permission_on [ :rolls ], :to => :vote do

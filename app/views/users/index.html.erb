@@ -1,21 +1,25 @@
 <h2>Listing users <%= "for #{h @roll}" if @roll %></h2>
 
-<p>
-	<%= form_tag (@roll ? roll_users_path( @roll ) : users_path), :method => :get %>
-	Search: <%= text_field_tag :search, @search %>
-	<%= submit_tag "Go" %>
-</p>
+<% form_for :search, :url => [ @roll, :users ], :html => { :method => :get } do |f| %>
+  <p>
+    <%= f.label :name_like, 'Name' %>
+    <%= f.text_field :name_like %>
+    <%= f.submit 'Search' %>
+  </p>
+<% end %>
 
 <%= will_paginate @users %>
 
 <hr/>
 
-<%= render :partial => "users", :object => @users %>
+<%= render :partial => "users/users", :object => @users %>
 <hr />
 
 <%= will_paginate @users %>
 
 <p>
+<% if permitted_to? :create, User.new %>
 <%= link_to 'New user', new_user_path %>
+<% end %>
 </p>
 

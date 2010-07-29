@@ -3,7 +3,7 @@
 </p>
 
 <p>
-	<strong>Email:</strong> <%=h @user.email %>
+	<b>Email:</b> <%=h @user.email %>
 </p>
 
 <p>
@@ -16,22 +16,23 @@
 
 <p><b>Admin?</b> <%= @user.admin ? 'Yes' : 'No' %> </p>
 
-
 <h3>Allowed elections</h3>
 
-  <% Election.allowable(:include => :rolls, :order => 'rolls.name ASC').each do |election| %>
+<% Election.allowable.all(:include => :rolls, :order => 'rolls.name ASC').each do |election| %>
   <% if @user.rolls.election_id_equals(election.id).size > 0 %>
   <h4><%=h election.name %></h4>
       <ul>
       <% @user.rolls.election_id_equals(election.id).each do |roll| %>
-      <li><%=h roll.name %></li>
+        <li><%=h roll.name %></li>
       <% end %>
       </ul>
   <% end %>
-  <% end %>
+<% end %>
 
 <p>
+<% if permitted_to? :edit, @user %>
 <%= link_to 'Edit', edit_user_path(@user) %> |
+<% end %>
 <%= link_to 'Back', users_path %>
 </p>
 
