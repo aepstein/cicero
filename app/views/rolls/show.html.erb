@@ -7,9 +7,13 @@
 </p>
 
 <p>
-<%= link_to( 'Edit', edit_roll_path( @roll ) ) if permitted_to? :edit, @roll %> |
+<% if permitted_to? :edit, @roll %>
+<%= link_to( 'Edit', edit_roll_path( @roll ) ) %> |
+<% end %>
 <%= link_to 'List users', roll_users_path( @roll ) %> |
+<% if permitted_to? :create, :users %>
 <%= link_to 'Import users', bulk_new_roll_user_path(@roll) %> |
+<% end %>
 <%= link_to 'Back', election_rolls_path( @roll.election ) %>
 </p>
 

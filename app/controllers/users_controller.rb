@@ -3,8 +3,10 @@ class UsersController < ApplicationController
   before_filter :initialize_context
   before_filter :initialize_index, :only => [ :index ]
   before_filter :new_user_from_params, :only => [ :new, :create ]
-  filter_access_to :new, :create, :edit, :update, :destroy, :show, :bulk,
-    :bulk_create, :attribute_check => true
+  filter_access_to :new, :create, :edit, :update, :destroy, :show, :attribute_check => true
+  filter_access_to :bulk, :bulk_create do
+    permitted_to! :create
+  end
 
   # GET /users
   # GET /users.xml
@@ -117,7 +119,7 @@ class UsersController < ApplicationController
   end
 
   def initialize_index
-    @users = User.scoped :conditions => { :roll_id => @roll.id } if @roll
+    @users = @roll.users if @roll
     @users ||= User
     @search = @users.with_permissions_to(:show).searchlogic( params[:search] )
     @users = @search.paginate( :page => params[:page] )

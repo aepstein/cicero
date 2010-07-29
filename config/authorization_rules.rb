@@ -3,7 +3,6 @@ authorization do
     has_permission_on [ :ballots, :candidates, :elections, :petitioners, :races,
       :rolls, :sections, :users ], :to => :manage
     has_permission_on [ :ballots ], :to => :preview
-    has_permission_on [ :users ], :to => [ :bulk, :bulk_create ]
   end
   role :user do
     has_permission_on [ :elections ], :to => :show do
