@@ -9,8 +9,9 @@ Feature: Manage users
   Scenario Outline: Test permissions for candidates controller actions
     Given a user: "owner" exists with last_name: "Vital"
     And a user: "regular" exists
+    And a roll exists
     And I log in as user: "<user>"
-    Given I am on the page for the user
+    Given I am on the page for user: "owner"
     Then I should <show> authorized
     And I should <update> "Edit"
     Given I am on the users page
@@ -22,11 +23,15 @@ Feature: Manage users
     Then I should <create> authorized
     Given I post on the users page
     Then I should <create> authorized
-    And I am on the edit page for the user
+    Given I am on the bulk_new user page for the roll
+    Then I should <create> authorized
+    Given I post on the bulk_create users page for the roll
+    Then I should <create> authorized
+    Given I am on the edit page for user: "owner"
     Then I should <update> authorized
-    Given I put on the page for the user
+    Given I put on the page for the user: "owner"
     Then I should <update> authorized
-    Given I delete on the page for the user
+    Given I delete on the page for user: "owner"
     Then I should <destroy> authorized
     Examples:
       | user    | create  | update  | destroy | show    |

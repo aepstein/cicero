@@ -17,17 +17,19 @@ module NavigationHelpers
     when /^the edit page for #{capture_model}$/
       edit_polymorphic_path( [model($1)] )
 
-    when /^the new #{capture_factory} page$/
-      new_polymorphic_path( [$1] )
+    when /^the (?:"(.+)" )?(?:(.+) )?#{capture_factory} page(?: for #{capture_model})?$/
+      if $4.blank?
+        polymorphic_path( [ $2, $3 ], :format => $1 )
+      else
+        polymorphic_path( [ $2, model($4), $3 ], :format => $1 )
+      end
 
-    when /^the new #{capture_factory} page for #{capture_model}$/
-      new_polymorphic_path( [model($2), $1] )
-
-    when /^the #{capture_plural_factory} page$/
-      polymorphic_path( [$1] )
-
-    when /^the (?:"(.+)" )?#{capture_plural_factory} page for #{capture_model}$/
-      polymorphic_path( [model($3), $2], :format => $1 )
+    when /^the (?:"(.+)" )?(?:(.+) )?#{capture_plural_factory} page(?: for #{capture_model})?$/
+      if $4.blank?
+        polymorphic_path( ($2.blank? ? [ $3 ] : [ $2, $3 ]), :format => $1 )
+      else
+        polymorphic_path( ($2.blank? ? [ model($4), $3 ] : [ $2, model($4), $3 ]), :format => $1 )
+      end
 
     when /^the page for #{capture_model}$/
       polymorphic_path( [model($1)] )
