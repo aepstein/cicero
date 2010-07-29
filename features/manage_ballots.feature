@@ -2,28 +2,30 @@ Feature: Manage ballots
   In order to cast votes
   As a an eligible voter
   I want to prepare, confirm, and create ballots
-
+@wip
   Scenario Outline: Test permissions for candidates controller actions
     Given an election exists
     And the election is a current election
     And a roll exists with election: the election
     And a user: "voter" exists with net_id: "voter", password: "secret", admin: false
     And the user is amongst the users of the roll
-    And a ballot exists with election: the election, user: the user
     And a user: "admin" exists with net_id: "admin", password: "secret", admin: true
     And a user: "regular" exists with net_id: "regular", password: "secret", admin: false
     And I log in as user: "<user>"
-    And I am on the page for the ballot
-    Then I should <show> authorized
-    Given I delete on the page for the ballot
-    Then I should <destroy> authorized
+    And I am on the preview_new ballot page for the election
+    Then I should <preview> authorized
     Given there are no ballots
     And I am on the new ballot page for the election
     Then I should <create> authorized
     Given I post on the ballots page for the election
     Then I should <create> authorized
-    Given I am on the preview ballot page for the election
-    Then I should <preview> authorized
+    # Make sure the ballot subect to the next tests is the only one
+    Given there are no ballots
+    And a ballot exists with election: the election, user: user "voter"
+    And I am on the page for the ballot
+    Then I should <show> authorized
+    Given I delete on the page for the ballot
+    Then I should <destroy> authorized
     Examples:
       | user    | create  | destroy | show    | preview |
       | admin   | not see | see     | see     | see     |
@@ -42,7 +44,7 @@ Feature: Manage ballots
     And a candidate: "biden" exists with name: "Joseph Biden", race: race "vpotus"
     And a candidate: "palin" exists with name: "Sarah Palin", race: race "vpotus"
     And the election is a current election
-    And I logged in as "voter" with password "secret"
+    And I log in as user: "voter"
     And I check "Barack Obama"
     And I check "Joseph Biden"
     And I press "Continue"
@@ -62,7 +64,7 @@ Feature: Manage ballots
     And a candidate: "biden" exists with name: "Joseph Biden", race: race "vpotus"
     And a candidate: "palin" exists with name: "Sarah Palin", race: race "vpotus"
     And the election is a current election
-    And I logged in as "voter" with password "secret"
+    And I log in as user: "voter"
     And I select "1" from "Barack Obama"
     And I select "2" from "John McCain"
     And I select "1" from "Joseph Biden"

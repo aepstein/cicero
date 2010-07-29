@@ -3,7 +3,8 @@ class BallotsController < ApplicationController
   before_filter :initialize_context
   before_filter :initialize_index, :only => [ :index ]
   before_filter :new_ballot_from_params, :only => [ :new, :create, :preview, :confirm ]
-  filter_access_to :new, :create, :edit, :update, :destroy, :show, :attribute_check => true
+  filter_access_to :new, :create, :edit, :update, :destroy, :show, :confirm,
+    :preview, :attribute_check => true
   filter_access_to :index do
     permitted_to!( :show, @election ) if @election
     permitted_to!( :show, @race ) if @race
@@ -88,10 +89,11 @@ class BallotsController < ApplicationController
   # DELETE /ballots/:id
   # DELETE /ballots/:id.xml
   def destroy
+    puts '***destroying'
     @ballot.destroy
 
     respond_to do |format|
-      format.html { redirect_to( election_ballots_url(@ballot.election) ) }
+      format.html { puts '***redirecting'; redirect_to election_ballots_url(@ballot.election) }
       format.xml  { head :ok }
     end
   end

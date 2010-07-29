@@ -1,8 +1,8 @@
 authorization do
   role :admin do
-    has_permission_on [ :ballots, :candidates, :elections, :petitioners, :races,
+    has_permission_on [ :candidates, :elections, :petitioners, :races,
       :rolls, :sections, :users ], :to => :manage
-    has_permission_on [ :ballots ], :to => :preview
+    has_permission_on [ :ballots ], :to => [ :preview, :destroy, :show, :index ]
   end
   role :user do
     has_permission_on [ :elections ], :to => :show do
