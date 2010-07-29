@@ -23,6 +23,8 @@ Feature: Manage users
     Then I should <create> authorized
     Given I post on the users page
     Then I should <create> authorized
+    Given I am on the page for the roll
+    Then I should <create> "Import users"
     Given I am on the bulk_new user page for the roll
     Then I should <create> authorized
     Given I post on the bulk_create users page for the roll

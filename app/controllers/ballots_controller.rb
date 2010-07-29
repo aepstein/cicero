@@ -10,29 +10,6 @@ class BallotsController < ApplicationController
     permitted_to!( :show, @user ) if @user
   end
 
-  def initialize_context
-    @ballot = Ballot.find params[:id] if params[:id]
-    @election = Election.find params[:election_id] if params[:election_id]
-    @race = Race.find params[:race_id] if params[:race_id]
-    @user = User.find params[:user_id] if params[:user_id]
-  end
-
-  def initialize_index
-    if @election
-      @ballots = Ballot.scoped( :conditions => { :election_id => @election.id } ) if @election
-    elsif @race
-      @ballots = Ballot.scoped( :conditions => { :race_id => @race.id } ) if @race
-    elsif @user
-      @ballots = Ballot.scoped( :conditions => { :user_id => @user.id } ) if @user
-    end
-    @ballots = @ballots.with_permissions_to(:show)
-  end
-
-  def new_ballot_from_params
-    @ballot = @election.ballots.build params[:ballot]
-    @ballot.user = ( @user ? @user : current_user )
-  end
-
   # GET /elections/:election_id/ballots
   # GET /elections/:election_id/ballots.xml
   # GET /races/:race_id/ballots.blt
@@ -117,6 +94,31 @@ class BallotsController < ApplicationController
       format.html { redirect_to( election_ballots_url(@ballot.election) ) }
       format.xml  { head :ok }
     end
+  end
+
+  private
+
+  def initialize_context
+    @ballot = Ballot.find params[:id] if params[:id]
+    @election = Election.find params[:election_id] if params[:election_id]
+    @race = Race.find params[:race_id] if params[:race_id]
+    @user = User.find params[:user_id] if params[:user_id]
+  end
+
+  def initialize_index
+    if @election
+      @ballots = Ballot.scoped( :conditions => { :election_id => @election.id } ) if @election
+    elsif @race
+      @ballots = Ballot.scoped( :conditions => { :race_id => @race.id } ) if @race
+    elsif @user
+      @ballots = Ballot.scoped( :conditions => { :user_id => @user.id } ) if @user
+    end
+    @ballots = @ballots.with_permissions_to(:show)
+  end
+
+  def new_ballot_from_params
+    @ballot = @election.ballots.build params[:ballot]
+    @ballot.user = ( @user ? @user : current_user )
   end
 
 end
