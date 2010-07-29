@@ -1,8 +1,8 @@
 <% table_row_tag do %>
   <td><%=h candidate.name %></td>
-  <td><%= link_to 'Show', candidate if candidate.may_user?(current_user, :show) %></td>
-  <td><%= link_to 'Edit', edit_candidate_path( candidate ) if candidate.may_user?(current_user, :update) %></td>
+  <td><%= link_to 'Show', candidate %></td>
+  <td><%= link_to( 'Edit', edit_candidate_path( candidate ) ) if permitted_to? :edit, candidate %></td>
   <td><%= link_to( 'Destroy', candidate_path( candidate ), :confirm => 'Are you sure?',
-          :method => :delete ) if candidate.may_user?(current_user, :delete) %></td>
+          :method => :delete ) if permitted_to? :destroy, candidate %></td>
 <% end %>
 

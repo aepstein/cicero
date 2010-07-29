@@ -3,9 +3,9 @@
   <td><%= race.slots %></td>
   <td><%= race.is_ranked? ? 'Yes' : 'No' %></td>
   <td><%= race.roll %></td>
-  <td><%= link_to( 'Show', race ) if race.may_user? current_user, :show %></td>
-  <td><%= link_to( 'Edit', edit_race_path( race ) ) if race.may_user? current_user, :update %></td>
+  <td><%= link_to 'Show', race %></td>
+  <td><%= link_to( 'Edit', edit_race_path( race ) ) if permitted_to? :edit, race %></td>
   <td><%= link_to( 'Destroy', race_path( race ), :confirm => 'Are you sure?',
-  :method => :delete) if race.may_user? current_user, :delete  %></td>
+  :method => :delete) if permitted_to? :destroy, race  %></td>
 <% end %>
 

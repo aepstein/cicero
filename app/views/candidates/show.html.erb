@@ -1,5 +1,5 @@
 <p>
-  <b>Race:</b> <%=h @candidate.race_id %>
+  <b>Race:</b> <%=h @candidate.race %>
 </p>
 
 <p>
@@ -19,7 +19,9 @@
 <p><b>Picture:</b> <%= @candidate.picture.file? ? 'Yes' + image_tag(@candidate.picture.url(:original)) : 'No' %></p>
 
 <p>
-<%= link_to( 'Edit', edit_candidate_path( @candidate )) if @candidate.may_user?(current_user,:update) %> |
+<% if permitted_to? :edit, @candidate %>
+<%= link_to 'Edit', edit_candidate_path( @candidate ) %> |
+<% end %>
 <%= link_to 'Back', race_candidates_path( @candidate.race ) %>
 </p>
 

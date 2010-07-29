@@ -5,7 +5,7 @@
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '2.3.5' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.8' unless defined? RAILS_GEM_VERSION
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
@@ -37,7 +37,7 @@ Rails::Initializer.run do |config|
   # Make sure the secret is at least 30 characters and all random,
   # no regular words or you'll be exposed to dictionary attacks.
   config.action_controller.session = {
-    :session_key => '_cicero_session',
+    :key => '_cicero_session',
     :secret      => '64cced0d99dabeb84b2e596eca215243ca31df9d96984f74a80b3ae1359595e4f23bb9983ef9ad874a82f0f17274b5305c5ab395d4941e6ffeada96795fdc5a4'
   }
 
@@ -72,5 +72,6 @@ Rails::Initializer.run do |config|
   config.gem 'cornell_netid', :source => 'http://gemcutter.org'
   config.gem 'whenever', :source => 'http://gemcutter.org'
   config.gem 'declarative_authorization', :source => 'http://gemcutter.org', :version => '>= 0.5'
+  config.gem 'repeated_auto_complete', :source => 'http://gemcutter.org'
 end
 

@@ -5,6 +5,9 @@
 <hr />
 
 <p>
+<% if permitted_to? :create, @election.races.build %>
 <%= link_to "New race for #{@election.name} election", new_election_race_path( @election ) %> |
+<% end %>
 <%= link_to "Back", election_path( @election ) %>
+</p>
 

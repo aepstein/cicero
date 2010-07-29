@@ -3,31 +3,43 @@ Feature: Manage races
   As an election manager
   I want to create, show, destroy, and update races
 
+  Background:
+    Given a user: "admin" exists with admin: true
+    And a user: "regular" exists
+
   Scenario Outline: Test permissions for candidates controller actions
-    Given an election exists
-    And a race exists with election: the election
-    And a user: "admin" exists with net_id: "admin", password: "secret", admin: true
-    And a user: "regular" exists with net_id: "regular", password: "secret", admin: false
-    And I logged in as "<user>" with password "secret"
-    And I am on the new race page for the election
-    Then I should <create>
+    Given a <when>election exists
+    And a race exists with election: the election, name: "Vital"
+    And I log in as user: "<user>"
+    And I am on the page for the race
+    Then I should <show> authorized
+    And I should <update> "Edit"
+    Given I am on the races page for the election
+    Then I should <show> "Vital"
+    And I should <update> "Edit"
+    And I should <destroy> "Destroy"
+    And I should <create> "New race"
+    Given I am on the new race page for the election
+    Then I should <create> authorized
     Given I post on the races page for the election
-    Then I should <create>
+    Then I should <create> authorized
     And I am on the edit page for the race
-    Then I should <update>
+    Then I should <update> authorized
     Given I put on the page for the race
-    Then I should <update>
-    Given I am on the page for the race
-    Then I should <show>
+    Then I should <update> authorized
     Given I delete on the page for the race
-    Then I should <destroy>
+    Then I should <destroy> authorized
     Examples:
-      | user    | create                 | update                 | destroy                | show                   |
-      | admin   | not see "Unauthorized" | not see "Unauthorized" | not see "Unauthorized" | not see "Unauthorized" |
-      | regular | see "Unauthorized"     | see "Unauthorized"     | see "Unauthorized"     | not see "Unauthorized" |
+      | when    | user    | create  | update  | destroy | show    |
+      |         | admin   | see     | see     | see     | see     |
+      |         | regular | not see | not see | not see | see     |
+      | past_   | admin   | see     | see     | see     | see     |
+      | past_   | regular | not see | not see | not see | see     |
+      | future_ | admin   | see     | see     | see     | see     |
+      | future_ | regular | not see | not see | not see | not see |
 
   Scenario: Register new race
-    Given I logged in as the administrator
+    Given I log in as user: "admin"
     And an election: "2008" exists with name: "2008 General Election"
     And a roll: "national" exists with name: "All US Citizens", election: the election
     And I am on the new race page for the election
@@ -50,8 +62,8 @@ Feature: Manage races
     And a race exists with name: "Second", slots: 1, is_ranked: false, roll: roll "national", election: election "2008"
     And a race exists with name: "Third", slots: 1, is_ranked: false, roll: roll "national", election: election "2008"
     And a race exists with name: "Fourth", slots: 1, is_ranked: false, roll: roll "national", election: election "2008"
-    And I logged in as the administrator
-    When I delete the 3rd race for election "2008"
+    And I log in as user: "admin"
+    When I follow "Destroy" for the 3rd race for election "2008"
     Then I should see the following races:
       |Name   |Slots|Ranked? |Roll           |
       |First  |1    |No      |All US Citizens|

@@ -1,7 +1,7 @@
 class Candidate < ActiveRecord::Base
   belongs_to :race
   has_many :votes, :dependent => :destroy
-  has_many :ballots, :through => :votes
+  has_many :sections, :through => :votes
   has_many :petitioners
   has_many :users, :through => :petitioners
 
@@ -15,13 +15,9 @@ class Candidate < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => :race_id
   validates_presence_of :race
 
-  def to_s
-    name
-  end
+  def to_s; name; end
 
-  def <=>(other)
-    name <=> other.name
-  end
+  def <=>(other); name <=> other.name; end
 
 end
 

@@ -17,6 +17,9 @@ authorization do
     has_permission_on [ :candidates ], :to => :show do
       if_permitted_to :show, :race
     end
+    has_permission_on [ :petitioners ], :to => :show do
+      if_permitted_to :show, :candidate
+    end
     has_permission_on [ :ballots ], :to => :show do
       if_attribute :user_id => is { user.id }
     end

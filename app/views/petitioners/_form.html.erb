@@ -1,10 +1,10 @@
 <%= form.error_messages %>
 
-  <p>
-    <%= form.label :net_id %><br/>
-    <%= form.text_field_with_auto_complete( :net_id, { },
-      { :url => roll_users_path(form.object.candidate.race.roll, { :format => :js }), :method => :get,
-        :with => "'search[name_like]=' + element.value"
-      } ) %>
-  </p>
+<% form.inputs do %>
+  <%= form.input( :net_id, :label => 'User', :as => :string_with_auto_complete, :remote => {
+    :url => roll_users_path( form.object.candidate.race.roll, :format => :js ), :method => :get, :with => "'search[name_like]=' + element.value"
+  } ) %>
+<% end %>
+
+<%= form.buttons %>
 

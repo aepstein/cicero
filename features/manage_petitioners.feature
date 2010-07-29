@@ -8,41 +8,51 @@ Feature: Manage petitioners
     And a roll: "national" exists with name: "United States Citizens", election: election "2008"
     And a race: "potus" exists with name: "President of the United States", roll: roll "national", election: election "2008", is_ranked: false
     And a candidate: "obama" exists with race: race "potus"
+    And a user: "admin" exists with admin: true
+    And a user: "regular" exists
 
   Scenario Outline: Test permissions for candidates controller actions
-    Given an election exists
+    Given a <when>election exists
     And a roll exists with election: the election
-    And a user: "voter" exists
+    And a user: "voter" exists with last_name: "Vital"
     And the user is amongst the users of the roll
     And a race exists with roll: the roll, election: the election
-    And a candidate: "basic" exists with race: the race
-    And a petitioner: "basic" exists with candidate: candidate "basic", user: user "voter"
-    And a user: "admin" exists with net_id: "admin", password: "secret", admin: true
-    And a user: "regular" exists with net_id: "regular", password: "secret", admin: false
-    And I logged in as "<user>" with password "secret"
-    And I am on the new petitioner page for candidate: "basic"
-    Then I should <create>
-    Given I post on the petitioners page for candidate: "basic"
-    Then I should <create>
-    And I am on the edit page for petitioner: "basic"
-    Then I should <update>
-    Given I put on the page for petitioner: "basic"
-    Then I should <update>
-    Given I am on the page for petitioner: "basic"
-    Then I should <show>
-    Given I delete on the page for petitioner: "basic"
-    Then I should <destroy>
+    And a candidate exists with race: the race
+    And a petitioner exists with candidate: the candidate, user: user "voter"
+    And I log in as user: "<user>"
+    Given I am on the page for the petitioner
+    Then I should <show> authorized
+    And I should <update> "Edit"
+    Given I am on the petitioners page for the candidate
+    Then I should <show> "Vital"
+    And I should <update> "Edit"
+    And I should <destroy> "Destroy"
+    And I should <create> "New petitioner"
+    Given I am on the new petitioner page for the candidate
+    Then I should <create> authorized
+    Given I post on the petitioners page for the candidate
+    Then I should <create> authorized
+    And I am on the edit page for the petitioner
+    Then I should <update> authorized
+    Given I put on the page for the petitioner
+    Then I should <update> authorized
+    Given I delete on the page for the petitioner
+    Then I should <destroy> authorized
     Examples:
-      | user    | create                 | update                 | destroy                | show                   |
-      | admin   | not see "Unauthorized" | not see "Unauthorized" | not see "Unauthorized" | not see "Unauthorized" |
-      | regular | see "Unauthorized"     | see "Unauthorized"     | see "Unauthorized"     | not see "Unauthorized" |
+      | when    | user    | create  | update  | destroy | show    |
+      |         | admin   | see     | see     | see     | see     |
+      |         | regular | not see | not see | not see | see     |
+      | past_   | admin   | see     | see     | see     | see     |
+      | past_   | regular | not see | not see | not see | see     |
+      | future_ | admin   | see     | see     | see     | see     |
+      | future_ | regular | not see | not see | not see | not see |
 
   Scenario: Register new petitioner
     Given a user: "voter" exists with net_id: "vot123", password: "secret", first_name: "John", last_name: "Doe"
     And the user is in the users of the roll
-    And I logged in as the administrator
+    And I log in as user: "admin"
     And I am on the new petitioner page for candidate: "obama"
-    When I fill in "petitioner[net_id]" with "vot123"
+    When I fill in "User" with "vot123"
     And I press "Create"
     Then I should see "Petitioner was successfully created."
     And I should see the following petitioners:
@@ -62,8 +72,8 @@ Feature: Manage petitioners
     And a user: "voter1" exists with last_name: "Alpha", first_name: "Joe"
     And the user is in the users of the roll
     And a petitioner exists with user: user "voter1", candidate: candidate "obama"
-    And I logged in as the administrator
-    When I delete the 3rd petitioner for candidate "obama"
+    And I log in as user: "Admin"
+    When I follow "Destroy" for the 3rd petitioner for candidate: "obama"
     Then I should see the following petitioners:
       |User         |
       |Joe Alpha    |
