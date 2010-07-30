@@ -1,6 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
   map.resource :user_session, :only => [ :create ]
-  map.resources :users
+  map.resources :users, :shallow => true do |user|
+    user.resources :ballots, :only => [ :index ]
+  end
   map.resources :elections, :shallow => true, :collection => { :my => :get } do |election|
     election.resources :rolls do |roll|
       roll.resources :users, :new => { :bulk => :get }, :only => [ :index, :create ],

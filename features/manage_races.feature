@@ -85,7 +85,7 @@ Feature: Manage races
     And a vote exists with section: the section, candidate: candidate "top", rank: 1
     And a vote exists with section: the section, candidate: candidate "middle", rank: 2
     And a vote exists with section: the section, candidate: candidate "bottom", rank: 3
-    And I logged in as the administrator
+    And I log in as user: "admin"
     And I am on the "blt" ballots page for race: "first"
     Then I should see "3 1"
     And I should see "-2"

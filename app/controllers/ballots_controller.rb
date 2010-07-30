@@ -6,9 +6,10 @@ class BallotsController < ApplicationController
   filter_access_to :new, :create, :edit, :update, :destroy, :show, :confirm,
     :preview, :attribute_check => true
   filter_access_to :index do
-    permitted_to!( :show, @election ) if @election
-    permitted_to!( :show, @race ) if @race
-    permitted_to!( :show, @user ) if @user
+    permitted_to!( :tabulate, @election ) if @election
+    permitted_to!( :tabulate, @race ) if @race
+    permitted_to!( :tabulate, @user ) if @user
+    true
   end
 
   # GET /elections/:election_id/ballots
@@ -19,12 +20,11 @@ class BallotsController < ApplicationController
     @ballots = @search.paginate( :page => params[:page] )
 
     respond_to do |format|
-      if @election
-        format.html # index.html.erb
-        format.xml  { render :xml => @ballots }
-      else
+      if @race
         format.blt { send_data @race.to_blt, :type => 'text/blt', :filename => @race.to_s(:file) }
       end
+      format.html # index.html.erb
+      format.xml  { render :xml => @ballots }
     end
   end
 
@@ -89,11 +89,10 @@ class BallotsController < ApplicationController
   # DELETE /ballots/:id
   # DELETE /ballots/:id.xml
   def destroy
-    puts '***destroying'
     @ballot.destroy
 
     respond_to do |format|
-      format.html { puts '***redirecting'; redirect_to election_ballots_url(@ballot.election) }
+      format.html { redirect_to election_ballots_url @ballot.election }
       format.xml  { head :ok }
     end
   end
@@ -105,17 +104,11 @@ class BallotsController < ApplicationController
     @election = Election.find params[:election_id] if params[:election_id]
     @race = Race.find params[:race_id] if params[:race_id]
     @user = User.find params[:user_id] if params[:user_id]
+    @context = @election || @race || @user
   end
 
   def initialize_index
-    if @election
-      @ballots = Ballot.scoped( :conditions => { :election_id => @election.id } ) if @election
-    elsif @race
-      @ballots = Ballot.scoped( :conditions => { :race_id => @race.id } ) if @race
-    elsif @user
-      @ballots = Ballot.scoped( :conditions => { :user_id => @user.id } ) if @user
-    end
-    @ballots = @ballots.with_permissions_to(:show)
+    @ballots = @context.ballots.with_permissions_to(:show)
   end
 
   def new_ballot_from_params

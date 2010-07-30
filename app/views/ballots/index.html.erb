@@ -1,7 +1,7 @@
-<h2>Listing ballots for <%=h @election %></h2>
+<h2>Listing ballots for <%=h @context %></h2>
 
 <p>
-	<%= form_tag election_ballots_path(@election), :method => :get %>
+	<%= form_tag polymorphic_path( [ @context, :ballots ] ), :method => :get %>
 	Search: <%= text_field_tag :search, @search %>
 	<%= submit_tag "Go" %>
 </p>
@@ -15,6 +15,8 @@
 <hr />
 
 <p>
-<%= link_to 'Back', election_path(@election) %>
+<% if @context %>
+<%= link_to h("Back to #{@context}"), @context %>
+<% end %>
 </p>
 

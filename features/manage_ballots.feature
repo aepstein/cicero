@@ -2,11 +2,11 @@ Feature: Manage ballots
   In order to cast votes
   As a an eligible voter
   I want to prepare, confirm, and create ballots
-@wip
+
   Scenario Outline: Test permissions for candidates controller actions
     Given an election exists
-    And the election is a current election
     And a roll exists with election: the election
+    And a race exists with roll: the roll, election: the election
     And a user: "voter" exists with net_id: "voter", password: "secret", admin: false
     And the user is amongst the users of the roll
     And a user: "admin" exists with net_id: "admin", password: "secret", admin: true
@@ -19,18 +19,24 @@ Feature: Manage ballots
     Then I should <create> authorized
     Given I post on the ballots page for the election
     Then I should <create> authorized
-    # Make sure the ballot subect to the next tests is the only one
+    # Make sure the ballot subject to the next tests is the only one
     Given there are no ballots
     And a ballot exists with election: the election, user: user "voter"
     And I am on the page for the ballot
     Then I should <show> authorized
+    Given I am on the ballots page for user: "voter"
+    Then I should <show> authorized
+    Given I am on the ballots page for the race
+    Then I should <tabulate> authorized
+    Given I am on the ballots page for the election
+    Then I should <tabulate> authorized
     Given I delete on the page for the ballot
     Then I should <destroy> authorized
     Examples:
-      | user    | create  | destroy | show    | preview |
-      | admin   | not see | see     | see     | see     |
-      | voter   | see     | not see | see     | not see |
-      | regular | not see | not see | not see | not see |
+      | user    | create  | destroy | show    | preview | tabulate |
+      | admin   | not see | see     | see     | see     | see      |
+      | voter   | see     | not see | see     | not see | not see  |
+      | regular | not see | not see | not see | not see | not see  |
 
   Scenario: Cast new ballot (unranked)
     Given a user: "voter" exists with net_id: "voter", password: "secret"

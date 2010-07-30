@@ -12,6 +12,7 @@ class Race < ActiveRecord::Base
     end
   end
   has_many :sections
+  has_many :ballots, :through => :sections
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :election_id
