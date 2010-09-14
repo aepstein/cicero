@@ -2,7 +2,7 @@
 set :application, "cicero"
 role :app, "xen1.assembly.cornell.edu", "kvm02.assembly.cornell.edu"
 role :web, "xen1.assembly.cornell.edu", "kvm02.assembly.cornell.edu"
-role :db,  "assembly.cornell.edu", "kvm02.assembly.cornell.edu", :primary => true
+role :db,  "xen1.assembly.cornell.edu", "kvm02.assembly.cornell.edu", :primary => true
 
 set :user, "www-data"
 set :deploy_to, "/var/www/assembly/#{application}"
