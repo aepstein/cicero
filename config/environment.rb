@@ -1,13 +1,25 @@
-RAILS_GEM_VERSION = '2.3.8' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.5' unless defined? RAILS_GEM_VERSION
 
 require File.join(File.dirname(__FILE__), 'boot')
+require 'csv'
+
+if Gem::VERSION >= "1.3.6"
+    module Rails
+        class GemDependency
+            def requirement
+                r = super
+                (r == Gem::Requirement.default) ? nil : r
+            end
+        end
+    end
+end
+
 
 Rails::Initializer.run do |config|
+
   config.action_controller.session = {
     :key => '_cicero_session', :secret => Proc.new { APP_CONFIG['session_secret'] }
   }
-
-  config.action_controller.session_store = :active_record_store
 
   config.time_zone = 'Eastern Time (US & Canada)'
 

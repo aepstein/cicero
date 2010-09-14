@@ -1,8 +1,8 @@
 # deploy.rb
 set :application, "cicero"
-role :app, "assembly.cornell.edu"
-role :web, "assembly.cornell.edu"
-role :db,  "assembly.cornell.edu", :primary => true
+role :app, "xen1.assembly.cornell.edu", "kvm02.assembly.cornell.edu"
+role :web, "xen1.assembly.cornell.edu", "kvm02.assembly.cornell.edu"
+role :db,  "assembly.cornell.edu", "kvm02.assembly.cornell.edu", :primary => true
 
 set :user, "www-data"
 set :deploy_to, "/var/www/assembly/#{application}"
@@ -22,6 +22,7 @@ namespace :deploy do
 
   desc "Symlink shared configs and folders on each release."
   task :symlink_shared do
+    run "ln -nfs #{shared_path}/config/application.yml #{release_path}/config/application.yml"
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     run "ln -nfs #{shared_path}/uploads #{release_path}/db/uploads"
     run "ln -nfs #{shared_path}/system/production #{release_path}/public/system"

@@ -16,6 +16,9 @@ config.action_controller.perform_caching             = false
 # Disable request forgery protection in test environment
 config.action_controller.allow_forgery_protection    = false
 
+# Using cookie-based sessions seems to cause trouble with webrat, so use database backed sessions here
+config.action_controller.session_store = :active_record_store
+
 # Tell ActionMailer not to deliver emails to the real world.
 # The :test delivery method accumulates sent emails in the
 # ActionMailer::Base.deliveries array.
