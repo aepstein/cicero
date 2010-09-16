@@ -1,6 +1,6 @@
 <h2>Ballot of <%=h @ballot.user %> for <%=h @ballot.election %> election</h2>
 
-<% semantic_form_for( :ballot, @ballot, :url => confirm_new_election_ballot_url( @ballot.election ) ) do |f| %>
+<% semantic_form_for( :ballot, @ballot, :url => confirm_new_election_ballot_path( @ballot.election ) ) do |f| %>
 
   <%= f.error_messages %>
 
