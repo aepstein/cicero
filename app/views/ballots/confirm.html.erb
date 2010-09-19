@@ -6,7 +6,7 @@ When you have finished please click the link at the end to cast your ballot.  Yo
 further modify your ballot after you have confirmed.
 </p>
 
-<% semantic_form_for( :ballot, @ballot, :url => election_ballots_url( @ballot.election ) ) do |f| %>
+<% semantic_form_for( :ballot, @ballot, :url => election_ballots_path( @ballot.election ) ) do |f| %>
 
 <% f.inputs do %>
 <%= render :partial => 'form', :object => f %>
