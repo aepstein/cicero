@@ -1,9 +1,11 @@
 <h2>Listing ballots for <%=h @context %></h2>
 
 <p>
-	<%= form_tag polymorphic_path( [ @context, :ballots ] ), :method => :get %>
-	Search: <%= text_field_tag :search, @search %>
+	<% form_for( :search, :url => polymorphic_path( [ @context, :ballots ] ), :html => { :method => :get } ) do |form| %>
+	<%= form.label :user_name_like, 'User' %>
+	<%= form.text_field :user_name_like  %>
 	<%= submit_tag "Go" %>
+	<% end %>
 </p>
 
 <%= will_paginate @users %>
