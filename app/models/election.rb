@@ -13,10 +13,10 @@ class Election < ActiveRecord::Base
       'WHERE r.id = ru.roll_id AND ru.user_id = ?)',
       user_id )
   }
-  scope :allowable, lambda { ends_at_greater_than Time.zone.now }
-  scope :past, lambda { ends_at_less_than Time.zone.now }
-  scope :current, lambda { starts_at_less_than(Time.zone.now).ends_at_greater_than(Time.zone.now) }
-  scope :future, lambda { starts_at_greater_than(Time.zone.now) }
+  scope :allowable, lambda { where( :ends_at.gt => Time.zone.now )}
+  scope :past, lambda { where( :ends_at.lt => Time.zone.now ) }
+  scope :current, lambda { where( :starts_at.lt => Time.zone.now, :ends_at.gt => Time.zone.now ) }
+  scope :future, lambda { where( :starts_at.gt => Time.zone.now ) }
 
   validates_presence_of :name
   validates_datetime :starts_at, :before => :ends_at
