@@ -45,6 +45,7 @@ gem 'whenever'
 gem 'declarative_authorization'
 #gem 'repeated_auto_complete'
 group :development, :test do
+  gem 'test-unit'
   gem 'cucumber-rails'
   gem 'database_cleaner'
 #  gem 'webrat'
