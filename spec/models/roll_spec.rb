@@ -48,7 +48,7 @@ describe Roll do
   end
 
   it 'should have a users.import_from_file method' do
-    file = ActionController::TestUploadedFile.new('spec/assets/users.csv','text/csv')
+    file = fixture_file_upload 'spec/assets/users.csv','text/csv'
     @roll.users.import_from_file(file).should eql [2,2]
   end
 
