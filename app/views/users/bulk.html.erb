@@ -1,6 +1,6 @@
 <h2>Bulk add users to <%=h @roll %></h2>
 
-<%= form_tag bulk_create_roll_users_path( @roll ), :multipart => true %>
+<%= form_tag bulk_create_roll_users_path( @roll ), :multipart => true do %>
 <p>
 You may specify voters to add by listing comma-separated values like this:
 <pre>
@@ -19,5 +19,5 @@ You may also upload a file with such data.
 
 <br/>
 <%= submit_tag 'Add users to roll' %>
-</form>
+<% end %>
 

@@ -1,7 +1,7 @@
 <h2>New petitioner for <%= @petitioner.candidate %></h2>
 
-<% semantic_form_for( :petitioner, @petitioner, :url =>
-  candidate_petitioners_url( @petitioner.candidate ) ) do |f| %>
+<%= semantic_form_for( @petitioner,
+  :url => candidate_petitioners_url( @petitioner.candidate ) ) do |f| %>
 
 <%= render :partial => 'form', :object => f %>
 

@@ -1,9 +1,4 @@
 class Race < ActiveRecord::Base
-  named_scope :allowed_for_user_id, lambda { |user_id|
-    { :joins => 'INNER JOIN rolls_users AS ru',
-      :conditions => [ 'races.roll_id = ru.roll_id AND ru.user_id = ?', user_id ] }
-  }
-
   belongs_to :election
   belongs_to :roll
   has_many :candidates, :order => 'candidates.name ASC', :dependent => :destroy do
@@ -13,6 +8,11 @@ class Race < ActiveRecord::Base
   end
   has_many :sections
   has_many :ballots, :through => :sections
+
+  scope :allowed_for_user_id, lambda { |user_id|
+    joins( 'INNER JOIN rolls_users AS ru' ).
+    where( 'races.roll_id = ru.roll_id AND ru.user_id = ?', user_id )
+  }
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :election_id
@@ -61,7 +61,7 @@ class Race < ActiveRecord::Base
     candidates.disqualified.each do |candidate|
       output += "-#{candidates.index(candidate) + 1}\r\n"
     end
-    sections.all(:include => :votes).each do |section|
+    sections.includes(:votes).all.each do |section|
       section.race = self
       output += "1 #{section.to_blt} 0\r\n"
     end

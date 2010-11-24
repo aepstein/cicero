@@ -1,4 +1,4 @@
-<% table_row_tag do %>
+<%= table_row_tag do %>
   <td><%=h candidate.name %></td>
   <td><%= link_to 'Show', candidate %></td>
   <td><%= link_to( 'Edit', edit_candidate_path( candidate ) ) if permitted_to? :edit, candidate %></td>

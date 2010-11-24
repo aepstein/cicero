@@ -1,22 +1,22 @@
 class Election < ActiveRecord::Base
-  default_scope :order => 'elections.name ASC'
-
-  named_scope :allowed_for_user_id, lambda { |user_id|
-    { :conditions => [
-        'elections.id IN (SELECT election_id FROM rolls AS r INNER JOIN rolls_users AS ru
-        WHERE r.id = ru.roll_id AND ru.user_id = ?)',
-        user_id ] }
-  }
-  scope_procedure :allowable, lambda { ends_at_greater_than Time.zone.now }
-  scope_procedure :past, lambda { ends_at_less_than Time.zone.now }
-  scope_procedure :current, lambda { starts_at_less_than(Time.zone.now).ends_at_greater_than(Time.zone.now) }
-  scope_procedure :future, lambda { starts_at_greater_than(Time.zone.now) }
-
   has_many :rolls, :include => [:races], :order => :name, :dependent => :destroy
   has_many :races, :include => [:candidates, :roll], :order => :name, :dependent => :destroy
   has_and_belongs_to_many :managers, :class_name => 'User', :join_table => 'elections_managers'
   has_many :ballots, :dependent => :destroy
   has_many :candidates, :through => :races
+
+  default_scope order('elections.name ASC')
+
+  scope :allowed_for_user_id, lambda { |user_id|
+    where(
+      'elections.id IN (SELECT election_id FROM rolls AS r INNER JOIN rolls_users AS ru ' +
+      'WHERE r.id = ru.roll_id AND ru.user_id = ?)',
+      user_id )
+  }
+  scope :allowable, lambda { ends_at_greater_than Time.zone.now }
+  scope :past, lambda { ends_at_less_than Time.zone.now }
+  scope :current, lambda { starts_at_less_than(Time.zone.now).ends_at_greater_than(Time.zone.now) }
+  scope :future, lambda { starts_at_greater_than(Time.zone.now) }
 
   validates_presence_of :name
   validates_datetime :starts_at, :before => :ends_at

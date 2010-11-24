@@ -16,7 +16,7 @@ class BallotsController < ApplicationController
   # GET /elections/:election_id/ballots.xml
   # GET /races/:race_id/ballots.blt
   def index
-    @search = @ballots.searchlogic( params[:search] )
+    @search = @ballots.search( params[:search] )
     @ballots = @search.paginate( :page => params[:page] )
 
     respond_to do |format|

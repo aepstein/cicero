@@ -32,10 +32,8 @@ You may choose up to <%=h form.object.race.available_slots %>.
 <% end %>
 <ol>
 <%= form.input :race_id, :as => :hidden %>
-<% form.object.votes.sort.each do |vote| %>
-<% form.semantic_fields_for :votes, vote do |subform| %>
+<%= form.semantic_fields_for :votes, form.object.votes.sort do |subform| %>
   <%= render :partial => 'votes/form', :object => subform, :locals => { :race => form.object.race } %>
-<% end %>
 <% end %>
 </ol>
 </li>

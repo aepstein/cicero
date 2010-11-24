@@ -1,9 +1,10 @@
 <h2>Listing petitioners for <%= @candidate %></h2>
 
 <p>
-	<%= form_tag candidate_petitioners_path( @candidate ), :method => :get %>
+	<%= form_tag candidate_petitioners_path( @candidate ), :method => :get do %>
 	Search: <%= text_field_tag :search, @search %>
 	<%= submit_tag "Go" %>
+	<% end %>
 </p>
 
 <%= will_paginate @petitioners %>

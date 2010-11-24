@@ -1,9 +1,7 @@
 <%= form.error_messages %>
 
-<% form.inputs do %>
-  <%= form.input( :net_id, :label => 'User', :as => :string_with_auto_complete, :remote => {
-    :url => roll_users_path( form.object.candidate.race.roll, :format => :js ), :method => :get, :with => "'search[name_like]=' + element.value"
-  } ) %>
+<%= form.inputs do %>
+  <%= form.input :net_id, :label => 'User', :as => :string %>
 <% end %>
 
 <%= form.buttons %>

@@ -1,7 +1,8 @@
 class Petitioner < ActiveRecord::Base
-  default_scope :include => :user, :order => 'users.last_name ASC, users.first_name ASC, users.net_id ASC'
   belongs_to :user
   belongs_to :candidate
+
+  default_scope includes(:user).order('users.last_name ASC, users.first_name ASC, users.net_id ASC')
 
   delegate :name, :to => :user
 

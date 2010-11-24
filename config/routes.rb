@@ -1,26 +1,45 @@
-ActionController::Routing::Routes.draw do |map|
-  map.resource :user_session, :only => [ :create ]
-  map.resources :users, :shallow => true do |user|
-    user.resources :ballots, :only => [ :index ]
-  end
-  map.resources :elections, :shallow => true, :collection => { :my => :get } do |election|
-    election.resources :rolls do |roll|
-      roll.resources :users, :new => { :bulk => :get }, :only => [ :index, :create ],
-        :collection => { :bulk_create => :post }
+Cicero::Application.routes.draw do
+  shallow do
+    resource :user_session, :only => [ :create ]
+    resources :users do
+      resources :ballots, :only => [ :index ]
     end
-    election.resources :races do |race|
-      race.resources :ballots, :only => [ :index ]
-      race.resources :sections, :only => [ :index ]
-      race.resources :candidates, :member => { :popup => :get } do |candidate|
-        candidate.resources :petitioners
+    resources :elections do
+      collection do
+        get :my
+      end
+      resources :rolls do
+        resources :users, :only => [ :index, :create ] do
+          new do
+            get :bulk
+          end
+          collection do
+            post :bulk_create
+          end
+        end
+      end
+      resources :races do
+        resources :ballots, :only => [ :index ]
+        resources :sections, :only => [ :index ]
+        resources :candidates do
+          member do
+            get :popup
+          end
+          resources :petitioners
+        end
+      end
+      resources :ballots, :except => [ :edit, :update ] do
+        new do
+          post :confirm
+          get :preview
+        end
       end
     end
-    election.resources :ballots, :new => [ :confirm, :preview ], :except => [ :edit, :update ]
   end
 
-  map.login 'login', :controller => 'user_sessions', :action => 'new'
-  map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
+  match 'login', :to => 'user_sessions#new', :as => 'login'
+  match 'logout', :to => 'user_sessions#destroy', :as => 'logout'
 
-  map.root :controller => 'elections', :action => 'my'
+  root :to => 'elections#my'
 end
 

@@ -1,6 +1,6 @@
 <h2>New candidate for <%=h @candidate.race %></h2>
 
-<% semantic_form_for( :candidate, @candidate, :url => race_candidates_path( @candidate.race ),
+<% semantic_form_for( @candidate, :url => race_candidates_path( @candidate.race ),
      :html => { :multipart => true } ) do |f| %>
 
 <%= render :partial => 'form', :object => f %>

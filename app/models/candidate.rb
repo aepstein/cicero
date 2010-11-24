@@ -5,7 +5,7 @@ class Candidate < ActiveRecord::Base
   has_many :petitioners
   has_many :users, :through => :petitioners
 
-  named_scope :disqualified, :conditions => { :disqualified => true }
+  scope :disqualified, where( :disqualified => true )
 
   has_attached_file :picture, :styles => { :small => '300x300>', :thumb => '100x100>' },
     :path => ':rails_root/db/uploads/:rails_env/candidates/:attachment/:id_partition/:style.:extension',

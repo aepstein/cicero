@@ -1,11 +1,11 @@
 module ApplicationHelper
+
+  def markdown( content )
+    sanitize Markdown.new(content).to_html
+  end
+
   def table_row_tag(increment=true, &block)
-    content_tag = content_tag 'tr', capture(&block), :class => table_row_class(increment)
-    if block_called_from_erb?(block)
-      concat(content_tag)
-    else
-      content_tag
-    end
+    content_tag 'tr', capture(&block), :class => table_row_class(increment)
   end
 
   def table_row_class(increment=true)
@@ -15,5 +15,6 @@ module ApplicationHelper
     @table_row_class = 'row1' if increment == :reset
     out
   end
+
 end
 

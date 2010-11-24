@@ -1,6 +1,6 @@
 <%= form.error_messages %>
 
-<% form.inputs do %>
+<%= form.inputs do %>
   <%= form.input :net_id %>
   <%= form.input :email %>
   <%= form.input :first_name %>
@@ -17,7 +17,7 @@ Please select the rolls in which the user should be listed.
 </p>
 
 <% Election.find(:all, :include => :rolls, :order => 'rolls.name ASC').each do |election| %>
-  <h4><%=h election.name %></h4>
+  <h4><%= election.name %></h4>
   <ul>
     <% election.rolls.each do |roll| %>
     <li><%= check_box_tag 'user[roll_ids][]', roll.id, @user.rolls.include?(roll) %> <%= roll.name %></li>

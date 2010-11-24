@@ -1,6 +1,6 @@
 <h2>Listing users <%= "for #{h @roll}" if @roll %></h2>
 
-<% form_for :search, :url => [ @roll, :users ], :html => { :method => :get } do |f| %>
+<%= form_for @search, :as => :search, :url => [ @roll, :users ], :html => { :method => :get } do |f| %>
   <p>
     <%= f.label :name_like, 'Name' %>
     <%= f.text_field :name_like %>

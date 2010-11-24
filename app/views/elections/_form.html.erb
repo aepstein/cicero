@@ -1,6 +1,6 @@
 <%= error_messages_for :election %>
 
-<% form.inputs do %>
+<%= form.inputs do %>
 <%= form.input :name %>
 <%= form.input :starts_at, :as => :ft_calendar_date_select %>
 <%= form.input :ends_at, :as => :ft_calendar_date_select %>

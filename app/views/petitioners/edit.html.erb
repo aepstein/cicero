@@ -1,6 +1,6 @@
 <h2>Editing petitioner for <%= @petitioner.candidate %></h2>
 
-<% semantic_form_for(@petitioner) do |f| %>
+<%= semantic_form_for(@petitioner) do |f| %>
 
 <%= render :partial => 'form', :object => f %>
 
