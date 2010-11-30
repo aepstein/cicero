@@ -3,7 +3,7 @@
 <%= semantic_form_for( @ballot,
   :url => confirm_new_election_ballot_path( @ballot.election ) ) do |f| %>
 
-  <%= f.error_messages %>
+  <%= render "shared/error_messages", :target => f.object %>
 
   <% f.inputs do  %>
     <%= render :partial => 'form', :object => f %>
