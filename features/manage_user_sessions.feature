@@ -5,7 +5,7 @@ Feature: Manage user_sessions
 
   Background:
     Given a user: "admin" exists with admin: true
-@wip
+
   Scenario: Register new user_session (log in)
     Given I log in as user: "admin"
     Then I should see "You logged in successfully."
