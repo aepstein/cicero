@@ -18,7 +18,13 @@ class Ballot < ActiveRecord::Base
     end
   end
 
+  scope :user_name_like, lambda { |name|
+    joins(:user) & User.name_like( name )
+  }
+
   accepts_nested_attributes_for :sections
+
+  search_methods :user_name_like
 
   before_validation :initialize_sections
 

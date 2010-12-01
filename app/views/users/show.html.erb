@@ -19,11 +19,11 @@
 <h3>Allowed elections</h3>
 
 <% Election.allowable.all(:include => :rolls, :order => 'rolls.name ASC').each do |election| %>
-  <% if @user.rolls.election_id_equals(election.id).size > 0 %>
-  <h4><%=h election.name %></h4>
+  <% if @user.rolls.where( :election_id => election.id ).length > 0 %>
+  <h4><%= election.name %></h4>
       <ul>
-      <% @user.rolls.election_id_equals(election.id).each do |roll| %>
-        <li><%=h roll.name %></li>
+      <% @user.rolls.where( :election_id => election.id ).each do |roll| %>
+        <li><%= roll.name %></li>
       <% end %>
       </ul>
   <% end %>

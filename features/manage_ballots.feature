@@ -32,10 +32,11 @@ Feature: Manage ballots
     Then I should <tabulate> authorized
     Given I delete on the page for the ballot
     Then I should <destroy> authorized
+    # TODO: for voter, test preview access to another user's ballot
     Examples:
       | user    | create  | destroy | show    | preview | tabulate |
       | admin   | not see | see     | see     | see     | see      |
-      | voter   | see     | not see | see     | not see | not see  |
+      | voter   | see     | not see | see     | see     | not see  |
       | regular | not see | not see | not see | not see | not see  |
 
   Scenario: Cast new ballot (unranked)
