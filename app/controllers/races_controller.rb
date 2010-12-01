@@ -89,7 +89,7 @@ class RacesController < ApplicationController
 
   def initialize_index
     @races = Race.scoped :conditions => { :election_id => @election.id }
-    @search = @races.searchlogic( params[:search] )
+    @search = @races.search( params[:search] )
     @races = @search.paginate( :page => params[:page] )
   end
 

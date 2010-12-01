@@ -96,7 +96,7 @@ class CandidatesController < ApplicationController
 
   def initialize_index
     @candidates = Candidate.scoped :conditions => { :race_id => @race.id }
-    @search = @candidates.searchlogic( params[:search] )
+    @search = @candidates.search( params[:search] )
     @candidates = @search.paginate( :page => params[:page] )
   end
 

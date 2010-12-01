@@ -100,7 +100,7 @@ class ElectionsController < ApplicationController
 
   def initialize_index
     @elections = Election
-    @search = @elections.with_permissions_to(:show).searchlogic( params[:search] )
+    @search = @elections.with_permissions_to(:show).search( params[:search] )
     @elections = @search.paginate( :page => params[:page] )
   end
 
