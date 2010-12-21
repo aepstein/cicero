@@ -9,9 +9,15 @@ module Cicero
     config.autoload_paths += %W(#{Rails.root}/lib)
     config.encoding = "utf-8"
     config.filter_parameters += [:password, :password_confirmation]
+
     def self.app_config
       @@app_config ||= YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))[Rails.env]
     end
+
+    class << self
+      attr_accessor :relative_url_root
+    end
+
   end
 end
 
