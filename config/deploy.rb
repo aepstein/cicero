@@ -1,4 +1,6 @@
 # deploy.rb
+require "bundler/capistrano"
+
 set :application, "cicero"
 role :app, "xen1.assembly.cornell.edu", "kvm02.assembly.cornell.edu"
 role :web, "xen1.assembly.cornell.edu", "kvm02.assembly.cornell.edu"
