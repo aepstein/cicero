@@ -1,11 +1,21 @@
 class CustomFormBuilder < Formtastic::SemanticFormBuilder
 
-  # A method that deals with calendar_date_select fields
-  def ft_calendar_date_select_input(method, options = {})
-    html_options = options.delete(:input_html) || {}
+  def datepicker_input(method, options = {})
+    format = options[:format] || ActiveSupport::CoreExtensions::Date::Conversions::DATE_FORMATS[:default] || '%d %b %Y'
+    string_input(method, datepicker_options(format, object.send(method)).merge(options))
+  end
 
-    self.label(method, options_for_label(options)) +
-    self.send(:calendar_date_select, method, html_options)
+  def datepicker_options(format, value = nil)
+    datepicker_options = {:value => value.try(:strftime, format), :input_html => {:class => 'ui-datepicker'}}
+  end
+
+  def datetimepicker_input(method, options = {})
+    format = options[:format] || ActiveSupport::CoreExtensions::Date::Conversions::DATETIME_FORMATS[:default] || '%d %b %Y'
+    string_input(method, datepicker_options(format, object.send(method)).merge(options))
+  end
+
+  def datetimepicker_options(format, value = nil)
+    datepicker_options = {:value => value.try(:strftime, format), :input_html => {:class => 'ui-datetimepicker'}}
   end
 
   # A method that deals with auto_complete field
