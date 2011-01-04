@@ -11,11 +11,11 @@ class CustomFormBuilder < Formtastic::SemanticFormBuilder
 
   def datetimepicker_input(method, options = {})
     format = options[:format] || Time::DATE_FORMATS[:db] || '%d %b %Y %H:%M'
-    string_input(method, datepicker_options(format, object.send(method)).merge(options))
+    string_input(method, datetimepicker_options(format, object.send(method)).merge(options))
   end
 
   def datetimepicker_options(format, value = nil)
-    datepicker_options = {:value => value.try(:strftime, format), :input_html => {:class => 'ui-datetimepicker'}}
+    datetimepicker_options = {:value => value.try(:strftime, format), :input_html => {:class => 'ui-datetimepicker'}}
   end
 
   # A method that deals with auto_complete field
