@@ -43,6 +43,7 @@ gem 'meta_search'
 gem 'cornell_netid'
 gem 'whenever'
 gem 'declarative_authorization'
+gem 'jquery-rails'
 #gem 'repeated_auto_complete'
 group :development, :test do
   gem 'launchy'
