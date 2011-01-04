@@ -1,5 +1,5 @@
 Cicero::Application.routes.draw do
-  scope Cicero::Application.relative_url_root do
+#  scope Cicero::Application.relative_url_root do
     resources :ballots, :only => [ :show, :destroy ]
     resources :candidates, :except => [ :index, :new, :create ] do
       member do
@@ -45,6 +45,6 @@ Cicero::Application.routes.draw do
     match 'logout', :to => 'user_sessions#destroy', :as => 'logout'
 
     root :to => 'elections#my'
-  end
+#  end
 end
 
