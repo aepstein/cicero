@@ -1,7 +1,7 @@
 class CustomFormBuilder < Formtastic::SemanticFormBuilder
 
   def datepicker_input(method, options = {})
-    format = options[:format] || ActiveSupport::CoreExtensions::Date::Conversions::DATE_FORMATS[:default] || '%d %b %Y'
+    format = options[:format] || Date::DATE_FORMATS[:db] || '%d %b %Y'
     string_input(method, datepicker_options(format, object.send(method)).merge(options))
   end
 
@@ -10,7 +10,7 @@ class CustomFormBuilder < Formtastic::SemanticFormBuilder
   end
 
   def datetimepicker_input(method, options = {})
-    format = options[:format] || ActiveSupport::CoreExtensions::Date::Conversions::DATETIME_FORMATS[:default] || '%d %b %Y'
+    format = options[:format] || Time::DATE_FORMATS[:db] || '%d %b %Y %H:%M:%S'
     string_input(method, datepicker_options(format, object.send(method)).merge(options))
   end
 
