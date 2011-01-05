@@ -3,6 +3,11 @@ class Petitioner < ActiveRecord::Base
   belongs_to :candidate
 
   default_scope includes(:user).order('users.last_name ASC, users.first_name ASC, users.net_id ASC')
+  scope :user_name_contains, lambda { |name|
+    self & User.name_like( name )
+  }
+
+  search_methods :user_name_contains
 
   delegate :name, :to => :user
 
@@ -22,13 +27,15 @@ class Petitioner < ActiveRecord::Base
     user.name if user
   end
 
-  def net_id
-    user.net_id if user
+  def user_name
+    "#{user.name} (#{user.net_id})" if user
   end
 
-  def net_id=(net_id)
-    return self.user = nil if net_id.nil? || net_id.blank?
-    self.user = User.find_by_net_id net_id[/^(\w{2,4}\d+)/]
+  def user_name=(name)
+    if name.to_net_ids.empty?
+      self.user = User.find_by_net_id name[/\(([^\s]*)\)/,1]
+    end
+    self.user = nil if user && user.id.blank?
   end
 end
 

@@ -1,7 +1,7 @@
 <%= render "shared/error_messages", :target => form.object %>
 
 <%= form.inputs do %>
-  <%= form.autocompleted_input :net_id, :url => users_path(:format => :json),
+  <%= form.autocompleted_input :user_name, :url => users_path(:format => :json),
     :label => 'User' %>
 <% end %>
 
