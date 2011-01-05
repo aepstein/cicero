@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
   end
 
   def net_id_name
-    "#{net_id} (#{name})"
+    "#{name} (#{net_id})"
   end
 
   def role_symbols

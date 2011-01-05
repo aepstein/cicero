@@ -15,6 +15,7 @@ gem 'cornell_netid'
 gem 'whenever'
 gem 'declarative_authorization'
 gem 'jquery-rails'
+gem 'rails3-jquery-autocomplete'
 group :development, :test do
   gem 'launchy'
   gem 'test-unit'

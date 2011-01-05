@@ -9,7 +9,7 @@ module Cicero
     config.autoload_paths += %W(#{Rails.root}/lib)
     config.encoding = "utf-8"
     config.filter_parameters += [:password, :password_confirmation]
-    config.action_view.javascript_expansions[:defaults] = %w(jquery jquery-ui jquery-ui-timepicker-addon rails)
+    config.action_view.javascript_expansions[:defaults] = %w(jquery jquery-ui jquery-ui-timepicker-addon autocomplete-rails rails)
 
     def self.app_config
       @@app_config ||= YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))[Rails.env]
