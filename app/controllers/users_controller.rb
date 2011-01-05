@@ -121,8 +121,7 @@ class UsersController < ApplicationController
   def initialize_index
     @users = @roll.users if @roll
     @users ||= User
-    params[:search][:user_name_contains] ||= params[:term] if params[:term]
-    @search = @users.search( params[:search] )
+    @search = @users.search( params[:term] ? { :user_name_contains => params[:term] } : params[:search] )
     @users = @search.paginate( :page => params[:page] )
   end
 
