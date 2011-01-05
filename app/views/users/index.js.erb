@@ -1,6 +1,0 @@
-<ul>
-<% @users.each do |user| -%>
-<li><%= params[:search] ? highlight(user.net_id_name, params[:search]) : h(user.net_id_name) %></li>
-<% end -%>
-</ul>
-

@@ -15,7 +15,7 @@ class UsersController < ApplicationController
   def index
     respond_to do |format|
       format.html # index.html.erb
-      format.js # index.js.erb
+      format.json # index.json.erb
       format.xml  { render :xml => @users }
     end
   end
