@@ -1,11 +1,7 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
 $(document).ready(function(){
-  $('input.ui-datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
-});
-$(document).ready(function(){
-  $('input.ui-datetimepicker').datetimepicker({
-    dateFormat: 'yy-mm-dd', timeFormat: 'hh:mm'
-  });
+  $('input.ui-date-picker').datepicker({ dateFormat: 'dd M yy' });
+  $('input.ui-datetime-picker').datetimepicker({ dateFormat: 'dd M yy', timeFormat: 'hh:mm' });
 });
 
