@@ -1,7 +1,7 @@
 <h2>Listing petitioners for <%= @candidate %></h2>
 
 <p>
-	<%= form_for @search, candidate_petitioners_path( @candidate ), :method => :get do |f| %>
+	<%= form_for @search, :method => :get do |f| %>
 	<%= f.label :user_name_contains, 'Search' %>
 	<%= f.text_field :user_name_contains %>
 	<%= submit_tag "Go" %>
