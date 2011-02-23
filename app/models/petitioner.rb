@@ -17,8 +17,8 @@ class Petitioner < ActiveRecord::Base
   validate :user_must_be_in_race_roll
 
   def user_must_be_in_race_roll
-    return unless candidate && user_id
-    unless candidate.race.roll.users.exists?(user_id)
+    return unless candidate && user
+    unless candidate.race.roll.users.exists?(user)
       errors.add :user_id, "is not eligible to petition for #{candidate}"
     end
   end
@@ -33,9 +33,10 @@ class Petitioner < ActiveRecord::Base
 
   def user_name=(name)
     if name.to_net_ids.empty?
-      self.user = User.find_by_net_id name[/\(([^\s]*)\)/,1]
+      self.user = nil
+    else
+      self.user = User.find_by_net_id name.to_net_ids.first
     end
-    self.user = nil if user && user.id.blank?
   end
 end
 

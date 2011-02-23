@@ -4,6 +4,10 @@ class UsersController < ApplicationController
   before_filter :initialize_index, :only => [ :index ]
   before_filter :new_user_from_params, :only => [ :new, :create ]
   filter_access_to :new, :create, :edit, :update, :destroy, :show, :attribute_check => true
+  filter_access_to :index do
+    permitted_to! :show, @roll if @roll
+    permitted_to! :index, :users
+  end
   filter_access_to :bulk, :bulk_create do
     permitted_to! :create
   end
@@ -13,6 +17,8 @@ class UsersController < ApplicationController
   # GET /rolls/:roll_id/users
   # GET /rolls/:roll_id/users
   def index
+    @search = @users.search( params[:term] ? { :name_like => params[:term] } : params[:search] )
+    @users = @search.paginate( :page => params[:page] )
     respond_to do |format|
       format.html # index.html.erb
       format.json # index.json.erb
@@ -120,9 +126,8 @@ class UsersController < ApplicationController
 
   def initialize_index
     @users = @roll.users if @roll
-    @users ||= User
-    @search = @users.search( params[:term] ? { :name_like => params[:term] } : params[:search] )
-    @users = @search.paginate( :page => params[:page] )
+    @users ||= User.scoped
+    @users = @users.with_permissions_to(:show)
   end
 
   def new_user_from_params

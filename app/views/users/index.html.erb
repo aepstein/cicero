@@ -1,4 +1,4 @@
-<h2>Listing users <%= "for #{h @roll}" if @roll %></h2>
+<h2>Listing users <%= "for #{@roll}" if @roll %></h2>
 
 <%= form_for @search, :as => :search, :url => [ @roll, :users ], :html => { :method => :get } do |f| %>
   <p>
