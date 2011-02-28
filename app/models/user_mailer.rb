@@ -1,7 +1,7 @@
 class UserMailer < ActionMailer::Base
   helper :application
 
-  def ballot_verification(ballot)
+  def ballot_verification( ballot )
     @ballot = ballot
     mail(
       :to => "#{ballot.user.name} <#{ballot.user.email}>",

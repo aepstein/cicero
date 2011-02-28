@@ -3,7 +3,7 @@ class Section < ActiveRecord::Base
 
   belongs_to :ballot
   belongs_to :race
-  has_many :votes, :order => 'votes.rank' do
+  has_many :votes, :dependent => :destroy, :order => 'votes.rank' do
     def populate
       proxy_owner.race.candidates.each do |candidate|
         build(:candidate => candidate) unless candidate_ids.include? candidate.id
