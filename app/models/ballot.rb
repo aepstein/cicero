@@ -1,7 +1,7 @@
 class Ballot < ActiveRecord::Base
   belongs_to :election
   belongs_to :user
-  has_many :sections, :dependent => :destroy do
+  has_many :sections, :inverse_of => :ballot, :dependent => :destroy do
     def populate
       proxy_owner.races.allowed.each do |race|
         section = ( with_race_id(race.id) || build( :race => race ) )
@@ -26,22 +26,9 @@ class Ballot < ActiveRecord::Base
 
   search_methods :user_name_like
 
-  before_validation :initialize_sections
-
   validates_presence_of :election
   validates_presence_of :user
   validates_uniqueness_of :user_id, :scope => [ :election_id ]
-  validate :sections_must_be_unique
-
-  def sections_must_be_unique
-    race_ids = []
-    sections.each do |section|
-      if section.race_id && race_ids.include?(section.race_id)
-        section.errors.add :race_id, 'is not unique for the ballot'
-      end
-      race_ids << section.race_id if section.race_id?
-    end
-  end
 
   def confirmation
     @confirmation

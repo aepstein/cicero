@@ -42,6 +42,28 @@ describe Section do
     candidates.should_not include excluded
   end
 
+  it 'should not save duplicate ranks in a ranked race' do
+    @section = Factory.build(:section)
+    @section.race.update_attributes :slots => 3, :is_ranked => true
+    3.times { add_candidate_for_section @section }
+    3.times { |i| @section.votes.build( :candidate_id => @section.race.candidates[i].id,
+      :rank => (i+1) ) }
+    @section.votes.last.rank = 2
+    @section.votes.map(&:rank).should eql [1,2,2]
+    @section.save.should be_false
+  end
+
+  it 'should not save votes for which there is no immediately lower rank in a ranked race' do
+    @section = Factory.build(:section)
+    @section.race.update_attributes :slots => 3, :is_ranked => true
+    3.times { add_candidate_for_section @section }
+    2.times { |i| @section.votes.build( :candidate_id => @section.race.candidates[i].id,
+      :rank => (i+1) ) }
+    @section.votes.last.rank = 3
+    @section.votes.map(&:rank).should eql [1,3]
+    @section.save.should be_false
+  end
+
   def add_candidate_for_section( section )
     Factory( :candidate, :race => section.race )
   end

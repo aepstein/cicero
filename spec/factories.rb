@@ -63,6 +63,7 @@ end
 
 Factory.define :vote do |f|
   f.association :section
+  f.rank 1
   f.candidate { |vote| vote.association( :candidate, :race => vote.section.race ) }
 end
 

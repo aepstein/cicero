@@ -11,12 +11,17 @@ describe Vote do
 
   it "should not save without a candidate" do
     @vote.candidate = nil
-    @vote.save.should eql false
+    @vote.save.should be_false
   end
 
   it 'should not save without a section' do
     @vote.section = nil
-    @vote.save.should eql false
+    @vote.save.should be_false
+  end
+
+  it 'should not save without a rank' do
+    @vote.rank = nil
+    @vote.save.should be_false
   end
 
 
