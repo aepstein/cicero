@@ -1,8 +1,8 @@
 class Candidate < ActiveRecord::Base
-  belongs_to :race
-  has_many :votes, :dependent => :destroy
+  belongs_to :race, :inverse_of => :candidates
+  has_many :votes, :inverse_of => :candidate, :dependent => :destroy
   has_many :sections, :through => :votes
-  has_many :petitioners
+  has_many :petitioners, :inverse_of => :candidate
   has_many :users, :through => :petitioners
 
   scope :disqualified, where( :disqualified => true )

@@ -2,7 +2,7 @@ class Section < ActiveRecord::Base
   attr_accessor :warning
 
   belongs_to :ballot, :inverse_of => :sections
-  belongs_to :race
+  belongs_to :race, :inverse_of => :sections
   has_many :votes, :inverse_of => :section, :dependent => :destroy,
     :order => 'votes.rank' do
     def populate

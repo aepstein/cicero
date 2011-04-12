@@ -1,12 +1,13 @@
 class Race < ActiveRecord::Base
-  belongs_to :election
-  belongs_to :roll
-  has_many :candidates, :order => 'candidates.name ASC', :dependent => :destroy do
+  belongs_to :election, :inverse_of => :races
+  belongs_to :roll, :inverse_of => :races
+  has_many :candidates, :order => 'candidates.name ASC', :dependent => :destroy,
+    :inverse_of => :race do
     def open_to(user)
       self.reject { |c| user.candidates.include?(c) }
     end
   end
-  has_many :sections
+  has_many :sections, :inverse_of => :race
   has_many :ballots, :through => :sections
 
   scope :allowed_for_user_id, lambda { |user_id|

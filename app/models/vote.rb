@@ -1,7 +1,7 @@
 class Vote < ActiveRecord::Base
   attr_accessible :rank, :candidate_id, :candidate
 
-  belongs_to :candidate
+  belongs_to :candidate, :inverse_of => :votes
   belongs_to :section, :inverse_of => :votes
 
   validates_presence_of :rank

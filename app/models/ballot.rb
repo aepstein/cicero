@@ -1,6 +1,6 @@
 class Ballot < ActiveRecord::Base
-  belongs_to :election
-  belongs_to :user
+  belongs_to :election, :inverse_of => :ballots
+  belongs_to :user, :inverse_of => :ballots
   has_many :sections, :inverse_of => :ballot, :dependent => :destroy do
     def populate
       proxy_owner.races.allowed.each do |race|

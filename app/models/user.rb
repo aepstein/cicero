@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  has_many :ballots, :dependent => :destroy
+  has_many :ballots, :dependent => :destroy, :inverse_of => :user
   has_and_belongs_to_many :rolls, :order => 'rolls.name'
   has_many :elections, :through => :ballots do
     def allowed

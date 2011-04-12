@@ -1,8 +1,10 @@
 class Election < ActiveRecord::Base
-  has_many :rolls, :include => [:races], :order => :name, :dependent => :destroy
-  has_many :races, :include => [:candidates, :roll], :order => :name, :dependent => :destroy
+  has_many :rolls, :include => [:races], :order => :name, :dependent => :destroy,
+    :inverse_of => :election
+  has_many :races, :include => [:candidates, :roll], :order => :name,
+    :dependent => :destroy, :inverse_of => :election
   has_and_belongs_to_many :managers, :class_name => 'User', :join_table => 'elections_managers'
-  has_many :ballots, :dependent => :destroy
+  has_many :ballots, :dependent => :destroy, :inverse_of => :election
   has_many :candidates, :through => :races
 
   default_scope order('elections.name ASC')
