@@ -39,7 +39,12 @@ class ApplicationController < ActionController::Base
   def require_no_user
     if current_user || @current_user
       store_location
-      redirect_to logout_url
+      if sso_net_id
+        flash[:notice] = 'You must close your web browser to log out.'
+        redirect_to root_url
+      else
+        redirect_to logout_url
+      end
     end
   end
 
@@ -48,7 +53,7 @@ class ApplicationController < ActionController::Base
   end
 
   def store_location
-    session.delete :return_to if self == UserSessionsController
+    return if self == UserSessionsController
     session[:return_to] = request.request_uri
   end
 
