@@ -13,5 +13,5 @@ Feature: Manage user_sessions
   Scenario: Delete user_session (log out)
     Given I log in as user: "admin"
     When I log out
-    Then I should see "You must log in to access this page."
+    Then I should see "You logged out successfully."
 
