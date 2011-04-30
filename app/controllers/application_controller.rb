@@ -26,8 +26,8 @@ class ApplicationController < ActionController::Base
     @current_user = current_user_session && current_user_session.record
     if @current_user.net_id != sso_net_id
       current_user_session.destroy
-      unset @current_user_session
-      unset @current_user
+      @current_user_session = nil
+      @current_user = nil
     end
     @current_user
   end
