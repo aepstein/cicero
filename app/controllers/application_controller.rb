@@ -44,12 +44,7 @@ class ApplicationController < ActionController::Base
   def require_no_user
     if current_user || @current_user
       store_location
-      if sso_net_id
-        flash[:notice] = 'You must close your web browser to log out.'
-        redirect_to root_url
-      else
-        redirect_to logout_url
-      end
+      redirect_to logout_url
     end
   end
 
