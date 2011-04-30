@@ -48,7 +48,7 @@ class ApplicationController < ActionController::Base
   end
 
   def store_location
-    return if self == UserSessionsController
+    session.delete :return_to if self == UserSessionsController
     session[:return_to] = request.request_uri
   end
 
