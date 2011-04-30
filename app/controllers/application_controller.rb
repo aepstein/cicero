@@ -24,7 +24,11 @@ class ApplicationController < ActionController::Base
 
   def current_user
     @current_user = current_user_session && current_user_session.record
-    return nil if sso_net_id && (@current_user.nil? || @current_user.net_id != sso_net_id)
+    if @current_user.net_id != sso_net_id
+      current_user_session.destroy
+      unset @current_user_session
+      unset @current_user
+    end
     @current_user
   end
 
