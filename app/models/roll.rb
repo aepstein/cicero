@@ -1,4 +1,7 @@
 class Roll < ActiveRecord::Base
+  attr_accessible :name
+  attr_readonly :election_id
+
   belongs_to :election, :inverse_of => :rolls
   has_many :candidates, :through => :races
   has_and_belongs_to_many :users do

@@ -1,5 +1,7 @@
 class Section < ActiveRecord::Base
   attr_accessor :warning
+  attr_accessible :race_id, :votes_attributes
+  attr_readonly :ballot_id, :race_id
 
   belongs_to :ballot, :inverse_of => :sections
   belongs_to :race, :inverse_of => :sections
@@ -7,7 +9,10 @@ class Section < ActiveRecord::Base
     :order => 'votes.rank' do
     def populate
       proxy_owner.race.candidates.each do |candidate|
-        build(:candidate => candidate) unless candidate_ids.include? candidate.id
+        unless candidate_ids.include? candidate.id
+          vote = build
+          vote.candidate = candidate
+        end
       end
     end
     def candidate_ids

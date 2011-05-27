@@ -1,4 +1,7 @@
 class Petitioner < ActiveRecord::Base
+  attr_accessible :user_id, :user_name
+  attr_readonly :candidate_id
+
   belongs_to :user
   belongs_to :candidate
 

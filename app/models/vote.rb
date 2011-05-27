@@ -1,5 +1,6 @@
 class Vote < ActiveRecord::Base
-  attr_accessible :rank, :candidate_id, :candidate
+  attr_accessible :rank, :candidate_id
+  attr_readonly :section_id, :candidate_id, :rank
 
   belongs_to :candidate, :inverse_of => :votes
   belongs_to :section, :inverse_of => :votes

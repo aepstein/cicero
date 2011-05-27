@@ -1,4 +1,7 @@
 class Race < ActiveRecord::Base
+  attr_accessible :name, :slots, :is_ranked, :roll_id, :description
+  attr_readonly :election_id
+
   belongs_to :election, :inverse_of => :races
   belongs_to :roll, :inverse_of => :races
   has_many :candidates, :order => 'candidates.name ASC', :dependent => :destroy,

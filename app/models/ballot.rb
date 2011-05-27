@@ -1,10 +1,14 @@
 class Ballot < ActiveRecord::Base
+  attr_accessible :confirmation, :sections_attributes
+  attr_readonly :election_id, :user_id
+
   belongs_to :election, :inverse_of => :ballots
   belongs_to :user, :inverse_of => :ballots
   has_many :sections, :inverse_of => :ballot, :dependent => :destroy do
     def populate
       proxy_owner.races.allowed.each do |race|
-        section = ( with_race_id(race.id) || build( :race => race ) )
+        section = ( with_race_id(race.id) || build )
+        section.race ||= race
         section.votes.populate
       end
     end
