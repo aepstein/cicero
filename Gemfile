@@ -1,7 +1,8 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.6'
-gem 'mysql2'
+gem 'rails', '3.0.7'
+gem 'mysql2', '~> 0.2.7'
+gem 'rake', '~> 0.8.7'
 gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'ar-extensions'
 gem 'bluecloth'
