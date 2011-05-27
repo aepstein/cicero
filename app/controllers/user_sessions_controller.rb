@@ -33,8 +33,13 @@ class UserSessionsController < ApplicationController
   # GET /logout
   def destroy
     current_user_session.destroy
-    flash[:notice] = LOGOUT_NOTICE
-    redirect_back_or_default login_url
+    if sso_net_id
+      flash[:notice] = 'You must close your web browser to log out.'
+      redirect_to root_url
+    else
+      flash[:notice] = LOGOUT_NOTICE
+      redirect_back_or_default login_url
+    end
   end
 end
 
