@@ -1,7 +1,7 @@
 authorization do
   role :admin do
     has_permission_on [ :candidates, :elections, :petitioners, :races,
-      :rolls, :sections, :users ], :to => :manage
+      :rolls, :sections, :users ], :to => [ :manage, :show ]
     has_permission_on [ :ballots ], :to => [ :preview, :destroy, :show ]
     has_permission_on [ :elections, :races, :users ], :to => :tabulate
   end
@@ -43,7 +43,7 @@ end
 
 privileges do
   privilege :manage do
-    includes :create, :update, :destroy, :show, :profile, :index
+    includes :create, :update, :destroy, :profile, :index
   end
   privilege :create do
     includes :new, :confirm
