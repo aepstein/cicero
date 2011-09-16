@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   attr_accessible :net_id, :first_name, :last_name, :admin, :email, :password,
-    :password_confirmation
+    :password_confirmation, :roll_ids
 
   ADMIN_UPDATABLE = [ :net_id, :admin, :roll_ids ]
 
