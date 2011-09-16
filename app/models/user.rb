@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   attr_accessible :net_id, :first_name, :last_name, :admin, :email, :password,
     :password_confirmation
 
-  ADMIN_UPDATABLE = [ :net_id, :admin ]
+  ADMIN_UPDATABLE = [ :net_id, :admin, :roll_ids ]
 
   has_many :ballots, :dependent => :destroy, :inverse_of => :user
   has_and_belongs_to_many :rolls, :order => 'rolls.name'
