@@ -8,7 +8,7 @@ class Section < ActiveRecord::Base
   has_many :votes, :inverse_of => :section, :dependent => :destroy,
     :order => 'votes.rank' do
     def populate
-      proxy_owner.race.candidates.each do |candidate|
+      proxy_association.owner.race.candidates.each do |candidate|
         unless candidate_ids.include? candidate.id
           vote = build
           vote.candidate = candidate
@@ -23,9 +23,9 @@ class Section < ActiveRecord::Base
     end
   end
 
-  validates_presence_of :ballot
-  validates_presence_of :race
-  validates_uniqueness_of :race_id, :scope => [ :ballot_id ]
+  validates :ballot, presence: true
+  validates :race, presence: true
+  validates :race_id, uniqueness: { scope: :ballot_id }
   validate :user_must_be_in_race_roll, :votes_must_not_exceed_maximum,
     :sections_must_be_unique
 

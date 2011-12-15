@@ -7,7 +7,7 @@ class Petitioner < ActiveRecord::Base
 
   default_scope includes(:user).order('users.last_name ASC, users.first_name ASC, users.net_id ASC')
   scope :user_name_contains, lambda { |name|
-    self & User.name_like( name )
+    merge( User.unscoped.name_like( name ) )
   }
 
   search_methods :user_name_contains

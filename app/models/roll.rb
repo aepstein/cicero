@@ -43,17 +43,17 @@ class Roll < ActiveRecord::Base
 
       # Add users to roll not already in the roll
       connection.insert_sql "INSERT INTO rolls_users ( roll_id, user_id )
-        SELECT #{connection.quote proxy_owner.id}, u.id FROM users AS u WHERE
+        SELECT #{connection.quote proxy_association.owner.id}, u.id FROM users AS u WHERE
         u.net_id IN (#{import_net_ids_sql}) AND u.id NOT IN
-        (SELECT user_id FROM rolls_users AS ru WHERE ru.roll_id = #{connection.quote proxy_owner.id})"
+        (SELECT user_id FROM rolls_users AS ru
+        WHERE ru.roll_id = #{connection.quote proxy_association.owner.id})"
       [(size - original_roll_size), (user_import.nil? ? 0 : user_import.num_inserts) ]
     end
   end
   has_many :races, :order => 'races.name ASC', :dependent => :destroy
 
-  validates_presence_of :election
-  validates_presence_of :name
-  validates_uniqueness_of :name, :scope => :election_id
+  validates :election, presence: true
+  validates :name, presence: true, uniqueness: { scope: :election_id }
 
   def to_s; name; end
 end

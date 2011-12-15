@@ -6,7 +6,7 @@ class Ballot < ActiveRecord::Base
   belongs_to :user, :inverse_of => :ballots
   has_many :sections, :inverse_of => :ballot, :dependent => :destroy do
     def populate
-      proxy_owner.races.allowed.each do |race|
+      proxy_association.owner.races.allowed.each do |race|
         section = ( with_race_id(race.id) || build )
         section.race ||= race
         section.votes.populate
@@ -18,7 +18,7 @@ class Ballot < ActiveRecord::Base
   end
   has_many :races, :through => :election do
     def allowed
-      allowed_for_user_id( proxy_owner.user_id )
+      allowed_for_user_id( proxy_association.owner.user_id )
     end
   end
 

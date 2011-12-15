@@ -18,11 +18,10 @@ class Race < ActiveRecord::Base
     where( 'races.roll_id = ru.roll_id AND ru.user_id = ?', user_id )
   }
 
-  validates_presence_of :name
-  validates_uniqueness_of :name, :scope => :election_id
-  validates_presence_of :election
-  validates_numericality_of :slots, :only_integer => true, :greater_than => 0
-  validates_presence_of :roll
+  validates :name, presence: true, uniqueness: { scope: :election_id }
+  validates :election, presence: true
+  validates :slots, numericality: { only_integer: true, greater_than: 0 }
+  validates :roll, presence: true
   validate :roll_must_belong_to_election
 
   def roll_must_belong_to_election

@@ -5,9 +5,9 @@ class Vote < ActiveRecord::Base
   belongs_to :candidate, :inverse_of => :votes
   belongs_to :section, :inverse_of => :votes
 
-  validates_presence_of :rank
-  validates_presence_of :candidate
-  validates_presence_of :section
+  validates :rank, presence: true
+  validates :candidate, presence: true
+  validates :section, presence: true
   validate :candidate_must_be_in_section_race,
     :ranked_vote_must_be_unique_and_sequential,
     :candidate_must_be_unique_in_section
