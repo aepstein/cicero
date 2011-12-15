@@ -1,8 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe Section do
   before(:each) do
-    @section = Factory(:section)
+    @section = create(:section)
   end
 
   it "should create a new instance given valid attributes" do
@@ -20,19 +20,19 @@ describe Section do
   end
 
   it 'should not save with a duplicate race within a given ballot' do
-    duplicate = Factory.build(:section, :ballot => @section.ballot, :race => @section.race)
+    duplicate = build(:section, :ballot => @section.ballot, :race => @section.race)
     duplicate.save.should eql false
   end
 
   it "should not save with a race whose roll does not include the ballot's user" do
-    race = Factory(:race, :election => @section.ballot.election)
+    race = create(:race, :election => @section.ballot.election)
     race.roll.users.exists?(@section.ballot.user.id).should be_false
     @section.race = race
     @section.save.should eql false
   end
 
   it "should have a votes.populate method that generates votes for each candidate" do
-    excluded = Factory(:candidate, :race => Factory( :race, :election => @section.ballot.election ) )
+    excluded = create(:candidate, :race => create( :race, :election => @section.ballot.election ) )
     included = add_candidate_for_section( @section )
     @section.reload
     @section.votes.populate
@@ -43,7 +43,7 @@ describe Section do
   end
 
   it 'should not save duplicate ranks in a ranked race' do
-    @section = Factory.build(:section)
+    @section = build(:section)
     @section.race.update_attributes :slots => 3, :is_ranked => true
     3.times { add_candidate_for_section @section }
     3.times { |i| @section.votes.build( :candidate_id => @section.race.candidates[i].id,
@@ -54,7 +54,7 @@ describe Section do
   end
 
   it 'should not save votes for which there is no immediately lower rank in a ranked race' do
-    @section = Factory.build(:section)
+    @section = build(:section)
     @section.race.update_attributes :slots => 3, :is_ranked => true
     3.times { add_candidate_for_section @section }
     2.times { |i| @section.votes.build( :candidate_id => @section.race.candidates[i].id,
@@ -65,7 +65,7 @@ describe Section do
   end
 
   def add_candidate_for_section( section )
-    Factory( :candidate, :race => section.race )
+    create( :candidate, :race => section.race )
   end
 end
 

@@ -1,8 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe Election do
   before(:each) do
-    @election = Factory(:election)
+    @election = create(:election)
   end
 
   it "should create a new instance given valid attributes" do
@@ -15,7 +15,7 @@ describe Election do
   end
 
   it "should not save without a unique name" do
-    duplicate = Factory.build(:election)
+    duplicate = build(:election)
     duplicate.name = @election.name
     duplicate.save.should eql false
   end
@@ -90,8 +90,8 @@ describe Election do
   end
 
   def make_past_and_future
-    @past = Factory(:past_election)
-    @future = Factory(:future_election)
+    @past = create(:past_election)
+    @future = create(:future_election)
   end
 end
 

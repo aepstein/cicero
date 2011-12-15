@@ -36,7 +36,7 @@ class Roll < ActiveRecord::Base
       values = values.reject { |row| current_user_net_ids.include?( row[0] ) }
       unless values.empty?
         values.map! { |row| User.new( :net_id => row[0], :email => row[1], :first_name => row[2], :last_name => row[3] ) }
-        values.each { |user| user.reset_password }
+#        values.each { |user| user.reset_password }
         user_import = User.import( values, :validate => false )
         values = nil
       end

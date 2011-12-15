@@ -23,16 +23,16 @@ class Ballot < ActiveRecord::Base
   end
 
   scope :user_name_like, lambda { |name|
-    joins(:user) & User.name_like( name )
+    joins(:user).merge( User.unscoped.name_like( name ) )
   }
 
   accepts_nested_attributes_for :sections
 
   search_methods :user_name_like
 
-  validates_presence_of :election
-  validates_presence_of :user
-  validates_uniqueness_of :user_id, :scope => [ :election_id ]
+  validates :election, presence: true
+  validates :user, presence: true
+  validates :user_id, uniqueness: { scope: :election_id }
 
   def confirmation
     @confirmation

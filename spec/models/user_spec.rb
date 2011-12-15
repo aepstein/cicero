@@ -1,8 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe User do
   before(:each) do
-    @user = Factory(:user)
+    @user = create(:user)
   end
 
   it "should save with valid properties" do
@@ -15,7 +15,7 @@ describe User do
   end
 
   it 'should not save a user with duplicate net_id' do
-    duplicate = Factory.build(:user, :net_id => @user.net_id)
+    duplicate = build(:user, :net_id => @user.net_id)
     duplicate.save.should eql false
   end
 

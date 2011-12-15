@@ -10,13 +10,10 @@ class Candidate < ActiveRecord::Base
 
   scope :disqualified, where( :disqualified => true )
 
-  has_attached_file :picture, :styles => { :small => '300x300>', :thumb => '100x100>' },
-    :path => ':rails_root/db/uploads/:rails_env/candidates/:attachment/:id_partition/:style.:extension',
-    :url => '/system/candidates/:attachment/:id_partition/:style.:extension'
+  mount_uploader :picture, PortraitUploader
 
-  validates_presence_of :name
-  validates_uniqueness_of :name, :scope => :race_id
-  validates_presence_of :race
+  validates :name, presence: true, uniqueness: { scope: :race_id }
+  validates :race, presence: true
 
   def to_s; name; end
 

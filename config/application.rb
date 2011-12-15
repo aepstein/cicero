@@ -2,15 +2,20 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
-Bundler.require(:default, Rails.env) if defined?(Bundler)
+if defined?(Bundler)
+  Bundler.require *Rails.groups(:assets => %w(development test))
+end
 
 module Cicero
   class Application < Rails::Application
     config.autoload_paths += %W(#{Rails.root}/lib)
     config.encoding = "utf-8"
-    config.filter_parameters += [:password, :password_confirmation]
-    config.time_zone = 'Eastern Time (US & Canada)'
-    config.action_view.javascript_expansions[:defaults] = %w(jquery jquery-ui jquery-ui-timepicker-addon autocomplete-rails rails)
+    config.filter_parameters += [:password, :password_confirmation, :ballot]
+    config.action_mailer.default_url_options = { :host => "assembly.cornell.edu/cicero", :protocol => 'https' }
+  config.time_zone = 'Eastern Time (US & Canada)'
+    config.active_record.identity_map = true
+    config.assets.enabled = true
+    config.assets.version = '1.0'
 
     def self.app_config
       @@app_config ||= YAML.load(File.read(File.expand_path('../application.yml', __FILE__)))[Rails.env]

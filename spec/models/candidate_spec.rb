@@ -1,8 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe Candidate do
   before(:each) do
-    @candidate = Factory(:candidate)
+    @candidate = create(:candidate)
   end
 
   it "should save with valid properties" do
@@ -20,14 +20,14 @@ describe Candidate do
   end
 
   it 'should not save with a name unless it is unique for the race' do
-    duplicate = Factory.build(:candidate, :race => @candidate.race)
+    duplicate = build(:candidate, :race => @candidate.race)
     duplicate.name = @candidate.name
     duplicate.save.should eql false
   end
 
   it 'should have a disqualified named scope that gets only disqualified canidates' do
     @candidate.disqualified.should eql false
-    disqualified = Factory(:candidate, :disqualified => true)
+    disqualified = create(:candidate, :disqualified => true)
     Candidate.disqualified.size.should eql 1
     Candidate.disqualified.should include disqualified
   end

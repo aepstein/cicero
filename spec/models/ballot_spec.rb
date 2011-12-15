@@ -1,8 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe Ballot do
   before(:each) do
-    @ballot = Factory(:ballot)
+    @ballot = create(:ballot)
   end
 
   it "should save with valid properties" do
@@ -20,12 +20,12 @@ describe Ballot do
   end
 
   it 'should not save if another ballot exists for same user and election' do
-    duplicate = Factory.build(:ballot, :user => @ballot.user, :election => @ballot.election)
+    duplicate = build(:ballot, :user => @ballot.user, :election => @ballot.election)
     duplicate.save.should eql false
   end
 
   it 'should generate correct votes for a race and save' do
-    ballot = Factory.build(:ballot)
+    ballot = build(:ballot)
     race = add_race_for_ballot( ballot, :is_ranked => false )
     candidate_a = add_candidate_for_race race
     candidate_b = add_candidate_for_race race
@@ -46,7 +46,7 @@ describe Ballot do
 
   it "should have a races.allowed method that returns only races the user is allowed to vote in" do
     allowed = add_race_for_ballot(@ballot)
-    not_allowed = Factory(:race, :election => @ballot.election)
+    not_allowed = create(:race, :election => @ballot.election)
     allowed.should_not eql not_allowed
     @ballot.races.allowed.size.should == 1
     @ballot.races.allowed.should include allowed
@@ -69,7 +69,7 @@ describe Ballot do
 
   it 'should have a sections.populate method that creates sections for each race the user can vote in' do
     allowed_race = add_race_for_ballot( @ballot )
-    disallowed_race = Factory(:race, :election => @ballot.election)
+    disallowed_race = create(:race, :election => @ballot.election)
     @ballot.reload
     @ballot.sections.populate
     @ballot.sections.size.should eql 1
@@ -77,15 +77,15 @@ describe Ballot do
   end
 
   def add_race_for_ballot(ballot, options = {})
-    default_options = { :election => ballot.election, :roll => Factory(:roll, :election => ballot.election) }
-    race = Factory(:race, default_options.merge(options) )
+    default_options = { :election => ballot.election, :roll => create(:roll, :election => ballot.election) }
+    race = create(:race, default_options.merge(options) )
     race.roll.users << ballot.user
     race
   end
 
   def add_candidate_for_race(race, options = {})
     default_options = { :race => race }
-    Factory(:candidate, default_options.merge(options) )
+    create(:candidate, default_options.merge(options) )
   end
 
 end

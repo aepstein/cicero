@@ -1,8 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe Roll do
   before(:each) do
-    @roll = Factory(:roll)
+    @roll = create(:roll)
   end
 
   after(:each) do
@@ -23,21 +23,21 @@ describe Roll do
   end
 
   it 'should not save with a name unless it is unique for the election' do
-    duplicate = Factory.build(:roll, :election => @roll.election)
+    duplicate = build(:roll, :election => @roll.election)
     duplicate.name = @roll.name
     duplicate.save.should eql false
   end
 
   it 'should have a users.import_from_string method' do
-    existing = Factory(:user)
+    existing = create(:user)
     @roll.users << existing
-    existing_out = Factory(:user, :net_id => 'jd3')
+    existing_out = create(:user, :net_id => 'jd3')
     data = "\"jd1\",\"jd1@example.com\",\"John\",\"Doe\"
 \"jd2\",\"jd2@example.com\",\"Jane\",\"Doe\"
 \"jd3\",\"jd3@example.com\",\"Third\",\"Person\"
 \"#{existing.net_id}\",\"#{existing.email}\",\"#{existing.first_name}\",\"#{existing.last_name}\"
 "
-    excluded = Factory(:user)
+    excluded = create(:user)
     @roll.users.import_from_string(data).should eql [3,2]
     @roll.users.size.should eql 4
     @roll.users.should_not include excluded
@@ -48,7 +48,7 @@ describe Roll do
   end
 
   it 'should have a users.import_from_file method' do
-    file = fixture_file_upload 'spec/assets/users.csv','text/csv'
+    file = Rack::Test::UploadedFile.new "#{::Rails.root}/spec/assets/users.csv",'text/csv'
     @roll.users.import_from_file(file).should eql [2,2]
   end
 

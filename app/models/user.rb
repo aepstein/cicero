@@ -20,14 +20,11 @@ class User < ActiveRecord::Base
 
   search_methods :name_like
 
-  acts_as_authentic do |c|
-    c.login_field :net_id
-  end
+  is_authenticable
 
-  validates_presence_of :net_id
-  validates_presence_of :first_name
-  validates_presence_of :last_name
-  validates_uniqueness_of :net_id
+  validates :net_id, presence: true, uniqueness: true
+  validates :first_name, presence: true
+  validates :last_name, presence: true
 
   def name
     ("#{first_name} #{last_name}").squeeze(' ')

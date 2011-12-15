@@ -1,8 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe Petitioner do
   before(:each) do
-    @petitioner = Factory(:petitioner)
+    @petitioner = create(:petitioner)
   end
 
   it "should save with valid properties" do
@@ -20,14 +20,14 @@ describe Petitioner do
   end
 
   it 'should not save if the user is not in the roll of the candidate\'s race' do
-    outside = Factory(:user)
+    outside = create(:user)
     @petitioner.candidate.race.roll.users.should_not include outside
     @petitioner.user = outside
     @petitioner.save.should eql false
   end
 
   it 'should not save a duplicate user id for the same candidate' do
-    duplicate = Factory.build(:petitioner, :user => @petitioner.user, :candidate => @petitioner.candidate )
+    duplicate = build(:petitioner, :user => @petitioner.user, :candidate => @petitioner.candidate )
     duplicate.save.should eql false
   end
 

@@ -1,8 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe Election do
   before(:each) do
-    @race = Factory(:race)
+    @race = create(:race)
   end
 
   it "should save a race with valid properties" do
@@ -20,7 +20,7 @@ describe Election do
   end
 
   it 'should not save if the name duplicates another in the same election' do
-    duplicate = Factory.build(:race, :election => @race.election)
+    duplicate = build(:race, :election => @race.election)
     duplicate.name = @race.name
     duplicate.save.should eql false
   end
@@ -45,7 +45,7 @@ describe Election do
   end
 
   it 'should not save with a roll from a different election' do
-    @race.roll = Factory(:roll)
+    @race.roll = create(:roll)
     @race.election.rolls.should_not include @race.roll
     @race.save.should eql false
   end

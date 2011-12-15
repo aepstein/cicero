@@ -1,69 +1,79 @@
-Factory.define :election do |f|
-  f.sequence(:name) { |n| "Election #{n}" }
-  f.starts_at { |r| Time.zone.now - 1.day }
-  f.ends_at { |r| r.starts_at + 2.days  }
-  f.results_available_at { |r| r.ends_at + 1.week }
-  f.verify_message "Congratulations!"
-  f.contact_name "Elections Committee"
-  f.contact_email "elections@example.com"
-end
+FactoryGirl.define do
+  factory :election do
+    sequence(:name) { |n| "Election #{n}" }
+    starts_at { Time.zone.now - 1.day }
+    ends_at { starts_at + 2.days  }
+    results_available_at { ends_at + 1.week }
+    verify_message "Congratulations!"
+    contact_name "Elections Committee"
+    contact_email "elections@example.com"
 
-Factory.define :past_election, :parent => :election do |f|
-  f.starts_at { |r| Time.zone.now - 1.year }
-end
+    factory :past_election do
+      starts_at { Time.zone.now - 1.year }
+      ends_at { starts_at + 2.days  }
+      results_available_at { ends_at + 1.week }
+    end
 
-Factory.define :future_election, :parent => :election do |f|
-  f.starts_at { |r| Time.zone.now + 1.year }
-end
+    factory :future_election do
+      starts_at { Time.zone.now + 1.year }
+      ends_at { starts_at + 2.days  }
+      results_available_at { ends_at + 1.week }
+    end
+  end
 
-Factory.define :roll do |f|
-  f.association :election
-  f.sequence(:name) { |n| "Roll #{n}" }
-end
+  factory :roll do
+    association :election
+    sequence(:name) { |n| "Roll #{n}" }
+  end
 
-Factory.define :race do |f|
-  f.association :election
-  f.roll { |race| race.association(:roll, :election => race.election) }
-  f.sequence(:name) { |n| "Race #{n}" }
-  f.is_ranked false
-end
+  factory :race do
+    association :election
+    roll { association(:roll, :election => election) }
+    sequence(:name) { |n| "Race #{n}" }
+    is_ranked false
+  end
 
-Factory.define :candidate do |f|
-  f.association :race
-  f.sequence(:name) { |n| "Candidate #{n}" }
-end
+  factory :candidate do
+    association :race
+    sequence(:name) { |n| "Candidate #{n}" }
+  end
 
-Factory.define :user do |f|
-  f.sequence(:net_id) { |n| "net#{n}" }
-  f.first_name "First"
-  f.last_name "Last"
-  f.email { |user| "#{user.net_id}@cornell.edu" }
-  f.password 'secret'
-  f.password_confirmation { |user| user.password }
-end
+  factory :user do
+    sequence(:net_id) { |n| "net#{n}" }
+    first_name "First"
+    last_name "Last"
+    email { "#{net_id}@cornell.edu" }
+    password 'secret'
+    password_confirmation { password }
+  end
 
-Factory.define :petitioner do |f|
-  f.association :user
-  f.candidate { |petitioner|
-    race = Factory(:race)
-    race.roll.users << petitioner.user
-    petitioner.association :candidate, :race => race
-  }
-end
+  factory :petitioner do
+    association :user
+    candidate do
+      race = association(:race)
+      race.roll.users << user
+      association :candidate, :race => race
+    end
+  end
 
-Factory.define :ballot do |f|
-  f.association :election
-  f.association :user
-end
+  factory :ballot do
+    association :election
+    association :user
+  end
 
-Factory.define :section do |f|
-  f.association :ballot
-  f.race { |section| section.association(:race, :election => section.ballot.election, :roll => Factory(:roll, :election => section.ballot.election, :users => [ section.ballot.user ] ) ) }
-end
+  factory :section do
+    association :ballot
+    race do
+      association(:race, :election => ballot.election,
+        :roll => association(:roll, :election => ballot.election,
+        :users => [ ballot.user ] ) )
+    end
+  end
 
-Factory.define :vote do |f|
-  f.association :section
-  f.rank 1
-  f.candidate { |vote| vote.association( :candidate, :race => vote.section.race ) }
+  factory :vote do
+    association :section
+    rank 1
+    candidate { association( :candidate, :race => section.race ) }
+  end
 end
 

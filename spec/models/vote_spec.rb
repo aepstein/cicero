@@ -1,8 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe Vote do
   before(:each) do
-    @vote = Factory(:vote)
+    @vote = create(:vote)
   end
 
   it "should save with valid properties" do

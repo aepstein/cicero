@@ -1,0 +1,2 @@
+//= require cornell-assemblies-rails
+

@@ -5,15 +5,22 @@ Spork.prefork do
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
 
-  require File.dirname(__FILE__) + '/factories.rb'
-
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
+
+  if defined?(ActiveRecord::Base)
+    begin
+      require 'database_cleaner'
+      DatabaseCleaner.strategy = :truncation
+    rescue LoadError => ignore_if_database_cleaner_not_present
+    end
+  end
 
   RSpec.configure do |config|
     config.mock_with :rspec
     config.fixture_path = "#{::Rails.root}/spec/fixtures"
     config.use_transactional_fixtures = true
     config.include ActionDispatch::TestProcess
+    config.include Factory::Syntax::Methods
     config.after(:all) do
       data_directory = File.expand_path(File.dirname(__FILE__) + "../../db/uploads/#{ENV['RAILS_ENV']}")
       if File.directory?(data_directory)
