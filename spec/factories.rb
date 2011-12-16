@@ -10,14 +10,14 @@ FactoryGirl.define do
 
     factory :past_election do
       starts_at { Time.zone.now - 1.year }
-      ends_at { starts_at + 2.days  }
-      results_available_at { ends_at + 1.week }
+#      ends_at { starts_at + 2.days  }
+#      results_available_at { ends_at + 1.week }
     end
 
     factory :future_election do
       starts_at { Time.zone.now + 1.year }
-      ends_at { starts_at + 2.days  }
-      results_available_at { ends_at + 1.week }
+#      ends_at { starts_at + 2.days  }
+#      results_available_at { ends_at + 1.week }
     end
   end
 
@@ -64,7 +64,7 @@ FactoryGirl.define do
   factory :section do
     association :ballot
     race do
-      association(:race, :election => ballot.election,
+      association( :race, :election => ballot.election,
         :roll => association(:roll, :election => ballot.election,
         :users => [ ballot.user ] ) )
     end

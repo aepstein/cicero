@@ -62,8 +62,8 @@ describe Ballot do
   it 'should have sections.with_race_id method that returns a section with a particular race_id' do
     first_race = add_race_for_ballot( @ballot )
     second_race = add_race_for_ballot( @ballot )
-    second_section = @ballot.sections.build( :race => second_race )
-    first_section = @ballot.sections.build( :race => first_race )
+    second_section = @ballot.sections.build( :race_id => second_race.id )
+    first_section = @ballot.sections.build( :race_id => first_race.id )
     @ballot.sections.with_race_id( first_race.id ).race.should eql first_race
   end
 
@@ -77,6 +77,7 @@ describe Ballot do
   end
 
   def add_race_for_ballot(ballot, options = {})
+    ballot.association(:sections).reset
     default_options = { :election => ballot.election, :roll => create(:roll, :election => ballot.election) }
     race = create(:race, default_options.merge(options) )
     race.roll.users << ballot.user
