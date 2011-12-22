@@ -22,7 +22,7 @@ class Election < ActiveRecord::Base
   scope :allowable, lambda { where { ends_at > Time.zone.now } }
   scope :past, lambda { where { ends_at < Time.zone.now } }
   scope :current, lambda {
-    where { starts_at < Time.zone.now && ends_at > Time.zone.now } }
+    where { ( starts_at < Time.zone.now ) & ( ends_at > Time.zone.now ) } }
   scope :future, lambda { where { starts_at > Time.zone.now } }
 
   validates :name, presence: true, uniqueness: true

@@ -48,7 +48,8 @@ describe Roll do
   end
 
   it 'should have a users.import_from_file method' do
-    file = Rack::Test::UploadedFile.new "#{::Rails.root}/spec/assets/users.csv",'text/csv'
+    file = Rack::Test::UploadedFile.new(
+      "#{::Rails.root}/spec/assets/users.csv",'text/csv' )
     @roll.users.import_from_file(file).should eql [2,2]
   end
 
