@@ -23,23 +23,34 @@ class Roll < ActiveRecord::Base
 
     private
 
+    # Takes parsed CSV and:
+    # * creates users for any users not previously registered
+    # * adds to roll any users not already enrolled
     def import_from_csv(values)
-      original_roll_size = count
-
       # Filter values for correctly formatted rolls only
       values = values.select { |row| row.size == 4 }
       return [0,0] if values.empty?
       import_net_ids_sql = values.map { |row| connection.quote row[0] }.join ", "
 
       # Set up user records for any users not already in database
-      current_user_net_ids = connection.select_values "SELECT net_id FROM users WHERE net_id IN (#{import_net_ids_sql})"
-      values = values.reject { |row| current_user_net_ids.include?( row[0] ) }
-      unless values.empty?
-        values.map! { |row| User.new( :net_id => row[0], :email => row[1], :first_name => row[2], :last_name => row[3] ) }
-#        values.each { |user| user.reset_password }
-        user_import = User.import( values, :validate => false )
-        values = nil
+      current_user_net_ids = connection.select_values(
+        "SELECT DISTINCT net_id FROM users WHERE net_id IN (#{import_net_ids_sql})" )
+      values.reject! { |row| current_user_net_ids.include?( row[0] ) }
+      if values.empty?
+        user_import = 0
+      else
+        user_import = values.length
+        values.map! do |row|
+          u = User.new
+          u.net_id, u.email, u.first_name, u.last_name = row[0], row[1], row[2], row[3]
+          u
+        end
+        User.import values, validate: false
       end
+
+      # Record initial roll size
+      original_roll_size = count
+      proxy_association.reset
 
       # Add users to roll not already in the roll
       connection.insert_sql "INSERT INTO rolls_users ( roll_id, user_id )
@@ -47,10 +58,10 @@ class Roll < ActiveRecord::Base
         u.net_id IN (#{import_net_ids_sql}) AND u.id NOT IN
         (SELECT user_id FROM rolls_users AS ru
         WHERE ru.roll_id = #{connection.quote proxy_association.owner.id})"
-      [(size - original_roll_size), (user_import.nil? ? 0 : user_import.num_inserts) ]
+      [(count - original_roll_size), user_import ]
     end
   end
-  has_many :races, :order => 'races.name ASC', :dependent => :destroy
+  has_many :races, order: 'races.name ASC', dependent: :destroy
 
   validates :election, presence: true
   validates :name, presence: true, uniqueness: { scope: :election_id }
