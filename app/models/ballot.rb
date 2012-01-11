@@ -1,4 +1,5 @@
 class Ballot < ActiveRecord::Base
+  SEARCHABLE = [ :user_name_contains ]
   attr_accessible :confirmation, :sections_attributes
   attr_readonly :election_id, :user_id
 
@@ -22,8 +23,8 @@ class Ballot < ActiveRecord::Base
     end
   end
 
-  scope :user_name_like, lambda { |name|
-    joins(:user).merge( User.unscoped.name_like( name ) )
+  scope :user_name_contains, lambda { |name|
+    joins(:user).merge( User.unscoped.name_contains( name ) )
   }
 
   accepts_nested_attributes_for :sections

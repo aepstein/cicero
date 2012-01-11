@@ -16,8 +16,12 @@ class BallotsController < ApplicationController
   # GET /elections/:election_id/ballots.xml
   # GET /races/:race_id/ballots.blt
   def index
-    @search = @ballots.search( params[:search] )
-    @ballots = @search.paginate( :page => params[:page] )
+    @search = params[:search] || Hash.new
+    @search.each do |k,v|
+      if !v.blank? && Ballot::SEARCHABLE.include?( k.to_sym )
+        @ballots = @ballots.send k, v
+      end
+    end
 
     respond_to do |format|
       if @race
@@ -108,7 +112,7 @@ class BallotsController < ApplicationController
   end
 
   def initialize_index
-    @ballots = @context.ballots.with_permissions_to(:show)
+    @ballots = @context.ballots.with_permissions_to(:show).page(params[:page])
   end
 
   def new_ballot_from_params

@@ -90,7 +90,7 @@ class PetitionersController < ApplicationController
   def initialize_index
     @petitioners = Petitioner.scoped :conditions => { :candidate_id => @candidate.id }
     @search = @petitioners.search( params[:search] )
-    @petitioners = @search.paginate( :page => params[:page] )
+    @petitioners = @search.result.page( params[:page] )
   end
 
   def new_petitioner_from_params

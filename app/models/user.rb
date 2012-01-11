@@ -21,6 +21,8 @@ class User < ActiveRecord::Base
     where( sql.join(' OR '), :name => "%#{name}%" )
   }
 
+  ransacker :name
+
   is_authenticable
 
   validates :net_id, presence: true, uniqueness: true

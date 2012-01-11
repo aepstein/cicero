@@ -90,7 +90,7 @@ class RollsController < ApplicationController
   def initialize_index
     @rolls = Roll.scoped :conditions => { :election_id => @election.id }
     @search = @rolls.search( params[:search] )
-    @rolls = @search.paginate( :page => params[:page] )
+    @rolls = @search.result.page( params[:page] )
   end
 
   def new_roll_from_params
