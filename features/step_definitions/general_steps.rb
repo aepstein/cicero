@@ -11,11 +11,11 @@ Given /^(?:|I )(put|post|delete) on (.+)$/ do |method, page_name|
 end
 
 Then /^I should see authorized$/ do
-  Then %{I should not see "You are not allowed to perform the requested action."}
+  step %{I should not see "You are not allowed to perform the requested action."}
 end
 
 Then /^I should not see authorized$/ do
-  Then %{I should see "You are not allowed to perform the requested action."}
+  step %{I should see "You are not allowed to perform the requested action."}
 end
 
 When /^I follow "(.+)" for the (\d+)(?:st|nd|rd|th) #{capture_factory}(?: for #{capture_model})?$/ do |link, position, subject, context|
@@ -35,13 +35,13 @@ end
 
 Given /^the following (.+) records?:$/ do |factory, table|
   table.hashes.each do |record|
-    Factory(factory, record)
+    Factory.create(factory, record)
   end
 end
 
 Given /^([0-9]+) (.+) records?$/ do |number, factory|
   number.to_i.times do
-    Factory(factory)
+    Factory.create(factory)
   end
 end
 
