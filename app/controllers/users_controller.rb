@@ -76,7 +76,7 @@ class UsersController < ApplicationController
     params[:user][:roll_ids] ||= Array.new if params[:user]
 
     respond_to do |format|
-      if @user.update_attributes(params[:user])
+      if @user.update_attributes(params[:user], as: current_user_attr_role)
         flash[:notice] = 'User was successfully updated.'
         format.html { redirect_to(@user) }
         format.xml  { head :ok }
@@ -131,7 +131,12 @@ class UsersController < ApplicationController
   end
 
   def new_user_from_params
-    @user = User.new( params[:user] )
+    @user = User.new
+    @user.assign_attributes params[:user], as: current_user_attr_role
+  end
+
+  def current_user_attr_role
+    current_user.admin? ? :admin : :default
   end
 
 end
