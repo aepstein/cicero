@@ -1,24 +1,25 @@
 class User < ActiveRecord::Base
+  SEARCHABLE = [ :name_contains ]
   attr_accessible :first_name, :last_name, :email, :password,
     :password_confirmation
   attr_accessible :net_id, :first_name, :last_name, :admin, :email, :password,
     :password_confirmation, :roll_ids, as: :admin
 
-  has_many :ballots, :dependent => :destroy, :inverse_of => :user
-  has_and_belongs_to_many :rolls, :order => 'rolls.name'
-  has_many :elections, :through => :ballots do
+  has_many :ballots, dependent: :destroy, inverse_of: :user
+  has_and_belongs_to_many :rolls, order: 'rolls.name'
+  has_many :elections, through: :ballots do
     def allowed
-      Election.current.allowed_for_user_id(proxy_owner.id) - self
+      Election.current.allowed_for_user_id(proxy_association.owner.id) - self
     end
   end
 
   default_scope order( 'users.last_name ASC, users.first_name ASC, users.net_id ASC' )
-  scope :name_like, lambda { |name|
-    where %w( last_name first_name net_id ).map { |t| "users.#{t} LIKE :name" }.join(' OR '),
-      :name => "%#{name}%"
+  scope :name_contains, lambda { |name|
+    sql = %w( first_name middle_name last_name net_id ).map do |field|
+      "users.#{field} LIKE :name"
+    end
+    where( sql.join(' OR '), :name => "%#{name}%" )
   }
-
-  search_methods :name_like
 
   is_authenticable
 

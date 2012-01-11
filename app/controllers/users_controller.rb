@@ -17,8 +17,13 @@ class UsersController < ApplicationController
   # GET /rolls/:roll_id/users
   # GET /rolls/:roll_id/users
   def index
-    @search = @users.search( params[:term] ? { :name_like => params[:term] } : params[:search] )
-    @users = @search.paginate( :page => params[:page] )
+    @search = params[:search] || Hash.new
+    @search.each do |k,v|
+      if !v.blank? && User::SEARCHABLE.include?( k.to_sym )
+        @users = @users.send k, v
+      end
+    end
+    @users = @users.page(params[:page])
     respond_to do |format|
       format.html # index.html.erb
       format.json # index.json.erb
@@ -127,7 +132,7 @@ class UsersController < ApplicationController
   def initialize_index
     @users = @roll.users if @roll
     @users ||= User.scoped
-    @users = @users.with_permissions_to(:show)
+    @users = @users.with_permissions_to(:show).page(params[:page])
   end
 
   def new_user_from_params

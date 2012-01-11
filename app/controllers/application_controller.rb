@@ -3,11 +3,11 @@ class ApplicationController < ActionController::Base
 
   is_authenticator
 
-  private
+  protected
 
   def permission_denied
     flash[:error] = "You are not allowed to perform the requested action."
-    redirect_to profile_url
+    redirect_to home_url
   end
 
 end

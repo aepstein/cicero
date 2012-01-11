@@ -42,6 +42,7 @@ Cicero::Application.routes.draw do
 
   match 'login', :to => 'user_sessions#new', :as => 'login'
   match 'logout', :to => 'user_sessions#destroy', :as => 'logout'
+  match 'home', :to => 'elections#my', :as => 'home'
 
   root :to => 'elections#my'
 end
