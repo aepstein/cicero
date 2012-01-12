@@ -16,7 +16,7 @@
   <b>Disqualified?</b> <%= @candidate.disqualified? ? 'Yes' : 'No' %>
 </p>
 
-<p><b>Picture:</b> <%= @candidate.picture.file? ? 'Yes'.html_safe + image_tag(@candidate.picture.url(:original)) : 'No' %></p>
+<p><b>Picture:</b> <%= @candidate.picture? ? 'Yes'.html_safe + image_tag(@candidate.picture.url(:original)) : 'No' %></p>
 
 <p>
 <% if permitted_to? :edit, @candidate %>
