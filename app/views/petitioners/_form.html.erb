@@ -1,9 +1,9 @@
 <%= render "shared/error_messages", :target => form.object %>
 
 <%= form.inputs do %>
-  <%= form.autocompleted_input :user_name,
-    :url => roll_users_path( form.object.candidate.race.roll, :format => :json),
-    :label => 'User' %>
+  <%= form.input :user_name, :as => :autocomplete, :label => 'User',
+    :url => roll_users_path( form.object.candidate.race.roll, :format => :json )
+  %>
 <% end %>
 
 <%= form.buttons %>

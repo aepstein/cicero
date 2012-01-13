@@ -1,22 +1,23 @@
 class Petitioner < ActiveRecord::Base
+  SEARCHABLE = [ :user_name_contains ]
+
   attr_accessible :user_id, :user_name
   attr_readonly :candidate_id
 
   belongs_to :user
   belongs_to :candidate
 
-  default_scope includes(:user).order('users.last_name ASC, users.first_name ASC, users.net_id ASC')
+  default_scope includes(:user).
+    order('users.last_name ASC, users.first_name ASC, users.net_id ASC')
   scope :user_name_contains, lambda { |name|
-    merge( User.unscoped.name_like( name ) )
+    merge( User.unscoped.name_contains name )
   }
 
-  search_methods :user_name_contains
+  delegate :name, to: :user
 
-  delegate :name, :to => :user
-
-  validates_presence_of :user
-  validates_presence_of :candidate
-  validates_uniqueness_of :user_id, :scope => [ :candidate_id ]
+  validates :user, presence: true
+  validates :user_id, uniqueness: { scope: [ :candidate_id ] }
+  validates :candidate, presence: true
   validate :user_must_be_in_race_roll
 
   def user_must_be_in_race_roll

@@ -50,7 +50,7 @@ class Roll < ActiveRecord::Base
 
       # Record initial roll size
       original_roll_size = count
-      proxy_association.reset
+      reset
 
       # Add users to roll not already in the roll
       connection.insert_sql "INSERT INTO rolls_users ( roll_id, user_id )

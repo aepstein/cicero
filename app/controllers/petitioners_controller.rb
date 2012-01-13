@@ -88,9 +88,14 @@ class PetitionersController < ApplicationController
   end
 
   def initialize_index
-    @petitioners = Petitioner.scoped :conditions => { :candidate_id => @candidate.id }
-    @search = @petitioners.search( params[:search] )
-    @petitioners = @search.result.page( params[:page] )
+    @petitioners = Petitioner.where { candidate_id == my { @candidate.id } }.
+      page( params[:page] )
+    @q = params[:q] || Hash.new
+    @q.each do |k,v|
+      if !v.blank? && Petitioner::SEARCHABLE.include?( k.to_sym )
+        @petitioners = @petitioners.send k, v
+      end
+    end
   end
 
   def new_petitioner_from_params
