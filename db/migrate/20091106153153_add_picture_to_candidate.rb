@@ -8,7 +8,7 @@ class AddPictureToCandidate < ActiveRecord::Migration
       Candidate.reset_column_information
       Race.reset_column_information
       Election.reset_column_information
-      base = "#{RAILS_ROOT}/db/uploads/#{RAILS_ENV}/candidates"
+      base = "#{::Rails.root}/db/uploads/#{::Rails.env}/candidates"
       Candidate.all(:include => :race).each do |candidate|
         candidate_base = "#{base}/#{candidate.race.election_id}/#{candidate.race_id}/#{candidate.id}"
         candidate.picture = File.new("#{candidate_base}/original.jpg")
@@ -24,7 +24,7 @@ class AddPictureToCandidate < ActiveRecord::Migration
     say_with_time 'Regenerating old candidate pictures from paperclip entries' do
       Candidate.reset_column_information
       Race.reset_column_information
-      base = "#{RAILS_ROOT}/db/uploads/#{RAILS_ENV}/candidates"
+      base = "#{::Rails.root}/db/uploads/#{::Rails.env}/candidates"
       Candidate.all(:include => :race).each do |candidate|
         candidate_base = "#{base}/#{candidate.race.election_id}/#{candidate.race_id}/#{candidate.id}"
         FileUtils.mkdir_p candidate_base
