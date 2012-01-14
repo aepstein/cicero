@@ -23,6 +23,7 @@ gem 'whenever', :require => false
 gem 'escape_utils'
 gem 'cornell-assemblies-rails',
   :git => 'git://assembly.cornell.edu/git/cornell-assemblies-rails.git'
+gem 'cornell_netid'
 group :assets do
   gem 'sass-rails', "  ~> 3.1.0"
   gem 'coffee-rails', "~> 3.1.0"
