@@ -49,8 +49,7 @@ class Roll < ActiveRecord::Base
       end
 
       # Record initial roll size
-      original_roll_size = count
-      reset
+      original_roll_size = uncached { count }
 
       # Add users to roll not already in the roll
       connection.insert_sql "INSERT INTO rolls_users ( roll_id, user_id )
@@ -58,7 +57,10 @@ class Roll < ActiveRecord::Base
         u.net_id IN (#{import_net_ids_sql}) AND u.id NOT IN
         (SELECT user_id FROM rolls_users AS ru
         WHERE ru.roll_id = #{connection.quote proxy_association.owner.id})"
-      [(count - original_roll_size), user_import ]
+      reset
+      uncached do
+        [(count - original_roll_size), user_import ]
+      end
     end
   end
   has_many :races, order: 'races.name ASC', dependent: :destroy
