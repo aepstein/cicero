@@ -8,9 +8,8 @@ end
 
 module Cicero
   class Application < Rails::Application
-    config.autoload_paths += %W(#{Rails.root}/lib)
+    config.autoload_paths += %W(#{::Rails.root}/lib)
     config.encoding = "utf-8"
-    config.filter_parameters += [:password, :password_confirmation, :ballot]
     config.action_mailer.default_url_options = { :host => "assembly.cornell.edu/cicero", :protocol => 'https' }
   config.time_zone = 'Eastern Time (US & Canada)'
     config.active_record.identity_map = true
