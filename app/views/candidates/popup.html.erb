@@ -1,5 +1,5 @@
 <h1><%=h @candidate.name %></h1>
-<% if @candidate.picture.file? %>
+<% if @candidate.picture? %>
 <%= image_tag @candidate.picture.url(:thumb), :alt => "Picture of #{@candidate.name}", :style => "float: left;" %>
 <% end %>
 <%=markdown @candidate.statement %>
