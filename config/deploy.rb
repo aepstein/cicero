@@ -31,11 +31,6 @@ namespace :deploy do
     #run "ln -nfs #{shared_path}/assets #{release_path}/public/assets"
   end
 
-  desc "Sync the public/assets directory."
-  task :assets do
-    #system "rsync -vr --exclude='.DS_Store' public/assets #{user}@#{application}:#{shared_path}/"
-  end
-
   desc "Update the crontab file"
   task :update_crontab, :roles => :db do
     run "cd #{release_path} && whenever --update-crontab #{application}"
