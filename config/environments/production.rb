@@ -12,6 +12,7 @@ Cicero::Application.configure do
   config.assets.compile = false
   config.assets.digest = true
   config.assets.precompile += %w( ie6.css ie7.css )
+  config.force_ssl = true
   config.filter_parameters += [ :password, :password_confirmation, :ballot ]
   config.middleware.use ExceptionNotifier,
     :email_prefix => "[cicero] ",
