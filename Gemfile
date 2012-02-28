@@ -1,11 +1,11 @@
 source 'http://rubygems.org'
-gem 'rails', '~>3.1.1'
-gem 'mysql2', '~> 0.2'
-gem 'rake', '~> 0.9'
+gem 'rails', '~>3.2.0'
+gem 'mysql2'
+gem 'rake'
 gem 'activerecord-import'
-gem 'exception_notification', '~> 2.5'
+gem 'exception_notification'
 gem 'capistrano'
-gem 'validates_timeliness', '~> 3.0'
+gem 'validates_timeliness'
 gem 'gettext'
 gem 'jquery-rails'
 gem 'squeel'
@@ -25,14 +25,14 @@ gem 'cornell-assemblies-rails',
   :git => 'git://assembly.cornell.edu/git/cornell-assemblies-rails.git'
 gem 'cornell_netid'
 group :assets do
-  gem 'sass-rails', "  ~> 3.1.0"
-  gem 'coffee-rails', "~> 3.1.0"
+  gem 'sass-rails'
+  gem 'coffee-rails'
   gem 'uglifier'
   gem 'execjs'
   gem 'therubyracer'
 end
 group :development, :test do
-  gem 'rspec-rails', '~> 2.0'
+  gem 'rspec-rails'
 end
 group :development do
   gem 'thin'
