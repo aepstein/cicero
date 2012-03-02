@@ -6,7 +6,7 @@ Feature: Manage elections
   Background:
     Given a user: "admin" exists with admin: true
     And a user: "regular" exists
-
+@wip
   Scenario Outline: Test permissions for candidates controller actions
     Given a <when>election: "basic" exists with name: "Vital"
     And I log in as user: "<user>"
