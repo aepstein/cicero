@@ -8,9 +8,9 @@ further modify your ballot after you have confirmed.
 
 <%= semantic_form_for( @ballot, :url => election_ballots_path( @ballot.election ) ) do |f| %>
 
-<%= f.inputs do %>
 <%= render :partial => 'form', :object => f %>
 
+<%= f.inputs name: "Confirmation" do %>
 <%= f.input :confirmation, :as => :radio, :label => 'I want to',
       :collection => [ ['Cast my votes for these choices', true],
                        ['Make changes to these choices', false] ] %>
