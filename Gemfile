@@ -30,6 +30,7 @@ group :assets do
   gem 'uglifier'
   gem 'execjs'
   gem 'therubyracer'
+  gem 'capistrano'
 end
 group :development, :test do
   gem 'rspec-rails'
