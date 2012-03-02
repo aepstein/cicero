@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
 
   default_scope order( 'users.last_name ASC, users.first_name ASC, users.net_id ASC' )
   scope :name_contains, lambda { |name|
-    sql = %w( first_name middle_name last_name net_id ).map do |field|
+    sql = %w( first_name last_name net_id ).map do |field|
       "users.#{field} LIKE :name"
     end
     where( sql.join(' OR '), :name => "%#{name}%" )
