@@ -8,8 +8,8 @@
     <%= render :partial => 'form', :object => f %>
   <% end %>
 
-  <%= f.buttons do %>
-    <%= f.commit_button 'Continue'%>
+  <%= f.actions do %>
+    <%= f.action :submit, label:  'Continue'%>
   <% end %>
 <% end %>
 
