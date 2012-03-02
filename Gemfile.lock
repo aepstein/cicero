@@ -1,9 +1,10 @@
 GIT
   remote: git://assembly.cornell.edu/git/cornell-assemblies-rails.git
-  revision: 3cc80a7d840ecc0fcbc95c4fc561cc80fd4040df
+  revision: 6a604889e1e2ea4e6ef7877fd66e2a271cd56e3f
   specs:
     cornell-assemblies-rails (0.0.1)
       bcrypt-ruby (~> 3.0.1)
+      formtastic (~> 2.1)
       jquery-rails (~> 1.0.15)
       rails (~> 3.1)
       rails3-jquery-autocomplete (~> 1.0.4)
