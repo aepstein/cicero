@@ -1,6 +1,10 @@
 <h2>Listing races for <%=h @election %> election</h2>
 
+<%=paginate @races %>
+
 <%= render :partial => "races", :object => @races %>
+
+<%=paginate @races %>
 
 <hr />
 
