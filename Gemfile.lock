@@ -1,6 +1,6 @@
 GIT
   remote: git://assembly.cornell.edu/git/cornell-assemblies-rails.git
-  revision: 476c99a267fa4dc0382ef08cf830c854a7928c79
+  revision: 540b8b67502b63a351f0d77aeb8db2bbaf028353
   specs:
     cornell-assemblies-rails (0.0.1)
       bcrypt-ruby (~> 3.0)
