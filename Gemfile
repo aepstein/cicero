@@ -22,8 +22,7 @@ gem 'bluecloth'
 gem 'whenever', require: false
 gem 'escape_utils'
 gem 'cornell-assemblies-rails',
-  git: 'git://assembly.cornell.edu/git/cornell-assemblies-rails.git',
-  branch: '0-0-2'
+  git: 'git://assembly.cornell.edu/git/cornell-assemblies-rails.git'
 gem 'cornell-assemblies-branding',
   git: 'git://assembly.cornell.edu/git/cornell-assemblies-branding.git'
 gem 'cornell_netid'
