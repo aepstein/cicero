@@ -16,13 +16,16 @@ gem 'declarative_authorization'
 gem 'kaminari'
 gem 'rmagick'
 gem 'carrierwave'
-gem 'acts_as_list', :git => 'git://github.com/aepstein/acts_as_list.git'
+gem 'acts_as_list', git: 'git://github.com/aepstein/acts_as_list.git'
 gem 'daemons'
 gem 'bluecloth'
-gem 'whenever', :require => false
+gem 'whenever', require: false
 gem 'escape_utils'
 gem 'cornell-assemblies-rails',
-  :git => 'git://assembly.cornell.edu/git/cornell-assemblies-rails.git'
+  git: 'git://assembly.cornell.edu/git/cornell-assemblies-rails.git',
+  branch: '0-0-2'
+gem 'cornell-assemblies-branding',
+  git: 'git://assembly.cornell.edu/git/cornell-assemblies-branding.git'
 gem 'cornell_netid'
 group :assets do
   gem 'sass-rails'

@@ -2,7 +2,8 @@
   <td><%=h candidate.name %></td>
   <td><%= link_to 'Show', candidate %></td>
   <td><%= link_to( 'Edit', edit_candidate_path( candidate ) ) if permitted_to? :edit, candidate %></td>
-  <td><%= link_to( 'Destroy', candidate_path( candidate ), :confirm => 'Are you sure?',
-          :method => :delete ) if permitted_to? :destroy, candidate %></td>
+  <td><%= link_to( 'Destroy', candidate_path( candidate ),
+            data: { confirm: 'Are you sure?' },
+            method: :delete ) if permitted_to? :destroy, candidate %></td>
 <% end %>
 

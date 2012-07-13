@@ -4,7 +4,8 @@
 <td><%=h ballot.user.last_name %></td>
 <td><%=h ballot.created_at.to_s :us_ordinal %></td>
 <td><%= link_to 'Show', ballot_path(ballot) %></td>
-<td><%= link_to 'Destroy', ballot_path(ballot),:confirm => 'Are you sure?',
-  :method => :delete if permitted_to? :destroy, ballot %></td>
+<td><%= link_to( 'Destroy', ballot_path(ballot),
+          data: { confirm: 'Are you sure?' },
+          method: :delete ) if permitted_to? :destroy, ballot %></td>
 <% end %>
 

@@ -3,8 +3,11 @@
 <%=markdown form.object.race.description %>
 
 <% if form.object.warning %>
-<div class="warnings">
-<b>Warning:</b> <%=h form.object.warning %>
+<div class="warning_messages">
+  <h2>Warning for this section</h2>
+  <ul>
+    <li><%= form.object.warning %></li>
+  </ul>
 </div>
 <% end %>
 

@@ -3,7 +3,8 @@
   <td><%= roll.users.count %></td>
   <td><%= link_to 'Show', roll_path( roll ) %></td>
   <td><%= link_to( 'Edit', edit_roll_path( roll ) ) if permitted_to? :edit, roll %></td>
-  <td><%= link_to( 'Destroy', roll_path( roll ), :confirm => 'Are you sure?',
-    :method => :delete ) if permitted_to? :destroy, roll %></td>
+  <td><%= link_to( 'Destroy', roll_path( roll ),
+    data: { confirm: 'Are you sure?' },
+    method: :delete ) if permitted_to? :destroy, roll %></td>
 <% end %>
 

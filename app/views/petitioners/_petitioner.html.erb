@@ -3,6 +3,7 @@
     <td><%= link_to 'Show', petitioner_path( petitioner ) %></td>
     <td><%= link_to 'Edit', edit_petitioner_path( petitioner ) if permitted_to? :edit, petitioner %></td>
     <td><%= link_to( 'Destroy', petitioner_path( petitioner ),
-      :confirm => 'Are you sure?', :method => :delete ) if permitted_to? :destroy, petitioner %></td>
+      data: { confirm: 'Are you sure?' },
+      method: :delete ) if permitted_to? :destroy, petitioner %></td>
   <% end %>
 
