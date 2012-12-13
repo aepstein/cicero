@@ -6,8 +6,8 @@
   <%= form.input :first_name %>
   <%= form.input :last_name %>
   <%= form.input :admin, :as => :radio if current_user.admin? %>
-  <%= form.input :password %>
-  <%= form.input :password_confirmation, :as => :password %>
+  <%= form.input :password, label: "Set Password" %>
+  <%= form.input :password_confirmation, as: :password, label: "Confirm Password" %>
 <% end %>
 
 <h3>Allowed races</h3>

@@ -4,7 +4,6 @@ gem 'mysql2'
 gem 'rake'
 gem 'activerecord-import'
 gem 'exception_notification'
-gem 'capistrano'
 gem 'validates_timeliness'
 gem 'gettext'
 gem 'jquery-rails'
@@ -16,7 +15,7 @@ gem 'declarative_authorization'
 gem 'kaminari'
 gem 'rmagick'
 gem 'carrierwave'
-gem 'acts_as_list', git: 'git://github.com/aepstein/acts_as_list.git'
+gem 'acts_as_list'
 gem 'daemons'
 gem 'bluecloth'
 gem 'whenever', require: false
@@ -31,25 +30,20 @@ group :assets do
   gem 'coffee-rails'
   gem 'uglifier'
   gem 'execjs'
-  gem 'therubyracer'
-  gem 'capistrano'
+  gem 'therubyracer', '~> 0.10.1'
+  gem 'libv8', '~> 3.3.10'
 end
 group :development, :test do
   gem 'rspec-rails'
 end
-group :development do
-  gem 'thin'
-end
 group :test do
-  gem 'test-unit'
-  gem 'cucumber-rails'
-  gem 'database_cleaner'
-  gem 'capybara'
-  gem 'spork'
-  gem 'factory_girl', '~> 2.0', :require => false
-  gem 'factory_girl_rails', '~> 1.0'
-  gem 'pickle', '~> 0.4'
-  gem 'email_spec'
+  gem 'test-unit', require: false
+  gem 'cucumber-rails', require: false
+  gem 'database_cleaner', require: false
+  gem 'spork', require: false
+  gem 'factory_girl_rails', require: false
+  gem 'pickle', require: false
+  gem 'email_spec', require: false
   gem 'launchy'
 end
 

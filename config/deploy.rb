@@ -38,4 +38,5 @@ namespace :deploy do
 end
 
 after 'deploy:update_code', 'deploy:symlink_shared', 'deploy:update_crontab'
+after 'deploy:update', 'deploy:clean'
 
