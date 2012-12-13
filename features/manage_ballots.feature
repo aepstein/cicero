@@ -76,7 +76,7 @@ Feature: Manage ballots
     And I select "2" from "John McCain"
     And I select "1" from "Joseph Biden"
     And I press "Continue"
-    Then I should see "Warning: 1 fewer votes are selected than the 2 that are allowed for the race Vice President of the United States"
+    Then I should see "1 fewer votes are selected than the 2 that are allowed for the race Vice President of the United States"
     And I choose "ballot_confirmation_true"
     And I press "Continue"
     Then I should see "Ballot was successfully created."
