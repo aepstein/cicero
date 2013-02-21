@@ -38,7 +38,7 @@ class Election < ActiveRecord::Base
   def to_pmwiki(statement_length=1250)
     races.map { |race|
       "(:title #{race.name}:)\n\n" +
-      candidates.map { |candidate|
+      race.candidates.map { |candidate|
         net_id = candidate.name.to_net_ids.first
         if net_id
           name = candidate.name.gsub(/^(.*)\s+\(#{net_id}\)\s*$/,'\1').strip
