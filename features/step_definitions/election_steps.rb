@@ -135,3 +135,21 @@ Then /^I should see the edited election$/ do
   page.should have_text "Disqualified? Yes"
 end
 
+
+Given /^there are (\d+) elections$/ do |quantity|
+  @elections = quantity.to_i.downto(1).
+    map { |i| create :election, name: "election #{i}" }
+end
+
+When /^I "(.+)" the (\d+)(?:st|nd|rd|th) election$/ do |text, election|
+  visit(elections_url)
+  within("table > tbody > tr:nth-child(#{election.to_i})") do
+    click_link "#{text}"
+  end
+  within(".alert") { page.should have_text("Election destroyed.") }
+end
+
+Then /^I should see the following elections:$/ do |table|
+  table.diff! tableish( 'table#elections > tbody > tr', 'td:nth-of-type(1)' )
+end
+
