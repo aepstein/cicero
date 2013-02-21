@@ -18,32 +18,14 @@ Feature: Manage elections
       |past   |plain|may not|may not|may not|may    |
       |future |admin|may    |may    |may    |may    |
       |future |plain|may not|may not|may not|may not|
-@wip @javascript
+
+  @javascript
   Scenario: Create and edit election
     Given I log in as the admin user
     When I create an election
     Then I should see the new election
     When I update the election
     Then I should see the edited election
-
-  Scenario: Register new election
-    Given I log in as user: "admin"
-    And I am on the new election page
-    When I fill in "Name" with "2008 Election"
-    And I fill in "Starts at" with "2008-11-04 00:00:01"
-    And I fill in "Ends at" with "2008-11-04 23:59:59"
-    And I fill in "Results available at" with "2008-11-05 12:00:00"
-    And I fill in "Contact name" with "Board of Elections"
-    And I fill in "Contact email" with "elections@example.com"
-    And I fill in "Verify message" with "Thank you for *voting*."
-    And I press "Create"
-    Then I should see "Name: 2008 Election"
-    And I should see "Starts at: November 4th, 2008 12:00am"
-    And I should see "Ends at: November 4th, 2008 11:59pm"
-    And I should see "Results available at: November 5th, 2008 12:00pm"
-    And I should see "Contact name: Board of Elections"
-    And I should see "Contact email: elections@example.com"
-    And I should see "Thank you for voting."
 
   Scenario: Delete election
     Given an election exists with name: "election 4"

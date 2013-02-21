@@ -1,6 +1,6 @@
 <%= render "shared/error_messages", target: form.object %>
 
-<%= form.input :name, label: "Election Name" %>
+<%= form.input :name, label: "Election name" %>
 <%= form.input :starts_at, as: :date_time_picker %>
 <%= form.input :ends_at, as: :date_time_picker %>
 <%= form.input :results_available_at, as: :date_time_picker %>
@@ -8,7 +8,9 @@
 <%= form.input :contact_email %>
 <%= form.input :verify_message %>
 <%= cocoon_fields form, :rolls, insertable: true %>
-<%= cocoon_fields form, :races, insertable: true %>
+<% if form.object.rolls.to_a.select { |r| r.persisted? }.length > 0 %>
+  <%= cocoon_fields form, :races, insertable: true %>
+<% end %>
 
 <%= form.button :wrapped, cancel: elections_path %>
 

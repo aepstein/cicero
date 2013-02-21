@@ -1,8 +1,9 @@
 <%=content_tag :li, id: "race-#{race.id}" do %>
-  <p>Name of Race: <%= race.name %></p>
+  <p>Race name: <%= race.name %></p>
   <p>Slots: <%= race.slots %></p>
   <p>Ranked? <%= race.is_ranked? ? 'Yes' : 'No' %></p>
   <p>Roll: <%= race.roll %></p>
+  <%=markdown race.description %>
   <%=render partial: 'candidates/candidates', object: race.candidates %>
 <% end %>
 

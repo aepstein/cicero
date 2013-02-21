@@ -1,4 +1,4 @@
-<table>
+<%=content_tag :table, id: "rolls" do %>
   <thead>
     <tr>
       <th>Name</th>
@@ -8,5 +8,5 @@
   <tbody>
     <%= render partial: 'rolls/roll', collection: rolls %>
   </tbody>
-</table>
+<% end %>
 

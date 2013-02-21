@@ -1,5 +1,5 @@
 <% if races.any? %>
-<%=content_tag :ul do %>
+<%=content_tag :ul, id: "races" do %>
 <%=render partial: 'races/race', collection: races %>
 <% end %>
 <% else %>

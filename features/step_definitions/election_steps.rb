@@ -52,7 +52,7 @@ end
 
 When /^I create an election$/ do
   visit new_election_path
-  fill_in "Election Name", with: "2008 Election"
+  fill_in "Election name", with: "2008 Election"
   @start = (Time.zone.now + 1.day).floor
   @end = @start + 1.day
   @release = @end + 1.day
@@ -62,6 +62,10 @@ When /^I create an election$/ do
   fill_in "Contact name", with: "Board of Elections"
   fill_in "Contact email", with: "elections@example.com"
   fill_in "Verify message", with: "Thank you for *voting*."
+  click_link "Add Roll"
+  within_fieldset("New roll") {
+    fill_in "Roll name", with: "City residents"
+  }
   click_button "Create"
 end
 
@@ -69,16 +73,21 @@ Then /^I should see the new election$/ do
   within(".alert") { page.should have_text "Election created." }
   @election = Election.find( URI.parse(current_url).path.match(/[\d]+$/)[0].to_i )
   page.should have_text "Election name: 2008 Election"
-  page.should have_text "Starts at: #{@start.to_s :long_ordinal}"
-  page.should have_text "Ends at: #{@end.to_s :long_ordinal}"
-  page.should have_text "Results available at: #{@release.to_s :long_ordinal}"
+  page.should have_text "Starts at: #{@start.to_s :us_ordinal}"
+  page.should have_text "Ends at: #{@end.to_s :us_ordinal}"
+  page.should have_text "Results available at: #{@release.to_s :us_ordinal}"
   page.should have_text "Contact: Board of Elections <elections@example.com>"
   page.should have_text "Thank you for voting."
+  click_link "Rolls"
+  within("table#rolls > tbody tr:nth-of-type(1)") {
+    within("td:nth-of-type(1)") { page.should have_text "City residents" }
+    within("td:nth-of-type(2)") { page.should have_text "0" }
+  }
 end
 
 When /^I update the election$/ do
   visit edit_election_path(@election)
-  fill_in "Election Name", with: "2009 Election"
+  fill_in "Election name", with: "2009 Election"
   @start += 1.day
   @end += 1.day
   @release += 1.day
@@ -88,16 +97,41 @@ When /^I update the election$/ do
   fill_in "Contact name", with: "Elections Inc"
   fill_in "Contact email", with: "el@example.com"
   fill_in "Verify message", with: "Good job!"
+  click_link "Add Race"
+  within_fieldset("New race") {
+    fill_in "Name", with: "President"
+    fill_in "Slots", with: 1
+    within_control_group("Ranked?") { choose "Yes" }
+    select "City residents", from: "Roll"
+    fill_in "Description", with: "*Special* instructions for this race."
+    click_link "Add Candidate"
+    within_fieldset("New candidate") {
+      fill_in "Name", with: "Barack Obama"
+      fill_in "Statement", with: "A *thoughtful* statement."
+      attach_file 'Picture', File.expand_path('spec/assets/robin.jpg')
+      within_control_group("Disqualified?") { choose "Yes" }
+    }
+  }
   click_button "Update"
 end
 
 Then /^I should see the edited election$/ do
   within(".alert") { page.should have_text "Election updated." }
   page.should have_text "Election name: 2009 Election"
-  page.should have_text "Starts at: #{@start.to_s :long_ordinal}"
-  page.should have_text "Ends at: #{@end.to_s :long_ordinal}"
-  page.should have_text "Results available at: #{@release.to_s :long_ordinal}"
+  page.should have_text "Starts at: #{@start.to_s :us_ordinal}"
+  page.should have_text "Ends at: #{@end.to_s :us_ordinal}"
+  page.should have_text "Results available at: #{@release.to_s :us_ordinal}"
   page.should have_text "Contact: Elections Inc <el@example.com>"
   page.should have_text "Good job!"
+  click_link "Races"
+  page.should have_text "Race name: President"
+  page.should have_text "Slots: 1"
+  page.should have_text "Ranked? Yes"
+  page.should have_text "Roll: City residents"
+  page.should have_text "Special instructions for this race."
+  page.should have_text "Barack Obama"
+  page.should have_text "A thoughtful statement."
+  page.should have_selector "img.candidate-thumb"
+  page.should have_text "Disqualified? Yes"
 end
 

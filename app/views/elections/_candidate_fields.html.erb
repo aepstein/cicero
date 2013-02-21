@@ -1,5 +1,9 @@
-<%= f.input :name %>
-<%= f.input :statement %>
-<%= f.input :picture, as: :file, hint: 'Candidate picture must be JPG format.' %>
-<%= f.input :disqualified, as: :radio_buttons %>
+<%= field_set_tag( f.object.to_s, class: 'nested-fields' ) do %>
+  <%= f.input :name, hint: 'Name of candidate as it should appear on ballot.' %>
+  <%= f.input :statement, hint: 'Candidate statement.' %>
+  <%= f.input :picture, as: :file, hint: 'Candidate picture must be JPG format.' %>
+  <%= f.input :disqualified, as: :radio_buttons, label: "Disqualified?",
+    hint: 'Will candidate be disqualified?' %>
+  <%= link_to_remove_association 'Remove Candidate', f %>
+<% end %>
 

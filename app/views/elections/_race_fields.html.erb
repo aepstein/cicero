@@ -1,7 +1,13 @@
-<%= f.input :name %>
-<%= f.input :slots %>
-<%= f.input :is_ranked, as: :radio_buttons %>
-<%= f.association :roll, collection: f.object.election.rolls %>
-<%= f.input :description %>
-<%= cocoon_fields f, :candidates, insertable: true %>
+<%= field_set_tag( f.object.to_s, class: 'nested-fields' ) do %>
+  <%= f.input :name %>
+  <%= f.input :slots, hint: 'How many seats are to be filled?  In non-ranked elections this is the maximum number of options the user may select for the race.  In ranked elections it only encodes the number of fields, and can be changed during tabulation.' %>
+  <%= f.input :is_ranked, as: :radio_buttons, label: "Ranked?",
+    hint: 'May the user rank candidates in order of preference?  If no, checkboxes will be presented instead.' %>
+  <%= f.association :roll, collection: f.object.election.rolls.to_a.select { |r| r.persisted? },
+    hint: 'Which voters are eligible for this race?' %>
+  <%= f.input :description,
+    hint: 'Provide any additional descriptive or special information that should be provided to voters for this race.' %>
+  <%= cocoon_fields f, :candidates, insertable: true %>
+  <%= link_to_remove_association 'Remove Race', f %>
+<% end %>
 

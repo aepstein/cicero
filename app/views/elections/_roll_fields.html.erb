@@ -1,2 +1,5 @@
-<%= f.input :name %>
+<%= field_set_tag( f.object.to_s, class: 'nested-fields' ) do %>
+  <%= f.input :name, label: "Roll name" %>
+  <%= link_to_remove_association 'Remove Roll', f %>
+<% end %>
 

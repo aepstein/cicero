@@ -1,5 +1,6 @@
 class Candidate < ActiveRecord::Base
-  attr_accessible :name, :eliminated, :statement, :disqualified, :picture
+  attr_accessible :name, :eliminated, :statement, :disqualified, :picture,
+    :_destroy
   attr_readonly :race_id
 
   belongs_to :race, :inverse_of => :candidates
@@ -15,7 +16,10 @@ class Candidate < ActiveRecord::Base
   validates :name, presence: true, uniqueness: { scope: :race_id }
   validates :race, presence: true
 
-  def to_s; name; end
+  def to_s
+    return "New candidate" if new_record?
+    name? ? name : super
+  end
 
   def <=>(other); name <=> other.name; end
 

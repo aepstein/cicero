@@ -1,4 +1,4 @@
-<%= content_tag :li, id: "candidate-#{candidate}" %>
+<%= content_tag :li, id: "candidate-#{candidate}" do %>
 <%=image_tag candidate.picture.url(:thumb), class: 'candidate-thumb' %>
 <p>
   <b>Name:</b> <%=h candidate.name %>

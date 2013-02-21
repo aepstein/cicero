@@ -1,17 +1,20 @@
 class Race < ActiveRecord::Base
-  attr_accessible :name, :slots, :is_ranked, :roll_id, :description
+  attr_accessible :name, :slots, :is_ranked, :roll_id, :description,
+    :candidates_attributes, :_destroy
   attr_readonly :election_id
 
-  belongs_to :election, :inverse_of => :races
-  belongs_to :roll, :inverse_of => :races
-  has_many :candidates, :order => 'candidates.name ASC', :dependent => :destroy,
-    :inverse_of => :race do
+  belongs_to :election, inverse_of: :races
+  belongs_to :roll, inverse_of: :races
+  has_many :candidates, order: 'candidates.name ASC', dependent: :destroy,
+    inverse_of: :race do
     def open_to(user)
       self.reject { |c| user.candidates.include?(c) }
     end
   end
-  has_many :sections, :inverse_of => :race
-  has_many :ballots, :through => :sections
+  has_many :sections, inverse_of: :race
+  has_many :ballots, through: :sections
+
+  accepts_nested_attributes_for :candidates, allow_destroy: true
 
   scope :allowed_for_user_id, lambda { |user_id|
     joins( 'INNER JOIN rolls_users AS ru' ).
@@ -46,11 +49,12 @@ class Race < ActiveRecord::Base
   end
 
   def to_s(format = nil)
+    return "New race" if new_record?
     case format
     when :file
       self.name.strip.downcase.gsub(/[^a-z]/,'-').squeeze('-') + ".blt"
     else
-      name
+      name? ? name : super()
     end
   end
 

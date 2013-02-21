@@ -1,5 +1,5 @@
 class Roll < ActiveRecord::Base
-  attr_accessible :name
+  attr_accessible :name, :_destroy
   attr_readonly :election_id
 
   belongs_to :election, :inverse_of => :rolls
@@ -63,11 +63,17 @@ class Roll < ActiveRecord::Base
       end
     end
   end
-  has_many :races, order: 'races.name ASC', dependent: :destroy
+  has_many :races, order: 'races.name ASC', dependent: :restrict
 
   validates :election, presence: true
   validates :name, presence: true, uniqueness: { scope: :election_id }
 
-  def to_s; name; end
+  def to_s
+    if new_record?
+      "New roll"
+    else
+      name? ? name : super
+    end
+  end
 end
 
