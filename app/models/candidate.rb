@@ -18,7 +18,7 @@ class Candidate < ActiveRecord::Base
   def truncated_statement(chars)
     n = 0
     statement.chars.inject("") do |memo, char|
-      n += 1 unless char ~= /\s/
+      n += 1 unless char =~ /\s/
       if n > chars
         memo
       else
