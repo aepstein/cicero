@@ -16,6 +16,7 @@ Tabulous.setup do |config|
 
   config.actions do
     [
+      [ :home          ,:all_actions,:home_tab         ],
       [ :petitioners   ,:all_actions,:elections_subtab ],
       [ :ballots       ,:all_actions,:elections_subtab ],
       [ :elections     ,:all_actions,:elections_subtab ],

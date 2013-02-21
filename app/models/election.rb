@@ -1,18 +1,21 @@
 class Election < ActiveRecord::Base
   attr_accessible :name, :starts_at, :ends_at, :results_available_at,
-    :verify_message, :contact_name, :contact_email
+    :verify_message, :contact_name, :contact_email, :rolls_attributes,
+    :races_attributes
 
-  has_many :rolls, :include => [:races], :order => :name,
-    :dependent => :destroy, :inverse_of => :election
-  has_many :races, :include => [:candidates, :roll], :order => :name,
-    :dependent => :destroy, :inverse_of => :election
-  has_and_belongs_to_many :managers, :class_name => 'User',
-    :join_table => 'elections_managers'
-  has_many :ballots, :dependent => :destroy, :inverse_of => :election
-  has_many :candidates, :through => :races
+  has_many :rolls, include: [:races], order: :name,
+    dependent: :destroy, inverse_of: :election
+  has_many :races, include: [:candidates, :roll], order: :name,
+    dependent: :destroy, inverse_of: :election
+  has_and_belongs_to_many :managers, class_name: 'User',
+    join_table: 'elections_managers'
+  has_many :ballots, dependent: :destroy, inverse_of: :election
+  has_many :candidates, through: :races
 
-  default_scope order('elections.name ASC')
+  accepts_nested_attributes_for :rolls, allow_destroy: true
+  accepts_nested_attributes_for :races, allow_destroy: true
 
+  scope :ordered, lambda { order { name } }
   scope :allowed_for_user_id, lambda { |user_id|
     where(
       'elections.id IN (SELECT election_id FROM rolls AS r INNER JOIN rolls_users AS ru ' +

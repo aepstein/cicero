@@ -1,10 +1,10 @@
-<h2>Listing elections</h2>
+<%=content_tag :h1, "Elections" %>
 
-<%= content_tag :p, paginate(@elections) %>
+<%= paginate(elections) %>
 
-<%= render :partial => "elections/elections", :object => @elections %>
+<%= render partial: "elections/elections", object: elections %>
 
-<%= content_tag :p, paginate(@elections) %>
+<%= paginate(elections) %>
 
 <hr />
 

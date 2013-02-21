@@ -1,13 +1,6 @@
-<h2>Editing election</h2>
+<%=content_tag :h1, "Edit #{election} election" %>
 
-<%= semantic_form_for(@election) do |f| %>
-
-<%= render :partial => 'form', :object => f %>
-
+<%= simple_form_for(election) do |f| %>
+  <%= render partial: 'form', object: f %>
 <% end %>
-
-<p>
-<%= link_to 'Show', @election %> |
-<%= link_to 'Back', elections_path %>
-</p>
 

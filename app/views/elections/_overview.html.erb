@@ -1,33 +1,29 @@
 <p>
-  <b>Name:</b> <%=h @election.name %>
+  <b>Election name:</b> <%= election.name %>
 </p>
 
 <p>
-  <b>Starts at:</b> <%=h @election.starts_at.to_formatted_s :us_ordinal %>
+  <b>Starts at:</b> <%= election.starts_at.to_formatted_s :us_ordinal %>
 </p>
 
 <p>
-  <b>Ends at:</b> <%=h @election.ends_at.to_formatted_s :us_ordinal %>
+  <b>Ends at:</b> <%= election.ends_at.to_formatted_s :us_ordinal %>
 </p>
 
 <p>
-  <b>Results available at:</b> <%=h @election.results_available_at.to_formatted_s :us_ordinal %>
+  <b>Results available at:</b> <%= election.results_available_at.to_formatted_s :us_ordinal %>
 </p>
 
 <p>
-  <strong>Contact name:</strong> <%=h @election.contact_name %>
+  <b>Contact:</b> <%= election.contact_name %> &lt;<%=link_to election.contact_email, "mailto:#{election.contact_email}" %>&gt;
 </p>
 
 <p>
-	<strong>Contact email:</strong> <%=h @election.contact_email %>
+  <b>Verify message:</b>
 </p>
+  <%=markdown election.verify_message %>
 
 <p>
-  <strong>Verify message:</strong>
-</p>
-  <%=markdown @election.verify_message %>
-
-<p>
-  <b>Ballots cast so far:</b> <%=h @election.ballots.size %><br/>
+  <b>Ballots cast so far:</b> <%= election.ballots.size %><br/>
 </p>
 

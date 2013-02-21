@@ -6,8 +6,8 @@ class ApplicationController < ActionController::Base
   protected
 
   def permission_denied
-    flash[:error] = "You are not allowed to perform the requested action."
-    redirect_to home_url
+    flash[:error] = "You may not perform the requested action."
+    redirect_to root_url
   end
 
 end

@@ -18,7 +18,6 @@
 <% end %>
 
 <p>
-<%= link_to( 'Edit', edit_election_path(@election) ) if permitted_to? :edit, @election %> |
-<%= link_to 'List ballots', election_ballots_path(@election) %>
+<%= link_to 'List ballots', election_ballots_path(election) %>
 </p>
 

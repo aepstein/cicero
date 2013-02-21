@@ -2,7 +2,7 @@ Feature: Manage elections
   In order to set up, monitor, and manage elections
   As an administrator
   I want to create, edit, list, and delete elections
-@wip
+
   Scenario Outline: Test permissions for elections controller actions
     Given a <tense> election exists
     And I log in as the <role> user
@@ -18,6 +18,13 @@ Feature: Manage elections
       |past   |plain|may not|may not|may not|may    |
       |future |admin|may    |may    |may    |may    |
       |future |plain|may not|may not|may not|may not|
+@wip @javascript
+  Scenario: Create and edit election
+    Given I log in as the admin user
+    When I create an election
+    Then I should see the new election
+    When I update the election
+    Then I should see the edited election
 
   Scenario: Register new election
     Given I log in as user: "admin"

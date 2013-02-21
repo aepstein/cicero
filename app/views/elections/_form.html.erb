@@ -1,14 +1,14 @@
 <%= render "shared/error_messages", target: form.object %>
 
-<%= form.input :name %>
+<%= form.input :name, label: "Election Name" %>
 <%= form.input :starts_at, as: :date_time_picker %>
 <%= form.input :ends_at, as: :date_time_picker %>
 <%= form.input :results_available_at, as: :date_time_picker %>
 <%= form.input :contact_name %>
 <%= form.input :contact_email %>
 <%= form.input :verify_message %>
-<%= cocoon_fields :rolls, insertable: true %>
-<%= cocoon_fields :races, insertable: true %>
+<%= cocoon_fields form, :rolls, insertable: true %>
+<%= cocoon_fields form, :races, insertable: true %>
 
 <%= form.button :wrapped, cancel: elections_path %>
 

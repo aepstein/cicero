@@ -1,31 +1,23 @@
 class ElectionsController < ApplicationController
   before_filter :require_user
   expose :q_scope do
-    scope = current_user.elections.allowed if params[:action] == 'my'
-    scope ||= Election.scoped
-    scope
+    Election.scoped
   end
   expose :q do
-    q_scope.with_permissions_to(:show).search( params[:search] )
+    q_scope.with_permissions_to(:show).ordered.search( params[:q] )
   end
   expose :elections do
     q.result.page( params[:page] )
   end
-  expose :election
-  filter_access_to :new, :create, :edit, :update, :destroy, :show,
-    load_method: :election, attribute_check: true
-
-  # GET /elections/my
-  # GET /elections/my.xml
-  def my
-    respond_to do |format|
-      if elections.size == 1
-        format.html { redirect_to new_election_ballot_url( elections.first ) }
-      else
-        format.html # my.html.erb
-      end
+  expose :election do
+    if params[:id]
+      Election.find(params[:id])
+    else
+      Election.new(params[:election])
     end
   end
+  filter_access_to :new, :create, :edit, :update, :destroy, :show,
+    load_method: :election, attribute_check: true
 
   # POST /elections
   # POST /elections.xml

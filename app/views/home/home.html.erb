@@ -1,0 +1,25 @@
+<%=content_tag :h1, "Elections for #{current_user.name}" %>
+
+<% if elections.empty? %>
+<p>
+<em>There are no elections remaining for you to vote in at this time.</em>
+</p>
+<% else %>
+<p>
+Please select the election in which you wish to vote:
+</p>
+<ul>
+<%= render partial: 'elections/election', collection: elections %>
+</ul>
+<% end %>
+
+<% if current_user.elections.size > 0 %>
+<p>
+You previously voted in these elections:
+</p>
+
+<ul>
+<%= render partial: 'elections/ballot', collection: current_user.ballots(include: :election) %>
+</ul>
+<% end %>
+

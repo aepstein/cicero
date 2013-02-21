@@ -1,12 +1,6 @@
-<h2>New election</h2>
+<%=content_tag :h1, "New election" %>
 
-<%= semantic_form_for(@election) do |f| %>
-
-<%= render :partial => 'form', :object => f %>
-
+<%= simple_form_for(election) do |f| %>
+  <%= render partial: 'form', object: f %>
 <% end %>
-
-<p>
-<%= link_to 'Back', elections_path %>
-</p>
 
