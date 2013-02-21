@@ -1,12 +1,8 @@
-<%= table_row_tag do %>
-  <td><%= race.name %></td>
-  <td><%= race.slots %></td>
-  <td><%= race.is_ranked? ? 'Yes' : 'No' %></td>
-  <td><%= race.roll %></td>
-  <td><%= link_to 'Show', race %></td>
-  <td><%= link_to( 'Edit', edit_race_path( race ) ) if permitted_to? :edit, race %></td>
-  <td><%= link_to( 'Destroy', race_path( race ),
-            data: { confirm: 'Are you sure?' },
-            method: :delete ) if permitted_to? :destroy, race  %></td>
+<%=content_tag :li, id: "race-#{race.id}" do %>
+  <p>Name of Race: <%= race.name %></p>
+  <p>Slots: <%= race.slots %></p>
+  <p>Ranked? <%= race.is_ranked? ? 'Yes' : 'No' %></p>
+  <p>Roll: <%= race.roll %></p>
+  <%=render partial: 'candidates/candidates', object: race.candidates %>
 <% end %>
 

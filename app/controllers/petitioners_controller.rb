@@ -1,55 +1,42 @@
 class PetitionersController < ApplicationController
   before_filter :require_user
-  before_filter :initialize_context
-  before_filter :initialize_index, :only => [ :index ]
-  before_filter :new_petitioner_from_params, :only => [ :new, :create ]
-  filter_access_to :new, :create, :edit, :update, :destroy, :show, :attribute_check => true
-  filter_access_to :index do
-    permitted_to!( :show, @candidate ) if @candidate
+  expose :candidate
+  expose :q_scope do
+    scope = candidate.petitioners
+    q = params[:q] || Hash.new
+    q.each do |k,v|
+      if !v.blank? && Petitioner::SEARCHABLE.include?( k.to_sym )
+        scope = scope.send k, v
+      end
+    end
+    scope
   end
-
-  # GET /candidates/:candidate_id/petitioners
-  # GET /candidates/:candidate_id/petitioners.xml
-  def index
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @petitioners }
+  expose :petitioners do
+    q_scope.page(params[:page])
+  end
+  expose :petitioner do
+    if params[:id]
+      Petitioner.find params[:id]
+    else
+      candidate.petitioners.build do |petitioner|
+        petitioner.assign_attributes params[:petitioner]
+      end
     end
   end
-
-  # GET /petitioners/:id
-  # GET /petitioners/:id.xml
-  def show
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @petitioner }
-    end
-  end
-
-  # GET /candidates/:candidate_id/petitioners/new
-  # GET /candidates/:candidate_id/petitioners/new.xml
-  def new
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @petitioner }
-    end
-  end
-
-  # GET /petitioners/1/edit
-  def edit
-  end
+  filter_access_to :new, :create, :edit, :update, :destroy, :show,
+    load_method: :petitioner, attribute_check: true
+  filter_access_to :index, load_method: :candidate, require: :show
 
   # POST /candidates/:candidate_id/petitioners
   # POST /candidates/:candidate_id/petitioners.xml
   def create
     respond_to do |format|
-      if @petitioner.save
-        flash[:notice] = 'Petitioner was successfully created.'
-        format.html { redirect_to candidate_petitioners_url( @petitioner.candidate ) }
-        format.xml  { render :xml => @petitioner, :status => :created, :location => @petitioner }
+      if petitioner.save
+        format.html { redirect_to candidate_petitioners_url( petitioner.candidate ), flash: { success: 'Petitioner created.' } }
+        format.xml  { render xml: petitioner, status: :created, location: petitioner }
       else
         format.html { render :action => "new" }
-        format.xml  { render :xml => @petitioner.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: petitioner.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -58,13 +45,12 @@ class PetitionersController < ApplicationController
   # PUT /petitioners/:id.xml
   def update
     respond_to do |format|
-      if @petitioner.update_attributes(params[:petitioner])
-        flash[:notice] = 'Petitioner was successfully updated.'
-        format.html { redirect_to candidate_petitioners_url( @petitioner.candidate ) }
+      if petitioner.update_attributes(params[:petitioner])
+        format.html { redirect_to candidate_petitioners_url( petitioner.candidate ), flash: { success: 'Petitioner updated.' } }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.xml  { render :xml => @petitioner.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: petitioner.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -72,35 +58,15 @@ class PetitionersController < ApplicationController
   # DELETE /petitioners/1
   # DELETE /petitioners/1.xml
   def destroy
-    @petitioner.destroy
+    petitioner.destroy
 
     respond_to do |format|
-      format.html { redirect_to candidate_petitioners_url( @petitioner.candidate ) }
+      format.html { redirect_to candidate_petitioners_url( petitioner.candidate ), flash: { success: 'Petitioner destroyed.' } }
       format.xml  { head :ok }
     end
   end
 
   private
-
-  def initialize_context
-    @candidate = Candidate.find params[:candidate_id] if params[:candidate_id]
-    @petitioner = Petitioner.find params[:id] if params[:id]
-  end
-
-  def initialize_index
-    @petitioners = Petitioner.where { candidate_id == my { @candidate.id } }.
-      page( params[:page] )
-    @q = params[:q] || Hash.new
-    @q.each do |k,v|
-      if !v.blank? && Petitioner::SEARCHABLE.include?( k.to_sym )
-        @petitioners = @petitioners.send k, v
-      end
-    end
-  end
-
-  def new_petitioner_from_params
-    @petitioner = @candidate.petitioners.build( params[:petitioner] )
-  end
 
 end
 

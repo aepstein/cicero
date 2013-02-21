@@ -1,41 +1,24 @@
-<p>
-  <b>Name:</b> <%=h @election.name %>
-</p>
-
-<p>
-  <b>Starts at:</b> <%=h @election.starts_at.to_formatted_s :us_ordinal %>
-</p>
-
-<p>
-  <b>Ends at:</b> <%=h @election.ends_at.to_formatted_s :us_ordinal %>
-</p>
-
-<p>
-  <b>Results available at:</b> <%=h @election.results_available_at.to_formatted_s :us_ordinal %>
-</p>
-
-<p>
-  <strong>Contact name:</strong> <%=h @election.contact_name %>
-</p>
-
-<p>
-	<strong>Contact email:</strong> <%=h @election.contact_email %>
-</p>
-
-<p>
-  <strong>Verify message:</strong>
-</p>
-  <%=markdown @election.verify_message %>
-
-<p>
-  <b>Ballots cast so far:</b> <%=h @election.ballots.size %><br/>
-</p>
+<%=content_tag :div, class: "tabbable", id: "election-#{election.id}" do %>
+  <%=content_tag :ul, class: "nav nav-tabs" do %>
+    <%=content_tag :li, content_tag(:a, "Overview", href: "#overview", data: { toggle: "tab" }), class: "active" %>
+    <%=content_tag :li, content_tag(:a, "Rolls", href: "#rolls", data: { toggle: "tab" }) %>
+    <%=content_tag :li, content_tag(:a, "Races", href: "#races", data: { toggle: "tab" }) %>
+  <% end %>
+  <%=content_tag :div, class: "tab-content" do %>
+    <%=content_tag :div, class: "tab-pane active", id: "overview" do %>
+      <%= render partial: "elections/overview", elections: election %>
+    <% end %>
+    <%=content_tag :div, class: "tab-pane", id: "rolls" do %>
+      <%= render partial: "elections/rolls", election: election %>
+    <% end %>
+    <%=content_tag :div, class: "tab-pane", id: "races" do %>
+      <%= render partial: "elections/races", election: election %>
+    <% end %>
+  <% end %>
+<% end %>
 
 <p>
 <%= link_to( 'Edit', edit_election_path(@election) ) if permitted_to? :edit, @election %> |
-<%= link_to 'List rolls', election_rolls_path(@election) %> |
-<%= link_to 'List races', election_races_path(@election) %> |
-<%= link_to 'List ballots', election_ballots_path(@election) %> |
-<%= link_to 'Back', elections_path %>
+<%= link_to 'List ballots', election_ballots_path(@election) %>
 </p>
 

@@ -35,6 +35,10 @@ class Ballot < ActiveRecord::Base
   validates :user, presence: true
   validates :user_id, uniqueness: { scope: :election_id }
 
+  after_create do |ballot|
+    UserMailer.ballot_verification( ballot ).deliver
+  end
+
   def confirmation
     @confirmation
   end

@@ -1,11 +1,6 @@
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-    </tr>
-  </thead>
-  <tbody>
-  <%= render :partial => 'candidate', :collection => candidates %>
-  </tbody>
-</table>
+<% if candidates.any? %>
+<%=content_tag :ul, render(partial: 'candidates/candidate', collection: candidates) %>
+<% else %>
+<%=content_tag :p, 'No candidates.' %>
+<% end %>
 

@@ -1,0 +1,7 @@
+<%= f.input :name %>
+<%= f.input :slots %>
+<%= f.input :is_ranked, as: :radio_buttons %>
+<%= f.association :roll, collection: f.object.election.rolls %>
+<%= f.input :description %>
+<%= cocoon_fields :candidates, insertable: true %>
+

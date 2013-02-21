@@ -8,16 +8,15 @@ FactoryGirl.define do
     contact_name "Elections Committee"
     contact_email "elections@example.com"
 
+    factory :current_election do
+    end
+
     factory :past_election do
       starts_at { Time.zone.now - 1.year }
-#      ends_at { starts_at + 2.days  }
-#      results_available_at { ends_at + 1.week }
     end
 
     factory :future_election do
       starts_at { Time.zone.now + 1.year }
-#      ends_at { starts_at + 2.days  }
-#      results_available_at { ends_at + 1.week }
     end
   end
 

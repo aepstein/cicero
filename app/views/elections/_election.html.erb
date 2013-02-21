@@ -1,4 +1,4 @@
-<%= table_row_tag do %>
+<%=content_tag :tr, id: "election-#{election.id}" do %>
   <td><%= election %></td>
   <td><%= link_to 'Show', election_url(election)%></td>
   <td><%= link_to( 'Edit', edit_election_path(election) ) if permitted_to? :update, election %></td>

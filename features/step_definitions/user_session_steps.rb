@@ -1,17 +1,25 @@
-Given /^I (?:am )?log(?:ged)? in as "(.*)" with password "(.*)"$/ do |net_id, password|
+Given /^I log in with net_id: "([^"]+)" and password: "([^"]+)"$/ do |net_id, password|
   unless net_id.blank?
-   step %{I go to the login page}
-   step %{I fill in "Net" with "#{net_id}"}
-   step %{I fill in "Password" with "#{password}"}
-   step %{I press "Login"}
+    visit login_path
+    fill_in "Net", with: net_id
+    fill_in "Password", with: password
+    click_button "Login"
   end
 end
 
-Given /^I log in as #{capture_model}$/ do |user|
-  step %{I log in as "#{model(user).net_id}" with password "secret"}
+Given /^I log in as the (admin|plain) user$/ do |type|
+  @current_user = case type
+  when 'admin'
+    create :user, admin: true, first_name: "Senior", last_name: "Administrator"
+  when 'staff'
+    create :user, staff: true
+  else
+    create :user
+  end
+  step %{I log in with net_id: "#{@current_user.net_id}" and password: "secret"}
 end
 
 When /^I log out$/ do
-  step %{I go to the logout page}
+  visit logout_path
 end
 

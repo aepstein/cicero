@@ -2,40 +2,22 @@ Feature: Manage elections
   In order to set up, monitor, and manage elections
   As an administrator
   I want to create, edit, list, and delete elections
-
-  Background:
-    Given a user: "admin" exists with admin: true
-    And a user: "regular" exists
-
-  Scenario Outline: Test permissions for candidates controller actions
-    Given a <when>election: "basic" exists with name: "Vital"
-    And I log in as user: "<user>"
-    And I am on the new election page
-    Then I should <create> authorized
-    Given I post on the elections page
-    Then I should <create> authorized
-    And I am on the edit page for election: "basic"
-    Then I should <update> authorized
-    Given I put on the page for election: "basic"
-    Then I should <update> authorized
-    Given I am on the page for election: "basic"
-    Then I should <show> authorized
-    And I should <update> "Edit"
-    Given I am on the elections page
-    Then I should <show> "Vital"
-    And I should <update> "Edit"
-    And I should <destroy> "Destroy"
-    And I should <create> "New election"
-    Given I delete on the page for election: "basic"
-    Then I should <destroy> authorized
+@wip
+  Scenario Outline: Test permissions for elections controller actions
+    Given a <tense> election exists
+    And I log in as the <role> user
+    Then I <see> see the election
+    And I <update> update the election
+    And I <create> create elections
+    And I <destroy> destroy the election
     Examples:
-      | when    | user    | create  | update  | destroy | show     |
-      |         | admin   | see     | see     | see     | see      |
-      |         | regular | not see | not see | not see | see      |
-      | past_   | admin   | see     | see     | see     | see      |
-      | past_   | regular | not see | not see | not see | see      |
-      | future_ | admin   | see     | see     | see     | see      |
-      | future_ | regular | not see | not see | not see | not see  |
+      |tense  |role |create |update |destroy|see    |
+      |current|admin|may    |may    |may    |may    |
+      |current|plain|may not|may not|may not|may    |
+      |past   |admin|may    |may    |may    |may    |
+      |past   |plain|may not|may not|may not|may    |
+      |future |admin|may    |may    |may    |may    |
+      |future |plain|may not|may not|may not|may not|
 
   Scenario: Register new election
     Given I log in as user: "admin"

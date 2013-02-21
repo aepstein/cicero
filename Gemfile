@@ -5,26 +5,22 @@ gem 'rake'
 gem 'activerecord-import'
 gem 'exception_notification'
 gem 'validates_timeliness'
-gem 'gettext'
 gem 'jquery-rails'
 gem 'squeel'
 gem 'ransack'
-gem 'formtastic'
-gem 'bluecloth'
 gem 'declarative_authorization'
-gem 'kaminari'
 gem 'rmagick'
-gem 'carrierwave'
 gem 'acts_as_list'
 gem 'daemons'
-gem 'bluecloth'
+gem 'carrierwave'
 gem 'whenever', require: false
 gem 'escape_utils'
-gem 'cornell-assemblies-rails',
-  git: 'git://assembly.cornell.edu/git/cornell-assemblies-rails.git'
+gem 'cornell_assemblies_rails',
+  git: 'git://assembly.cornell.edu/git/cornell-assemblies-rails.git',
+  branch: '0-0-3'
 gem 'cornell-assemblies-branding',
-  git: 'git://assembly.cornell.edu/git/cornell-assemblies-branding.git'
-gem 'cornell_netid'
+  git: 'git://assembly.cornell.edu/git/cornell-assemblies-branding.git',
+  branch: '0-0-3'
 group :assets do
   gem 'sass-rails'
   gem 'coffee-rails'
@@ -42,7 +38,6 @@ group :test do
   gem 'database_cleaner', require: false
   gem 'spork', require: false
   gem 'factory_girl_rails', require: false
-  gem 'pickle', require: false
   gem 'email_spec', require: false
   gem 'launchy'
 end

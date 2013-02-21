@@ -9,7 +9,8 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :rolls, order: 'rolls.name'
   has_many :elections, through: :ballots do
     def allowed
-      Election.current.allowed_for_user_id(proxy_association.owner.id) - self
+      Election.current.allowed_for_user_id(proxy_association.owner.id).
+        where { |e| e.id.not_in( proxy_association.owner.ballots.select { election_id } ) }
     end
   end
 

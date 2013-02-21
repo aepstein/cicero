@@ -1,27 +1,17 @@
+<%= content_tag :div, id: "candidate-#{candidate}" %>
+<%=image_tag candidate.picture.url(:thumb), class: 'candidate-thumb' %>
 <p>
-  <b>Race:</b> <%=h @candidate.race %>
-</p>
-
-<p>
-  <b>Name:</b> <%=h @candidate.name %>
+  <b>Name:</b> <%=h candidate.name %>
 </p>
 
 <p>
   <b>Statement:</b>
 </p>
 
-<%=markdown @candidate.statement %>
+<%=markdown candidate.statement %>
 
 <p>
-  <b>Disqualified?</b> <%= @candidate.disqualified? ? 'Yes' : 'No' %>
+  <b>Disqualified?</b> <%= candidate.disqualified? ? 'Yes' : 'No' %>
 </p>
-
-<p><b>Picture:</b> <%= @candidate.picture? ? 'Yes'.html_safe + image_tag(@candidate.picture.url(:small)) : 'No' %></p>
-
-<p>
-<% if permitted_to? :edit, @candidate %>
-<%= link_to 'Edit', edit_candidate_path( @candidate ) %> |
 <% end %>
-<%= link_to 'Back', race_candidates_path( @candidate.race ) %>
-</p>
 

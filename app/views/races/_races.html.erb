@@ -1,14 +1,8 @@
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Slots</th>
-<th>Ranked?</th>
-<th>Roll</th>
-</tr>
-</thead>
-<tbody>
-<%= render :partial => 'race', :collection => races %>
-</tbody>
-</table>
+<% if races.any? %>
+<%=content_tag :ul do %>
+<%=render partial: 'races/race', collection: races %>
+<% end %>
+<% else %>
+<%=content_tag :p, "No races." %>
+<% end %>
 
