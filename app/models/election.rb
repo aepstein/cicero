@@ -45,7 +45,7 @@ class Election < ActiveRecord::Base
           heading = candidate.name.gsub(/#{net_id}/,'[[NetId:\0 | \0]]')
           "!!! #{heading}\n" +
           "%rfloat width=\"150px\"% Attach:#{Time.zone.today.year}#{net_id.upcase}.jpg\"Photo of #{name}\"\n\n" +
-          candidate.statement
+          candidate.statement[0..1250]
         else
           "No output for #{candidate.name}"
         end
