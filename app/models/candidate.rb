@@ -15,6 +15,18 @@ class Candidate < ActiveRecord::Base
   validates :name, presence: true, uniqueness: { scope: :race_id }
   validates :race, presence: true
 
+  def truncated_statement(chars)
+    n = 0
+    statement.chars.inject("") do |memo, char|
+      n += 1 unless char ~= /\s/
+      if n > chars
+        memo
+      else
+        memo << char
+      end
+    end
+  end
+
   def to_s; name; end
 
   def <=>(other); name <=> other.name; end
