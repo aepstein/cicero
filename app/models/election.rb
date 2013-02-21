@@ -35,6 +35,24 @@ class Election < ActiveRecord::Base
   validates :contact_email, format: {
     with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, allow_nil: false }
 
+  def to_pmwiki
+    races.map { |race|
+      "(:title #{race.name}:)\n"
+      candidates.map { |candidate|
+        net_id = candidate.name.to_net_ids.first
+        if net_id
+          name = candidate.name.gsub(/^(.*)\s+\(#{net_id}\)\s*$/,'\1').strip
+          heading = candidate.name.gsub(/#{net_id}/,'[[NetId:\0 | \0]]')
+          "!!! #{heading}\n" +
+          "%rfloat width=\"150px\"% Attach:#{Time.zone.today.year}#{net_id.upcase}.jpg\"Photo of #{name}\"\n\n" +
+          candidate.statement
+        else
+          "No output for #{candidate.name}"
+        end
+      }.join("\n")
+    }.join("\n")
+  end
+
   def past?; ends_at < Time.zone.now; end
 
   def to_s; name; end
