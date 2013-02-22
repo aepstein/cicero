@@ -1,4 +1,4 @@
-<%= form.inputs :name => form.object.race.name do %>
+<%= field_set_tag form.object.race.name do %>
 <li>
 <%=markdown form.object.race.description %>
 
@@ -34,9 +34,9 @@ You may choose up to <%=h form.object.race.available_slots %>.
 <% end %>
 <% end %>
 <ol>
-<%= form.input :race_id, :as => :hidden %>
-<%= form.semantic_fields_for :votes, form.object.votes.sort do |subform| %>
-  <%= render :partial => 'votes/form', :object => subform, :locals => { :race => form.object.race } %>
+<%= form.input :race_id, as: :hidden %>
+<%= form.simple_fields_for :votes, form.object.votes.sort do |subform| %>
+  <%= render partial: 'votes/form', object: subform, locals: { race: form.object.race } %>
 <% end %>
 </ol>
 </li>

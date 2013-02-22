@@ -1,9 +1,9 @@
 class BallotsController < ApplicationController
   before_filter :require_user
   before_filter :populate_sections, only: [ :new, :preview ]
-  expose( :election ) { Election.find(params[:election_id]) if params[:election_id] }
-  expose(:race) { Race.find(params[:race_id]) if params[:race_id] }
-  expose(:user) { User.find(params[:user_id]]) if params[:user_id] }
+  expose( :election ) { Election.find( params[:election_id] ) if params[:election_id] }
+  expose( :race ) { Race.find( params[:race_id] ) if params[:race_id] }
+  expose( :user ) { User.find( params[:user_id] ) if params[:user_id] }
   expose( :context ) { election || race || user }
   expose :q_scope do
     scope = context.ballots

@@ -7,8 +7,8 @@ Given /^I log in with net_id: "([^"]+)" and password: "([^"]+)"$/ do |net_id, pa
   end
 end
 
-Given /^I am the (admin|plain) user$/ do
-  @current_user = case type
+Given /^I am the (admin|plain) user$/ do |role|
+  @current_user = case role
   when 'admin'
     create :user, admin: true, first_name: "Senior", last_name: "Administrator"
   when 'staff'
@@ -22,8 +22,8 @@ When /^I log in$/ do
   step %{I log in with net_id: "#{@current_user.net_id}" and password: "secret"}
 end
 
-Given /^I log in as the (admin|plain) user$/ do |type|
-  step %{I am the #{type} user}
+Given /^I log in as the (admin|plain) user$/ do |role|
+  step %{I am the #{role} user}
   step %{I log in}
 end
 

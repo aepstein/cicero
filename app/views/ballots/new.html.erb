@@ -1,17 +1,8 @@
-<h2>Ballot of <%= @ballot.user %> for <%= @ballot.election %> election</h2>
+<%=content_tag :h1, "Ballot of #{ballot.user} for #{ballot.election}" %>
 
-<%= semantic_form_for( @ballot, :url => confirm_new_election_ballot_path( @ballot.election ) ) do |f| %>
-
-  <%= render "shared/error_messages", :target => f.object %>
-
-  <%= f.inputs do  %>
-    <%= render :partial => 'form', :object => f %>
-  <% end %>
-
-  <%= f.actions do %>
-    <%= f.action :submit, label:  'Continue'%>
-  <% end %>
+<%= simple_form_for( ballot, url: confirm_new_election_ballot_path( ballot.election ) ) do |f| %>
+  <%= render "shared/error_messages", target: f.object %>
+  <%= render partial: 'form', object: f %>
+  <%= f.button :wrapped, label: 'Continue', cancel: home_path %>
 <% end %>
-
-<hr/>
 

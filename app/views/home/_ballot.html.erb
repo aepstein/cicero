@@ -1,0 +1,4 @@
+<%=content_tag :li, id: "ballot-#{ballot.id}" do %>
+  <%= ballot.election %> election on <%= ballot.created_at.to_s(:us_ordinal) %>
+<% end %>
+

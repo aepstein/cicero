@@ -1,15 +1,15 @@
 <%
 # TODO: popup links using jquery
 %>
-<%= form.input :candidate_id, :as => :hidden %>
+<%= form.input :candidate_id, as: :hidden %>
 <% if form.object.frozen? %>
-<%= form.input :rank, :as => :hidden, :label => form.object.candidate.name %><%= form.object.candidate %>
+<%= form.input :rank, as: :hidden, label: form.object.candidate.name %><%= form.object.candidate %>
 <% elsif race.is_ranked? -%>
-<%= form.input :rank, :as => :select, :required => false,
-      :label => link_to( form.object.candidate.name, popup_candidate_path(form.object.candidate), :target => '_blank' ),
-      :include_blank => true, :collection => form.object.candidate.race.rank_options %>
+<%= form.input :rank, as: :select, required: false,
+      label: link_to( form.object.candidate.name, popup_candidate_path(form.object.candidate), target: '_blank' ),
+      include_blank: true, collection: form.object.candidate.race.rank_options %>
 <% else -%>
-<%= form.input :rank, :as => :boolean, :required => false,
-   :label => link_to( form.object.candidate.name, popup_candidate_path(form.object.candidate), :target => '_blank' ) %>
+<%= form.input :rank, as: :boolean, required: false,
+   label: link_to( form.object.candidate.name, popup_candidate_path(form.object.candidate), target: '_blank' ) %>
 <% end -%>
 

@@ -1,2 +1,5 @@
-<%=content_tag :li, link_to( "#{election.name} until #{election.ends_at}", new_election_ballot_url(election) ) %>
+<%=content_tag :li,
+  link_to( "#{election.name} until #{election.ends_at}",
+    new_election_ballot_url(election) ),
+  id: "election-#{election.id}" %>
 
