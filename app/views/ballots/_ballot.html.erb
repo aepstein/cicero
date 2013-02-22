@@ -1,11 +1,11 @@
-<%= table_row_tag do %>
-<td><%=h ballot.user.net_id %></td>
-<td><%=h ballot.user.first_name %></td>
-<td><%=h ballot.user.last_name %></td>
-<td><%=h ballot.created_at.to_s :us_ordinal %></td>
-<td><%= link_to 'Show', ballot_path(ballot) %></td>
-<td><%= link_to( 'Destroy', ballot_path(ballot),
-          data: { confirm: 'Are you sure?' },
-          method: :delete ) if permitted_to? :destroy, ballot %></td>
+<%=content_tag :tr, id: "ballot-#{ballot.id}" do %>
+  <%=content_tag :td, ballot.user.net_id %>
+  <%=content_tag :td, ballot.user.first_name %>
+  <%=content_tag :td, ballot.user.last_name %>
+  <%=content_tag :td, ballot.created_at.to_s( :us_ordinal ) %>
+  <td><%= link_to 'Show', ballot_path(ballot) %></td>
+  <td><%= link_to( 'Destroy', ballot_path(ballot),
+            data: { confirm: 'Are you sure?' },
+            method: :delete ) if permitted_to? :destroy, ballot %></td>
 <% end %>
 

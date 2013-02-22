@@ -1,14 +1,10 @@
-<h2>Verification of submitted ballot</h2>
+<%=content_tag :h1, "Verification of submitted ballot" %>
 
 <p>
-You, <%=h @ballot.user.name %>, successfully cast this ballot in the <%=h @ballot.election %> election on
-<%=h @ballot.created_at.to_s :us_ordinal %>.  If you have questions or need further assistance, please email
-<%=mail_to @ballot.election.contact_email, @ballot.election.contact_name %>.
+You, <%=h ballot.user.name %>, successfully cast this ballot in the <%=h ballot.election %> election on
+<%=h ballot.created_at.to_s :us_ordinal %>.  If you have questions or need further assistance, please email
+<%=mail_to ballot.election.contact_email, ballot.election.contact_name %>.
 </p>
 
-<%=markdown @ballot.election.verify_message %>
-
-<p>
-<%= link_to 'Back', my_elections_path %>
-</p>
+<%=markdown ballot.election.verify_message %>
 

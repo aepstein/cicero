@@ -5,9 +5,9 @@ class BallotsController < ApplicationController
   expose( :race ) { Race.find( params[:race_id] ) if params[:race_id] }
   expose( :user ) { User.find( params[:user_id] ) if params[:user_id] }
   expose( :context ) { election || race || user }
+  expose( :q ) { params[:q] || Hash.new }
   expose :q_scope do
     scope = context.ballots
-    q = params[:search] || Hash.new
     q.each do |k,v|
       if !v.blank? && Ballot::SEARCHABLE.include?( k.to_sym )
         scope = scope.send k, v
@@ -30,8 +30,12 @@ class BallotsController < ApplicationController
   end
   filter_access_to :new, :create, :edit, :update, :destroy, :show, :confirm,
     :preview, load_method: :ballot, attribute_check: true
-  filter_access_to :index, load_method: :context, require: :tabulate,
-    attribute_check: true
+  filter_access_to :index do
+    permitted_to! :show, user if user
+    permitted_to! :tabulate, race if race
+    permitted_to! :tabulate, election if election
+    true
+  end
 
   # GET /elections/:election_id/ballots
   # GET /elections/:election_id/ballots.xml

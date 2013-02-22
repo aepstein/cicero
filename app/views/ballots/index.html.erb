@@ -1,24 +1,20 @@
-<h2>Listing ballots for <%=h @context %></h2>
+<%=content_tag :h1, "Ballots for #{context}" %>
 
-<%= form_tag polymorphic_path([ @context, :ballots ]), :method => :get do |f| %>
+<%= form_tag polymorphic_path([ context, :ballots ]), method: :get do |f| %>
   <p>
-    <%= label_tag 'search[user_name_contains]', 'Name' %>
-    <%= text_field_tag 'search[user_name_contains]', @search['user_name_contains'] %>
+    <%= label_tag 'q[user_name_contains]', 'Name' %>
+    <%= text_field_tag 'q[user_name_contains]', q['user_name_contains'] %>
     <%= submit_tag 'Search' %>
   </p>
 <% end %>
 
-<%= paginate @ballots %>
+<%= paginate ballots %>
 
-<%= render :partial => "ballots", :object => @ballots %>
+<%= render :partial => "ballots", :object => ballots %>
 
-<%= paginate @ballots %>
+<%= paginate ballots %>
 
 <hr />
 
-<p>
-<% if @context %>
-<%= link_to h("Back to #{@context}"), @context %>
-<% end %>
-</p>
+<%=content_tag :p, link_to( context.to_s, context ) if context %>
 

@@ -2,6 +2,18 @@ Given /^(?:an? )(current|future|past) election exists$/ do |tense|
   @election = create("#{tense}_election".to_sym)
 end
 
+Given /^I have an? (admin|voter|plain) relationship to the election$/ do |relation|
+  case relation
+  when 'admin', 'plain'
+    step %{I log in as the #{relation} user}
+  else
+    step %{I log in as the plain user}
+  end
+  if relation == 'voter'
+    create(:roll, election: @election).users << @current_user
+  end
+end
+
 Then /^I may( not)? see the election$/ do |negate|
   visit(election_url(@election))
   step %{I should#{negate} be authorized}

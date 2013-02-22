@@ -1,4 +1,4 @@
-<h2>Confirm ballot of <%=h @ballot.user.name %> for <%=h @ballot.election.name %></h2>
+<%=content_tag :h1, "Confirm ballot of #{ballot.user.name} for #{ballot.election.name}" %>
 
 <p>
 Please review the ballot below to assure it correctly reflects your preferences for the election.
@@ -6,19 +6,13 @@ When you have finished please click the link at the end to cast your ballot.  Yo
 further modify your ballot after you have confirmed.
 </p>
 
-<%= semantic_form_for( @ballot, :url => election_ballots_path( @ballot.election ) ) do |f| %>
-
-<%= render :partial => 'form', :object => f %>
-
-<%= f.inputs name: "Confirmation" do %>
-<%= f.input :confirmation, :as => :radio, :label => 'I want to',
-      :collection => [ ['Cast my votes for these choices', true],
-                       ['Make changes to these choices', false] ] %>
-<% end %>
-
-<%= f.actions do %>
-<%= f.action :submit, label:  'Continue' %>
-<% end %>
-
+<%= simple_form_for( ballot, url: election_ballots_path( ballot.election ) ) do |f| %>
+  <%= render partial: 'form', object: f %>
+  <%= field_set_tag "Confirmation" do %>
+  <%= f.input :confirmation, as: :radio_buttons, label: 'I want to',
+       collection: [ ['Cast my votes for these choices', true ],
+                     ['Make changes to these choices'  , false] ] %>
+  <% end %>
+  <%= f.button :wrapped, label: 'Continue', cancel: home_path %>
 <% end %>
 

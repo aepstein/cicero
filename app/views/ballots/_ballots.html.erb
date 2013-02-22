@@ -1,14 +1,14 @@
 <table>
-<thead>
-<tr>
-<th>Net id</th>
-<th>First name</th>
-<th>Last name</th>
-<th>When</th>
-</tr>
-</thead>
-<tbody>
-<%= render :partial => 'ballots/ballot', :collection => ballots %>
-</tbody>
+  <thead>
+    <tr>
+      <th>Net id</th>
+      <th>First name</th>
+      <th>Last name</th>
+      <th>When</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render partial: 'ballots/ballot', collection: ballots %>
+  </tbody>
 </table>
 
