@@ -1,38 +1,31 @@
 <p>
-  <b>Net id:</b> <%=h @user.net_id %>
+  <b>Net id:</b> <%=h user.net_id %>
 </p>
 
 <p>
-	<b>Email:</b> <%=h @user.email %>
+	<b>Email:</b> <%=h user.email %>
 </p>
 
 <p>
-  <b>First name:</b> <%=h @user.first_name %>
+  <b>First name:</b> <%=h user.first_name %>
 </p>
 
 <p>
-  <b>Last name:</b> <%=h @user.last_name %>
+  <b>Last name:</b> <%=h user.last_name %>
 </p>
 
-<p><b>Admin?</b> <%= @user.admin ? 'Yes' : 'No' %> </p>
+<p><b>Admin?</b> <%= user.admin ? 'Yes' : 'No' %> </p>
 
-<h3>Allowed elections</h3>
+<h2>Allowed elections</h2>
 
-<% Election.allowable.all(:include => :rolls, :order => 'rolls.name ASC').each do |election| %>
-  <% if @user.rolls.where( :election_id => election.id ).length > 0 %>
-  <h4><%= election.name %></h4>
+<% Election.allowable.all(include: :rolls, order: 'rolls.name ASC').each do |election| %>
+  <% if user.rolls.where( election_id: election.id ).length > 0 %>
+  <h3><%= election.name %></h3>
       <ul>
-      <% @user.rolls.where( :election_id => election.id ).each do |roll| %>
+      <% user.rolls.where( election_id: election.id ).each do |roll| %>
         <li><%= roll.name %></li>
       <% end %>
       </ul>
   <% end %>
 <% end %>
-
-<p>
-<% if permitted_to? :edit, @user %>
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<% end %>
-<%= link_to 'Back', users_path %>
-</p>
 

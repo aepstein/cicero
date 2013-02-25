@@ -1,21 +1,18 @@
-<h2>Listing users <%= "for #{@roll}" if @roll %></h2>
+<h1>Listing users <%= "for #{roll}" if roll %></h1>
 
-<%= form_tag polymorphic_path([ @roll, :users ]), :method => :get do |f| %>
+<%= form_tag polymorphic_path([ roll, :users ]), method: :get do |f| %>
   <p>
-    <%= label_tag 'search[name_contains]', 'Name' %>
-    <%= text_field_tag 'search[name_contains]', @search['name_contains'] %>
+    <%= label_tag 'q[name_contains]', 'Name' %>
+    <%= text_field_tag 'q[name_contains]', q['name_contains'] %>
     <%= submit_tag 'Search' %>
   </p>
 <% end %>
 
-<%= paginate @users %>
+<%= paginate users %>
 
-<hr/>
+<%= render partial: "users/users", object: users %>
 
-<%= render :partial => "users/users", :object => @users %>
-<hr />
-
-<%= paginate @users %>
+<%= paginate users %>
 
 <p>
 <% if permitted_to? :create, User.new %>

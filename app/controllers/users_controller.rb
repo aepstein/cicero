@@ -21,9 +21,9 @@ class UsersController < ApplicationController
     if params[:id]
       User.find params[:id]
     else
-      User.new do |user|
-        user.assign_attributes params[:user], as: current_user_attr_role
-      end
+      out = User.new
+      user.assign_attributes params[:user], as: current_user_attr_role
+      out
     end
   end
   filter_access_to :new, :create, :edit, :update, :destroy, :show,

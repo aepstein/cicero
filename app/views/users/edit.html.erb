@@ -1,15 +1,6 @@
-<h2>Editing user</h2>
+<%=content_tag :h1, "Edit user" %>
 
-<%= semantic_form_for(@user) do |f| %>
-
-<%= render :partial => 'form', :object => f %>
-
+<%= simple_form_for(user) do |f| %>
+  <%= render partial: 'form', object: f %>
 <% end %>
-
-<hr/>
-
-<p>
-<%= link_to 'Show', @user %> |
-<%= link_to 'Back', users_path %>
-</p>
 

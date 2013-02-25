@@ -1,4 +1,4 @@
-<table>
+<%=content_tag :table, id: "users" do %>
   <thead>
     <tr>
       <th>Net id</th>
@@ -7,7 +7,7 @@
     </tr>
   </thead>
   <tbody>
-  <%= render :partial => 'user', :collection => users %>
+  <%= render partial: 'user', collection: users %>
   </tbody>
-</table>
+<% end %>
 
