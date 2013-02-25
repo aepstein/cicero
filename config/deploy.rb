@@ -4,7 +4,7 @@ require "bundler/capistrano"
 set :application, "cicero"
 role :app, "kvm02.assembly.cornell.edu"
 role :web, "kvm02.assembly.cornell.edu"
-role :db,  "kvm02.assembly.cornell.edu", :primary => true
+role :db,  "kvm02.assembly.cornell.edu", primary: true
 
 set :user, "www-data"
 set :deploy_to, "/var/www/assembly/#{application}"
@@ -32,7 +32,7 @@ namespace :deploy do
   end
 
   desc "Update the crontab file"
-  task :update_crontab, :roles => :db do
+  task :update_crontab, roles: :db do
     run "cd #{release_path} && whenever --update-crontab #{application}"
   end
 end

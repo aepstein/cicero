@@ -64,3 +64,88 @@ Then /^I may( not)? destroy the ballot$/ do |negate|
   step %{I should#{negate} be authorized for the ballot}
 end
 
+Given /^I can vote in an? (un)?ranked election$/ do |unranked|
+  step %{I log in as the plain user}
+  @election = create(:election, name: "2012 President",
+    verify_message: "Congrats on *voting*!" )
+  @race = create( :race, election: @election, name: 'President',
+    is_ranked: ( unranked.present? ? false : true ) )
+  @race.roll.users << @current_user
+  create :candidate, name: "Barack Obama", race: @race
+  create :candidate, name: "Mitt Romney", race: @race
+end
+
+When /^I fill in an? (in)?complete (un)?ranked ballot$/ do |incomplete, unranked|
+  visit new_election_ballot_url( @election )
+  within_fieldset("President") do
+    if unranked.present?
+      check( "Barack Obama" ) unless incomplete.present?
+    else
+      select "1", from: "Barack Obama"
+      select( "2", from: "Mitt Romney" ) unless incomplete.present?
+    end
+  end
+  click_button "Continue"
+end
+
+Then /^I should see the confirmation page for the (in)?complete (un)?ranked ballot$/ do |incomplete, unranked|
+  if incomplete.present?
+    within("div.warning_messages:nth-of-type(1)") do
+      page.should have_text(
+        "1 fewer choices are selected than the #{unranked.present? ? 1 : 2} " +
+        "allowed for President"
+      )
+    end
+  else
+    page.should have_no_selector ".warning_messages"
+  end
+end
+
+When /^I change my choices for the (in)?complete (un)?ranked ballot$/ do |incomplete, unranked|
+  choose "Make changes to these choices"
+  click_button "Continue"
+  within_fieldset("President") do
+    if unranked.present?
+      uncheck "Barack Obama"
+      check( "Mitt Romney" ) unless incomplete.present?
+    else
+      select "1", from: "Mitt Romney"
+      if incomplete.present?
+        select "", from: "Barack Obama"
+      else
+        select "2", from: "Barack Obama"
+      end
+    end
+  end
+  click_button "Continue"
+end
+
+When /^I confirm my choices$/ do
+  choose "Cast my votes for these choices"
+  click_button "Continue"
+end
+
+Then /^I should have successfully cast my (un)?changed (in)?complete (un)?ranked ballot$/ do |unchanged, incomplete, unranked|
+  page.should have_text "Ballot cast."
+  page.should have_text "Congrats on voting!"
+  @ballot = Ballot.find( URI.parse(current_url).path.match(/[\d]+$/)[0].to_i )
+  section = @ballot.sections.first
+  if unranked.present?
+    if incomplete.present?
+      section.votes.length.should eql 0
+    else
+      section.votes.length.should eql 1
+      section.votes.first.candidate.name.should eql ( unchanged.present? ? "Barack Obama" : "Mitt Romney" )
+    end
+  else
+    if incomplete.present?
+      section.votes.length.should eql 1
+      section.votes.first.candidate.name.should eql ( unchanged.present? ? "Barack Obama" : "Mitt Romney" )
+    else
+      section.votes.length.should eql 2
+      section.votes.first.candidate.name.should eql ( unchanged.present? ? "Barack Obama" : "Mitt Romney" )
+      section.votes.last.candidate.name.should eql ( unchanged.present? ? "Mitt Romney" : "Barack Obama" )
+    end
+  end
+end
+
