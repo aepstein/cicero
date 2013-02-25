@@ -10,8 +10,32 @@ class Race < ActiveRecord::Base
     def open_to(user)
       self.reject { |c| user.candidates.include?(c) }
     end
+    def to_blt_map
+      inject({}) do |memo, c|
+        memo[ c.id ] = to_a.index(c) + 1
+        memo
+      end
+    end
   end
-  has_many :sections, inverse_of: :race
+  has_many :sections, inverse_of: :race do
+    def to_blt_values
+      sql = "SELECT sections.id, votes.rank, votes.candidate_id FROM " +
+        "sections LEFT JOIN votes ON sections.id = votes.section_id " +
+        "WHERE sections.race_id = #{proxy_association.owner.id} " +
+        "ORDER BY sections.id ASC, votes.rank ASC"
+      last_section_id = nil
+      candidates_map = proxy_association.owner.candidates.to_blt_map
+      connection.select_rows( sql ).inject([]) do |memo, vote|
+        if last_section_id == vote.first
+          memo.last << candidates_map[ vote.last ]
+          memo
+        else
+          last_section_id = vote.first
+          memo << [ candidates_map[ vote.last ] ]
+        end
+      end
+    end
+  end
   has_many :ballots, through: :sections
 
   accepts_nested_attributes_for :candidates, allow_destroy: true
@@ -68,10 +92,13 @@ class Race < ActiveRecord::Base
     candidates.disqualified.each do |candidate|
       output += "-#{candidates.index(candidate) + 1}\r\n"
     end
-    sections.includes(:votes).all.each do |section|
-      section.race = self
-      output += "1 #{section.to_blt} 0\r\n"
+    sections.to_blt_values.each do |section|
+      output += "1 #{section.join " "} 0\r\n".squeeze(" ")
     end
+#    sections.includes(:votes).all.each do |section|
+#      section.race = self
+#      output += "1 #{section.to_blt} 0\r\n"
+#    end
     output += "0\r\n"
     candidates.each do |candidate|
       output += "\"#{candidate.name}\"\r\n"

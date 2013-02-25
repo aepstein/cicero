@@ -15,6 +15,7 @@ gem 'daemons'
 gem 'carrierwave'
 gem 'whenever', require: false
 gem 'escape_utils'
+gem 'valium'
 gem 'cornell_assemblies_rails',
   git: 'git://assembly.cornell.edu/git/cornell-assemblies-rails.git',
   branch: '0-0-3'
