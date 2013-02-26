@@ -4,7 +4,7 @@ class Candidate < ActiveRecord::Base
   attr_readonly :race_id
 
   belongs_to :race, inverse_of: :candidates
-  has_many :votes, inverse_of: :candidate, dependent: :destroy
+  has_many :votes, inverse_of: :candidate, dependent: :restrict
   has_many :sections, through: :votes
   has_many :petitioners, inverse_of: :candidate
   has_many :users, through: :petitioners

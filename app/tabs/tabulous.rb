@@ -23,7 +23,8 @@ Tabulous.setup do |config|
       [ :candidates    ,:all_actions,:elections_subtab ],
       [ :users         ,:all_actions,:users_subtab     ],
       [ :user_sessions ,:new        ,:login_tab        ],
-      [ :user_sessions ,:create     ,:login_tab        ]
+      [ :user_sessions ,:create     ,:login_tab        ],
+      [ :user_sessions ,:sso_failure,:home_tab         ]
     ]
   end
 

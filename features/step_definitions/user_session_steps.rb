@@ -31,3 +31,33 @@ When /^I log out$/ do
   visit logout_path
 end
 
+Given /^I have a single sign on net id$/ do
+  @net_id = 'zzz999'
+  visit home_path( params: { sso_net_id: @net_id } )
+end
+
+When /^the single sign on net id is associated with a user$/ do
+  @current_user = create( :user, net_id: @net_id )
+end
+
+Then /^I can log out$/ do
+  step %{I log out}
+  URI.parse(current_url).path.should eql '/login'
+  within '.alert' do
+    page.should have_content "You logged out successfully."
+  end
+end
+
+Then /^I should be logged in$/ do
+  URI.parse(current_url).path.should eql '/'
+  within '.alert' do
+    page.should have_content "You logged in successfully."
+  end
+end
+
+
+Then /^I should automatically log in when required$/ do
+  visit home_path
+  current_path.should eql home_path
+end
+

@@ -37,6 +37,7 @@ Cicero::Application.routes.draw do
   end
   resource :user_session, only: [ :create ]
 
+  match 'sso_failure', to: 'user_sessions#sso_failure', as: 'sso_failure'
   match 'login', to: 'user_sessions#new', as: 'login'
   match 'logout', to: 'user_sessions#destroy', as: 'logout'
   match 'home', to: 'home#home', as: 'home'

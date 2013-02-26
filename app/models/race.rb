@@ -17,7 +17,7 @@ class Race < ActiveRecord::Base
       end
     end
   end
-  has_many :sections, inverse_of: :race do
+  has_many :sections, inverse_of: :race, dependent: :restrict do
     def to_blt_values
       sql = "SELECT sections.id, votes.rank, votes.candidate_id FROM " +
         "sections LEFT JOIN votes ON sections.id = votes.section_id " +
