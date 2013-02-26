@@ -1,10 +1,10 @@
 <%= render "shared/error_messages", target: form.object %>
 
-<%= form.input :net_id %>
+<%= form.input :net_id, label: "Net id" %>
 <%= form.input :email %>
 <%= form.input :first_name %>
 <%= form.input :last_name %>
-<%= form.input :admin, as: :radio_buttons if current_user.admin? %>
+<%= form.input :admin, as: :radio_buttons, label: "Administrator?" if current_user.admin? %>
 <%= form.input :password, label: "Set Password" %>
 <%= form.input :password_confirmation, as: :password, label: "Confirm Password" %>
 

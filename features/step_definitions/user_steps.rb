@@ -28,7 +28,7 @@ Then /^I may( not)? see the user$/ do |negate|
 end
 
 Then /^I may( not)? create users$/ do |negate|
-  visit(new_user_url)
+  visit new_user_url
   step %{I should#{negate} be authorized}
   visit(users_url)
   if negate.blank?
@@ -67,7 +67,9 @@ Then /^I may( not)? destroy the user$/ do |negate|
 end
 
 When /^I create a user as (admin|staff)$/ do |role|
-  visit(new_user_path)
+  create :roll, name: "Current Roll", election: create(:current_election, name: "Current Election")
+  @past_roll = create( :roll, name: "Past Roll", election: create(:past_election, name: "Past Election") )
+  visit new_user_path
   fill_in "First name", with: "Andrew"
   fill_in "Last name", with: "White"
   fill_in "Net id", with: "fake"
@@ -79,6 +81,10 @@ When /^I create a user as (admin|staff)$/ do |role|
     within_control_group("Administrator?") { page.should have_selector "input.disabled" }
 #    within_control_group("Staff?") { page.should have_selector "input.disabled" }
   end
+  within_fieldset("Current Election") do
+    check "Current Roll"
+  end
+  page.should have_no_fieldset "Past Election"
   click_button 'Create'
   @user = User.find( URI.parse(current_url).path.match(/[\d]+$/)[0].to_i )
 end
@@ -101,14 +107,8 @@ end
 
 When /^I fill in the user as (admin|staff|owner)$/ do |role|
   fill_in "First name", with: "David"
-  fill_in "Middle name", with: "J"
   fill_in "Last name", with: "Skorton"
   fill_in "Email", with: "dj@example.com"
-  fill_in "Mobile phone", with: "607-555-1213"
-  fill_in "Work phone", with: "607-555-1235"
-  fill_in "Home phone", with: "607-555-4322"
-  fill_in "Work address", with: "101 Day Hall"
-  fill_in "Date of birth", with: "1980-06-04"
   if role == 'admin'
     within_control_group("Administrator?") { choose "No" }
 #    within_control_group("Staff?") { choose "No" }
@@ -119,9 +119,13 @@ When /^I fill in the user as (admin|staff|owner)$/ do |role|
   if role == 'owner'
   else
   end
+  within_fieldset("Current Election") do
+    uncheck "Current Roll"
+  end
 end
 
 When /^I update the user as (admin|staff|owner)$/ do |role|
+  @past_roll.users << @user
   visit(edit_user_path(@user))
   step %{I fill in the user as #{role}}
   click_button 'Update'
@@ -134,10 +138,14 @@ Then /^I should see the edited user as (admin|staff|owner)$/ do |role|
     page.should have_text "Last name: Skorton"
     page.should have_text "Email: dj@example.com"
     page.should have_text "Administrator? No"
+    page.should have_no_text "Current Election"
+    page.should have_no_text "Current Roll"
     if role == 'owner'
     else
     end
   end
+  @user.association(:rolls).reset
+  @user.rolls.should include @past_roll
 end
 
 Given /^there are (\d+) users$/ do |quantity|
@@ -146,7 +154,7 @@ Given /^there are (\d+) users$/ do |quantity|
 end
 
 When /^I "(.+)" the (\d+)(?:st|nd|rd|th) user$/ do |text, user|
-  visit(users_url)
+  visit users_url
   within("table > tbody > tr:nth-child(#{user.to_i})") do
     click_link "#{text}"
   end

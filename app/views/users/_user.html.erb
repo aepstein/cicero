@@ -1,7 +1,6 @@
 <%=content_tag :tr, id: "user-#{user.id}" do %>
+  <%=content_tag :td, user.name(:last_first) %>
   <%=content_tag :td, user.net_id %>
-  <%=content_tag :td, user.first_name %>
-  <%=content_tag :td, user.last_name %>
   <td><%= link_to 'Show', user %></td>
   <td><%= link_to 'Edit', edit_user_path(user) if permitted_to? :edit, user %></td>
   <td><%= link_to( 'Destroy', user, data: { confirm: 'Are you sure?' },

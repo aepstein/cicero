@@ -2,7 +2,7 @@ Feature: Manage users
   In order to represent people in the elections
   As a secure process
   I want to create, list, edit, and delete users
-@wip
+
   Scenario Outline: Access control
     Given a user exists to whom I have a <relation> relationship
     Then I <show> see the user
@@ -25,7 +25,7 @@ Feature: Manage users
       |admin|
 
   Scenario: Search users
-    Given I log in as the staff user
+    Given I log in as the admin user
     And there are 4 users
     # contains first name
     When I search for users with name "35"
@@ -49,7 +49,7 @@ Feature: Manage users
       | User 11, Sequenced33  |
       | User 12, Sequenced34  |
       | User 14, Sequenced36  |
-
+@wip
 Scenario: Add users to roll in bulk (from csv text)
     Given a roll exists
     And I log in as user: "admin"
@@ -62,7 +62,7 @@ Scenario: Add users to roll in bulk (from csv text)
     Then I should see the following users:
       | Net id | First name | Last name |
       | jd1    | John       | Doe       |
-
+@wip
   Scenario: Add users to roll in bulk (from csv file)
     Given a roll exists
     And I log in as user: "admin"

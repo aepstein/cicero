@@ -32,8 +32,13 @@ class User < ActiveRecord::Base
   validates :email, presence: true,
     format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i }
 
-  def name
-    ("#{first_name} #{last_name}").squeeze(' ')
+  def name(format=nil)
+    case format
+    when :last_first
+      "#{last_name}, #{first_name}".squeeze(' ')
+    else
+      "#{first_name} #{last_name}".squeeze(' ')
+    end
   end
 
   def net_id_name

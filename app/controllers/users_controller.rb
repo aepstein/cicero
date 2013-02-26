@@ -22,12 +22,12 @@ class UsersController < ApplicationController
       User.find params[:id]
     else
       out = User.new
-      user.assign_attributes params[:user], as: current_user_attr_role
+      out.assign_attributes params[:user], as: current_user_attr_role
       out
     end
   end
   filter_access_to :new, :create, :edit, :update, :destroy, :show,
-    attribute_check: true
+    attribute_check: true, load_method: :user
   filter_access_to :index do
     permitted_to! :show, roll if roll
     permitted_to! :index, :users

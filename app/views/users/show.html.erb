@@ -1,20 +1,22 @@
-<p>
-  <b>Net id:</b> <%=h user.net_id %>
-</p>
+<%=content_tag :div, id: "user-#{user.id}" do %>
+  <p>
+    <b>Net id:</b> <%= user.net_id %>
+  </p>
 
-<p>
-	<b>Email:</b> <%=h user.email %>
-</p>
+  <p>
+	  <b>Email:</b> <%= user.email %>
+  </p>
 
-<p>
-  <b>First name:</b> <%=h user.first_name %>
-</p>
+  <p>
+    <b>First name:</b> <%= user.first_name %>
+  </p>
 
-<p>
-  <b>Last name:</b> <%=h user.last_name %>
-</p>
+  <p>
+    <b>Last name:</b> <%= user.last_name %>
+  </p>
 
-<p><b>Admin?</b> <%= user.admin ? 'Yes' : 'No' %> </p>
+  <p><b>Administrator?</b> <%= user.admin ? 'Yes' : 'No' %> </p>
+<% end %>
 
 <h2>Allowed elections</h2>
 
@@ -23,7 +25,7 @@
   <h3><%= election.name %></h3>
       <ul>
       <% user.rolls.where( election_id: election.id ).each do |roll| %>
-        <li><%= roll.name %></li>
+        <%=content_tag :li, roll.name %>
       <% end %>
       </ul>
   <% end %>
