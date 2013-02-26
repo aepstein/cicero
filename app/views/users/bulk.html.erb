@@ -1,23 +1,34 @@
-<h2>Bulk add users to <%=h roll %></h2>
+<h1>Bulk add users to <%= roll %></h1>
 
-<%= form_tag bulk_create_roll_users_path( roll ), multipart: true do %>
-<p>
-You may specify voters to add by listing comma-separated values like this:
-<pre>
-abc1,abc1example.com,Alpha,Bet
-jd1,jd1anotherexample.com,John,Doe
-</pre>
-<br/>
-<%= text_area_tag 'users' %>
-</p>
+<%= form_tag bulk_create_roll_users_path( roll ), multipart: true, class: "form-horizontal" do %>
+  <%=content_tag :div, class: 'control-group' do %>
+    <%=content_tag :label, "Raw User Data", class: 'control-label', for: "users" %>
+    <%=content_tag :div, class: 'controls' do %>
+      <%= text_area_tag 'users' %>
+    <% end %>
+    <%=content_tag :div, class: 'help-block' do %>
+      You may specify voters to add by listing comma-separated values like this:
+      <pre>
+      abc1,abc1example.com,Alpha,Bet
+      jd1,jd1anotherexample.com,John,Doe
+      </pre>
+    <% end %>
+  <% end %>
 
-<p>
-You may also upload a file with such data.
-<br/>
-<%= file_field_tag 'users_file' %>
-</p>
+  <%=content_tag :div, class: 'control-group' do %>
+    <%=content_tag :label, "User File", class: 'control-label', for: "users_file" %>
+    <%=content_tag :div, class: 'controls' do %>
+      <%= file_field_tag 'users_file' %>
+    <% end %>
+    <%=content_tag :div, class: 'help-block' do %>
+      You may also upload a file with such data.
+    <% end %>
+  <% end %>
 
-<br/>
-<%= button_tag 'Add users to roll', class: "btn btn-primary" %>
+  <%=content_tag :div, class: 'control-group' do %>
+    <%=content_tag :div, class: 'controls' do %>
+      <%= button_tag 'Import users', class: "btn btn-primary" %>
+    <% end %>
+  <% end %>
 <% end %>
 

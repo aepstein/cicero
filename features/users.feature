@@ -49,31 +49,14 @@ Feature: Manage users
       | User 11, Sequenced33  |
       | User 12, Sequenced34  |
       | User 14, Sequenced36  |
-@wip
-Scenario: Add users to roll in bulk (from csv text)
-    Given a roll exists
-    And I log in as user: "admin"
-    And I am on the page for the roll
-    And I follow "Import users"
-    And I fill in "users" with "jd1,jd1@example.com,John,Doe"
-    And I press "Add users to roll"
-    Then I should see "Processed new voters: 1 new voters and 1 new users."
-    Given I am on the users page for the roll
-    Then I should see the following users:
-      | Net id | First name | Last name |
-      | jd1    | John       | Doe       |
-@wip
-  Scenario: Add users to roll in bulk (from csv file)
-    Given a roll exists
-    And I log in as user: "admin"
-    And I am on the page for the roll
-    And I follow "Import users"
-    And I attach the file "spec/assets/users.csv" to "users_file"
-    And I press "Add users to roll"
-    Then I should see "Processed new voters: 2 new voters and 2 new users."
-    Given I am on the users page for the roll
-    Then I should see the following users:
-      | Net id | First name | Last name |
-      | jd2    | Jane       | Doe       |
-      | jd1    | John       | Doe       |
+
+  Scenario Outline: Set user empl_ids in bulk
+    Given I log in as the admin user
+    And a roll exists
+    When I set users for the roll via <method>
+    Then I should see users enrolled
+    Examples:
+      |method    |
+      |text      |
+      |attachment|
 

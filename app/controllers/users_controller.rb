@@ -35,11 +35,7 @@ class UsersController < ApplicationController
   filter_access_to :bulk, :bulk_create, require: :create
 
   # GET /rolls/:roll_id/users/new/bulk
-  def bulk
-    respond_to do |format|
-      format.html # bulk.html.erb
-    end
-  end
+  def bulk; end
 
   # POST /users
   # POST /users.xml
@@ -83,7 +79,7 @@ class UsersController < ApplicationController
   # POST /rolls/:roll_id/users/bulk_create
   def bulk_create
     respond_to do |format|
-      flash[:notice] = "Processed new voters"
+      flash[:success] = "Processed new voters"
       # Add from form field
       unless params[:users].nil? || params[:users].empty?
         import_results = roll.users.import_from_string( params[:users] )
@@ -93,8 +89,8 @@ class UsersController < ApplicationController
         import_results = roll.users.import_from_file( params[:users_file] )
       end
       import_results ||= [0,0]
-      flash[:notice] += ": #{import_results.first} new voters and #{import_results.last} new users."
-      format.html { redirect_to roll }
+      flash[:success] += ": #{import_results.first} new voters and #{import_results.last} new users."
+      format.html { redirect_to bulk_new_roll_user_url roll }
       format.xml { head :ok }
     end
   end

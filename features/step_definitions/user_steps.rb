@@ -171,10 +171,10 @@ Given /^I search for users with name "([^"]+)"$/ do |needle|
   click_button "Search"
 end
 
-When /^I set empl_ids in bulk via (text|attachment)$/ do |method|
+When /^I set users for the roll via (text|attachment)$/ do |method|
   @user = create(:user, net_id: 'faker1')
-  visit(import_empl_id_users_url)
-  values = [ %w( faker1 123456 ), %w( faker2 123457 ) ]
+  visit bulk_new_roll_user_url @roll
+  values = [ %w( faker1 faker1@cornell.edu Jane Doe ), %w( faker2 faker2@cornell.edu John Doe ) ]
   path = "#{temporary_file_path}/users.csv"
   if method == 'text'
     fill_in 'users', with: CSV.generate { |csv| values.each { |v| csv << v } }
@@ -186,13 +186,11 @@ When /^I set empl_ids in bulk via (text|attachment)$/ do |method|
     $temporary_files << file
     attach_file "users_file", file.path
   end
-  click_button "Import empl_ids"
+  click_button "Import users"
 end
 
-Then /^I should see empl_ids set$/ do
-  within(".alert") { page.should have_text "Processed empl_ids." }
-  @user.reload
-  @user.empl_id.should eql 123456
-  User.where { net_id.eq( 'faker2' ) }.should be_empty
+Then /^I should see users enrolled$/ do
+  within(".alert") { page.should have_text "Processed new voters: 2 new voters and 1 new users." }
+  @roll.users.should include( @user, User.find_by_net_id( 'faker2' ) )
 end
 

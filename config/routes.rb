@@ -1,6 +1,6 @@
 Cicero::Application.routes.draw do
   resources :ballots, only: [ :show, :destroy ]
-  resources :candidates, except: [ :index, :new, :create ] do
+  resources :candidates, only: [ :show ] do
     member do
       get :popup
     end
@@ -10,8 +10,6 @@ Cicero::Application.routes.draw do
     collection do
       get :my
     end
-    resources :rolls, only: [ :create, :new, :index ]
-    resources :races, only: [ :index, :new, :create ]
     resources :ballots, only: [ :index, :new, :create ] do
       new do
         post :confirm
@@ -20,12 +18,11 @@ Cicero::Application.routes.draw do
     end
   end
   resources :petitioners, except: [ :index, :new, :create ]
-  resources :races, except: [ :create, :new, :index ] do
+  resources :races, only: [] do
     resources :ballots, only: [ :index ]
-    resources :sections, only: [ :index ]
     resources :candidates, only: [ :index, :new, :create ]
   end
-  resources :rolls, except: [ :index, :new, :create ] do
+  resources :rolls, only: [] do
     resources :users, only: [ :index, :create ] do
       new do
         get :bulk
