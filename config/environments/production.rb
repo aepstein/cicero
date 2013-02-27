@@ -10,7 +10,7 @@ Cicero::Application.configure do
   config.assets.compress = true
   config.assets.compile = false
   config.assets.digest = true
-  config.assets.precompile += %w( ie6.css ie7.css )
+  config.assets.precompile += %w( ie6.css ie7.css print.css )
 #  config.force_ssl = true
   config.filter_parameters += [ :password, :password_confirmation, :ballot ]
   config.middleware.use ExceptionNotifier,
