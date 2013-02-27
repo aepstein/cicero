@@ -10,11 +10,9 @@
 
 <%= paginate ballots %>
 
-<%= render :partial => "ballots", :object => ballots %>
+<%= render partial: "ballots", object: ballots %>
 
 <%= paginate ballots %>
 
 <hr />
-
-<%=content_tag :p, link_to( context.to_s, context ) if context %>
 

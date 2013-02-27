@@ -1,5 +1,8 @@
 <%= content_tag :div, id: "candidate-#{candidate}" %>
+<% if ::Rails.env != 'test' %>
 <%=image_tag candidate.picture.url(:thumb), class: 'candidate-thumb' %>
+<% else %>
+<% end %>
 <p>
   <b>Name:</b> <%=h candidate.name %>
 </p>
