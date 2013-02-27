@@ -52,6 +52,8 @@ class User < ActiveRecord::Base
     [:user]
   end
 
+  def to_email; "#{name} <#{email}>"; end
+
   def to_s; name; end
 end
 
