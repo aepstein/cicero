@@ -1,7 +1,13 @@
 <%= field_set_tag( f.object.to_s, class: 'nested-fields' ) do %>
   <%= f.input :name, hint: 'Name of candidate as it should appear on ballot.' %>
   <%= f.input :statement, hint: 'Candidate statement.' %>
+  <% if f.object.persisted? && f.object.picture.url(:thumb) %>
+  <%= image_tag f.object.picture.url(:thumb) %>
+  <% else %>
+  <p>No current picture.</p>
+  <% end %>
   <%= f.input :picture, as: :file, hint: 'Candidate picture must be JPG format.' %>
+  <%= f.input :picture_cache, as: :hidden %>
   <%= f.input :disqualified, as: :radio_buttons, label: "Disqualified?",
     hint: 'Will candidate be disqualified?' %>
   <%= link_to_remove_association 'Remove Candidate', f %>
