@@ -1,5 +1,9 @@
 <%= content_tag :li, id: "candidate-#{candidate}" do %>
+<% if candidate.picture.url(:thumb) %>
 <%=image_tag candidate.picture.url(:thumb), class: 'candidate-thumb' %>
+<% else %>
+<p class="candidate-thumb">No picture.</p>
+<% end %>
 <p>
   <b>Name:</b> <%=h candidate.name %>
 </p>
