@@ -1,13 +1,14 @@
-<table>
-<thead>
-  <tr>
-    <th>User</th>
-  </tr>
-</thead>
-<tbody>
+<%=content_tag :table, id: "petitioners" do %>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Net Id</th>
+    </tr>
+  </thead>
+  <tbody>
 
-<%= render :partial => "petitioner", :collection => petitioners %>
+  <%= render partial: "petitioner", collection: petitioners %>
 
-</tbody>
-</table>
+  </tbody>
+<% end %>
 

@@ -1,9 +1,9 @@
 class PetitionersController < ApplicationController
   before_filter :require_user
   expose :candidate
+  expose( :q ) { params[:q] || Hash.new }
   expose :q_scope do
-    scope = candidate.petitioners
-    q = params[:q] || Hash.new
+    scope = candidate.petitioners.scoped
     q.each do |k,v|
       if !v.blank? && Petitioner::SEARCHABLE.include?( k.to_sym )
         scope = scope.send k, v
@@ -12,7 +12,7 @@ class PetitionersController < ApplicationController
     scope
   end
   expose :petitioners do
-    q_scope.page(params[:page])
+    q_scope.with_permissions_to(:show).page(params[:page])
   end
   expose :petitioner do
     if params[:id]
@@ -35,21 +35,7 @@ class PetitionersController < ApplicationController
         format.html { redirect_to candidate_petitioners_url( petitioner.candidate ), flash: { success: 'Petitioner created.' } }
         format.xml  { render xml: petitioner, status: :created, location: petitioner }
       else
-        format.html { render :action => "new" }
-        format.xml  { render xml: petitioner.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PUT /petitioners/:id
-  # PUT /petitioners/:id.xml
-  def update
-    respond_to do |format|
-      if petitioner.update_attributes(params[:petitioner])
-        format.html { redirect_to candidate_petitioners_url( petitioner.candidate ), flash: { success: 'Petitioner updated.' } }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
+        format.html { render action: "new" }
         format.xml  { render xml: petitioner.errors, status: :unprocessable_entity }
       end
     end
@@ -65,8 +51,5 @@ class PetitionersController < ApplicationController
       format.xml  { head :ok }
     end
   end
-
-  private
-
 end
 

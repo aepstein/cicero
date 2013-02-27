@@ -50,7 +50,7 @@ Feature: Manage users
       | User 12, Sequenced34  |
       | User 14, Sequenced36  |
 
-  Scenario Outline: Set user empl_ids in bulk
+  Scenario Outline: Populate users into rolls in bulk
     Given I log in as the admin user
     And a roll exists
     When I set users for the roll via <method>

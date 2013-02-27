@@ -1,5 +1,6 @@
-  <%= table_row_tag do %>
-    <td><%=h petitioner.user %></td>
+  <%=content_tag :tr, id: "petitioner-#{petitioner.id}" do %>
+    <%=content_tag :td, petitioner.user.name %>
+    <%=content_tag :td, petitioner.user.net_id %>
     <td><%= link_to 'Show', petitioner_path( petitioner ) %></td>
     <td><%= link_to 'Edit', edit_petitioner_path( petitioner ) if permitted_to? :edit, petitioner %></td>
     <td><%= link_to( 'Destroy', petitioner_path( petitioner ),

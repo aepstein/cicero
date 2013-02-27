@@ -1,24 +1,24 @@
-<h2>Listing petitioners for <%= @candidate %></h2>
+<%=content_tag :h1, "Petitioners for #{candidate}" %>
 
-<%= form_tag polymorphic_path([ @candidate, :petitioners ]), :method => :get do |f| %>
+<%= form_tag polymorphic_path([ candidate, :petitioners ]), method: :get do |f| %>
   <p>
-    <%= label_tag 'q[name_contains]', 'Search' %>
-    <%= text_field_tag 'q[name_contains]', @q['name_contains'] %>
+    <%= label_tag 'q[user_name_contains]', 'Name' %>
+    <%= text_field_tag 'q[user_name_contains]', q['name_contains'] %>
     <%= submit_tag 'Search' %>
   </p>
 <% end %>
 
-<%= paginate @petitioners %>
+<%= paginate petitioners %>
 
-<%= render :partial => "petitioners", :object => @petitioners %>
+<%= render partial: "petitioners", object: petitioners %>
 
-<%= paginate @petitioners %>
+<%= paginate petitioners %>
 
 <hr/>
 
 <p>
-<% if permitted_to? :create, @candidate.petitioners.build %>
-<%= link_to 'New petitioner', new_candidate_petitioner_path( @candidate ) %>
+<% if permitted_to? :create, candidate.petitioners.build %>
+<%= link_to 'New petitioner', new_candidate_petitioner_path( candidate ) %>
 <% end %>
 </p>
 

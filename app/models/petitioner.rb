@@ -10,7 +10,7 @@ class Petitioner < ActiveRecord::Base
   default_scope includes(:user).
     order('users.last_name ASC, users.first_name ASC, users.net_id ASC')
   scope :user_name_contains, lambda { |name|
-    merge( User.unscoped.name_contains name )
+    where { |p| p.user_id.in( User.unscoped.name_contains( name ) ) }
   }
 
   delegate :name, to: :user

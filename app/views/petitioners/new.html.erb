@@ -1,13 +1,7 @@
-<h2>New petitioner for <%= @petitioner.candidate %></h2>
+<%=content_tag :h1, "New petitioner" %>
 
-<%= semantic_form_for( @petitioner,
-  :url => candidate_petitioners_url( @petitioner.candidate ) ) do |f| %>
-
-<%= render :partial => 'form', :object => f %>
-
+<%= simple_form_for( petitioner,
+  url: candidate_petitioners_url( petitioner.candidate ) ) do |f| %>
+  <%= render partial: 'form', object: f %>
 <% end %>
-
-<p>
-<%= link_to 'Back', candidate_petitioners_path( @petitioner.candidate ) %>
-</p>
 

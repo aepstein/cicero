@@ -34,6 +34,8 @@ class User < ActiveRecord::Base
 
   def name(format=nil)
     case format
+    when :net_id
+      "#{first_name} #{last_name} (#{net_id})".squeeze(' ')
     when :last_first
       "#{last_name}, #{first_name}".squeeze(' ')
     else
