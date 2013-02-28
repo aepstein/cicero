@@ -1,3 +1,4 @@
+<% election ||= false %>
 <%=content_tag :table, id: "users" do %>
   <thead>
     <tr>
@@ -6,7 +7,7 @@
     </tr>
   </thead>
   <tbody>
-  <%= render partial: 'user', collection: users %>
+  <%= render partial: 'user', collection: users, locals: { election: election } %>
   </tbody>
 <% end %>
 

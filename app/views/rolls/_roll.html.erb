@@ -2,6 +2,6 @@
   <%=content_tag :td, roll.name %>
   <%=content_tag :td, roll.users.count %>
   <td><%= link_to( 'Add Users', bulk_new_roll_user_path(roll) ) if permitted_to?( :create, :users ) %></td>
-  <td><%= link_to( 'List Users', roll_users_path(roll) ) if permitted_to?( :show, :roll ) %></td>
+  <td><%= link_to( 'List Users', roll_users_path(roll) ) if permitted_to?( :show, roll ) %></td>
 <% end %>
 

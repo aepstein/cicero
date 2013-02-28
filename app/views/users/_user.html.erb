@@ -1,3 +1,4 @@
+<% election ||= false %>
 <%=content_tag :tr, id: "user-#{user.id}" do %>
   <%=content_tag :td, user.name(:last_first) %>
   <%=content_tag :td, user.net_id %>
@@ -5,5 +6,8 @@
   <td><%= link_to 'Edit', edit_user_path(user) if permitted_to? :edit, user %></td>
   <td><%= link_to( 'Destroy', user, data: { confirm: 'Are you sure?' },
             method: :delete ) if permitted_to? :destroy, user %></td>
+  <% if election && permitted_to?( :preview, election.ballots.build { |e| e.user = user } ) %>
+  <%=content_tag( :td, link_to( 'Preview', preview_new_election_ballot_path( election, user_id: user.id ) ) ) %>
+  <% end %>
 <% end %>
 

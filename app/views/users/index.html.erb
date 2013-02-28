@@ -10,7 +10,8 @@
 
 <%= paginate users %>
 
-<%= render partial: "users/users", object: users %>
+<%= render partial: "users/users", object: users,
+  locals: { election: roll.present? ? roll.election : false } %>
 
 <%= paginate users %>
 
