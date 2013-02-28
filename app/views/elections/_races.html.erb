@@ -1,2 +1,13 @@
-<%=render partial: 'races/races', object: election.races %>
+<%=content_tag :div, class: 'row' do %>
+  <%=content_tag :div, class: 'span3' do %>
+    <%=content_tag :ul, id: "races-nav", class: 'nav nav-pills nav-stacked' do %>
+      <% election.races.each do |race| %>
+        <%=content_tag :li, link_to( race.name, "#race-#{race.id}" ) %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%=content_tag :div, class: 'span9' do %>
+    <%=render partial: 'races/races', object: election.races %>
+  <% end %>
+<% end %>
 
