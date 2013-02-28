@@ -12,6 +12,6 @@
         include_blank: true, collection: form.object.candidate.race.rank_options %>
 <% else -%>
   <%= form.input :rank, as: :boolean, required: false,
-     inline_label: link_to( form.object.candidate.name, popup_candidate_path(form.object.candidate), target: '_blank' ) %>
+     label: link_to( form.object.candidate.name, popup_candidate_path(form.object.candidate), target: '_blank' ) %>
 <% end -%>
 
