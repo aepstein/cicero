@@ -3,10 +3,10 @@ class Section < ActiveRecord::Base
   attr_accessible :race_id, :votes_attributes
   attr_readonly :ballot_id, :race_id
 
-  belongs_to :ballot, :inverse_of => :sections
-  belongs_to :race, :inverse_of => :sections
-  has_many :votes, :inverse_of => :section, :dependent => :destroy,
-    :order => 'votes.rank' do
+  belongs_to :ballot, inverse_of: :sections
+  belongs_to :race, inverse_of: :sections
+  has_many :votes, inverse_of: :section, dependent: :destroy,
+    order: 'votes.rank' do
     def populate
       proxy_association.owner.race.candidates.each do |candidate|
         unless candidate_ids.include? candidate.id
@@ -29,7 +29,7 @@ class Section < ActiveRecord::Base
   validate :user_must_be_in_race_roll, :votes_must_not_exceed_maximum,
     :sections_must_be_unique
 
-  accepts_nested_attributes_for :votes, :reject_if => proc { |a| a['rank'].to_i == 0 }
+  accepts_nested_attributes_for :votes, reject_if: proc { |a| a['rank'].to_i == 0 }
 
   def to_blt
     votes.collect { |vote| race.candidate_ids.index(vote.candidate_id) + 1 }.join(' ')

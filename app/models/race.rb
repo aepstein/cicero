@@ -40,9 +40,8 @@ class Race < ActiveRecord::Base
 
   accepts_nested_attributes_for :candidates, allow_destroy: true
 
-  scope :allowed_for_user_id, lambda { |user_id|
-    joins( 'INNER JOIN rolls_users AS ru' ).
-    where( 'races.roll_id = ru.roll_id AND ru.user_id = ?', user_id )
+  scope :allowed_for_user, lambda { |user|
+    where { |r| r.roll_id.in( user.rolls.scoped.select { id } ) }
   }
 
   validates :name, presence: true, uniqueness: { scope: :election_id }

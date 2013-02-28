@@ -15,12 +15,9 @@ class Election < ActiveRecord::Base
   accepts_nested_attributes_for :rolls, allow_destroy: true
   accepts_nested_attributes_for :races, allow_destroy: true
 
-  scope :ordered, lambda { order { name } }
-  scope :allowed_for_user_id, lambda { |user_id|
-    where(
-      'elections.id IN (SELECT election_id FROM rolls AS r INNER JOIN rolls_users AS ru ' +
-      'WHERE r.id = ru.roll_id AND ru.user_id = ?)',
-      user_id )
+  scope :ordered, lambda { order { [ starts_at.desc, name ] } }
+  scope :allowed_for_user, lambda { |user|
+    where { |e| e.id.in( user.rolls.scoped.select { election_id } ) }
   }
   scope :allowable, lambda { where { ends_at > Time.zone.now } }
   scope :past, lambda { where { ends_at < Time.zone.now } }
