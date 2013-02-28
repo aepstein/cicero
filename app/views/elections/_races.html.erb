@@ -1,6 +1,6 @@
 <%=content_tag :div, class: 'row' do %>
   <%=content_tag :div, class: 'span3' do %>
-    <%=content_tag :ul, id: "races-nav", class: 'nav nav-pills nav-stacked' do %>
+    <%=content_tag :ul, class: 'nav nav-list races-nav' do %>
       <% election.races.each do |race| %>
         <%=content_tag :li, link_to( race.name, "#race-#{race.id}" ) %>
       <% end %>

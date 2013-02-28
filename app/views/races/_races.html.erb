@@ -1,6 +1,6 @@
 <% if races.any? %>
 <%=content_tag :ul, id: "races" do %>
-<%=render partial: 'races/race', collection: races, data: { spy: 'scroll', target: 'races-nav' } %>
+<%=render partial: 'races/race', collection: races, data: { spy: 'scroll', target: '.races-nav' } %>
 <% end %>
 <% else %>
 <%=content_tag :p, "No races." %>
