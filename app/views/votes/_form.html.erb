@@ -2,16 +2,17 @@
 # TODO: popup links using jquery
 %>
 <%= form.input :candidate_id, as: :hidden %>
+<%= render partial: 'votes/candidate', object: form.object.candidate %>
 <% if form.object.frozen? %>
-  <li>
-  <%= form.input :rank, as: :hidden, label: form.object.candidate.name %><%= form.object.candidate %>
-  </li>
+  <%= content_tag :li do %>
+    <%= form.input :rank, as: :hidden %><%=candidate_label form.object.candidate %>
+  <% end %>
 <% elsif race.is_ranked? -%>
   <%= form.input :rank, as: :select, required: false,
-        label: link_to( form.object.candidate.name, popup_candidate_path(form.object.candidate), target: '_blank' ),
+        label: candidate_label( form.object.candidate ),
         include_blank: true, collection: form.object.candidate.race.rank_options %>
 <% else -%>
   <%= form.input :rank, as: :boolean, required: false,
-     label: link_to( form.object.candidate.name, popup_candidate_path(form.object.candidate), target: '_blank' ) %>
+     label: candidate_label( form.object.candidate ) %>
 <% end -%>
 

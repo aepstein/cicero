@@ -1,8 +1,8 @@
-<h1><%=h @candidate.name %></h1>
-<% if @candidate.picture? %>
-<%= image_tag @candidate.picture.url(:thumb), alt: "Picture of #{@candidate.name}", style: "float: left;" %>
+<h1><%=h candidate.name %></h1>
+<% if candidate.picture? %>
+<%= image_tag candidate.picture.url(:thumb), alt: "Picture of #{@candidate.name}", style: "float: left;" %>
 <% end %>
-<%=markdown @candidate.statement %>
+<%=markdown candidate.statement %>
 <p style="clear: both;">
 <a href="javascript:window.close()">close window</a>
 </p>

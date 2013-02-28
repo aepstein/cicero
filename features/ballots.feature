@@ -58,3 +58,10 @@ Feature: Manage ballots
       | un | in |
       |    | in |
 
+  @javascript
+  Scenario: Modal candidate profiles
+    Given I can vote in an unranked election
+    When I start a ballot
+    And I click on a candidate
+    Then the candidate profile should pop up
+

@@ -71,8 +71,10 @@ Given /^I can vote in an? (un)?ranked election$/ do |unranked|
   @race = create( :race, election: @election, name: 'President',
     is_ranked: ( unranked.present? ? false : true ) )
   @race.roll.users << @current_user
-  create :candidate, name: "Barack Obama", race: @race
+  PortraitUploader.enable_processing = true
+  create :candidate, name: "Barack Obama", race: @race, statement: "The audacity of *hope*."
   create :candidate, name: "Mitt Romney", race: @race
+  PortraitUploader.enable_processing = false
 end
 
 When /^I fill in an? (in)?complete (un)?ranked ballot$/ do |incomplete, unranked|
@@ -147,5 +149,21 @@ Then /^I should have successfully cast my (un)?changed (in)?complete (un)?ranked
       section.votes.last.candidate.name.should eql ( unchanged.present? ? "Mitt Romney" : "Barack Obama" )
     end
   end
+end
+
+When /^I start a ballot$/ do
+  visit new_election_ballot_path( @election )
+end
+
+When /^I click on a candidate$/ do
+  click_link "Barack Obama"
+end
+
+Then /^the candidate profile should pop up$/ do
+  within("#candidate-#{@race.candidates.first.id}") do
+    page.should have_text 'The audacity of hope.'
+    click_button 'Close'
+  end
+  page.should have_no_text 'The audacity of hope.'
 end
 

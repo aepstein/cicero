@@ -20,7 +20,6 @@ Cicero::Application.routes.draw do
   resources :petitioners, except: [ :index, :new, :create ]
   resources :races, only: [] do
     resources :ballots, only: [ :index ]
-    resources :candidates, only: [ :index, :new, :create ]
   end
   resources :rolls, only: [] do
     resources :users, only: [ :index, :create ] do
