@@ -39,6 +39,13 @@ class Ballot < ActiveRecord::Base
     BallotMailer.verification( ballot ).deliver
   end
 
+  def simple_errors
+    errors.inject({}) do |errors, ( attribute, error )|
+      errors[attribute] = error if attribute =~ /\./
+      errors
+    end
+  end
+
   def confirmation
     @confirmation
   end
@@ -55,7 +62,11 @@ class Ballot < ActiveRecord::Base
   end
 
   def to_s
-    user.to_s
+    if user && election
+      "Ballot of #{user} for #{election}"
+    else
+      super
+    end
   end
 
 end

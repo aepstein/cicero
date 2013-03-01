@@ -77,6 +77,42 @@ Given /^I can vote in an? (un)?ranked election$/ do |unranked|
   PortraitUploader.enable_processing = false
 end
 
+When /^I prepare a ballot that is (overchecked|double-ranked|nonconsecutive)$/ do |error|
+  visit new_election_ballot_url( @election )
+  within_fieldset("President") do
+    case error
+    when 'overchecked'
+      check "Barack Obama"
+      check "Mitt Romney"
+    when 'double-ranked'
+      select "1", from: "Barack Obama"
+      select "1", from: "Mitt Romney"
+    when 'nonconsecutive'
+      select "2", from: "Barack Obama"
+    end
+  end
+  click_button "Continue"
+end
+
+Then /^I should see an error about the ballot being (overchecked|double-ranked|nonconsecutive)$/ do |error|
+  within("div.alert-error") do
+    page.should have_text "Ballot of #{@current_user.name} for 2012 President has the following errors:"
+    page.should have_text "section for President has the following errors:"
+    case error
+    when 'overchecked'
+      page.should have_text "1 choice is selected beyond the 1 allowed for the section"
+    when 'double-ranked'
+      page.should have_text "vote for Barack Obama has the following errors:"
+      page.should have_text "rank is not unique for the race"
+      page.should have_text "vote for Mitt Romney has the following errors:"
+    when 'missing a rank'
+      page.should have_text "vote for Barack Obama has the following errors:"
+      page.should have_text "rank is 2 but there is no vote ranked 1"
+    end
+  end
+end
+
+
 When /^I fill in an? (in)?complete (un)?ranked ballot$/ do |incomplete, unranked|
   visit new_election_ballot_url( @election )
   within_fieldset("President") do
@@ -92,14 +128,15 @@ end
 
 Then /^I should see the confirmation page for the (in)?complete (un)?ranked ballot$/ do |incomplete, unranked|
   if incomplete.present?
-    within("div.warning_messages:nth-of-type(1)") do
+    within("div.alert:nth-of-type(1)") do
       page.should have_text(
-        "1 fewer choices are selected than the #{unranked.present? ? 1 : 2} " +
-        "allowed for President"
+        "1 fewer choice is selected than the #{unranked.present? ? 1 : 2} " +
+        "allowed for the section. Your ballot can be cast without changing " +
+        "your selections for this section, but you may want to make more selections."
       )
     end
   else
-    page.should have_no_selector ".warning_messages"
+    page.should have_no_selector ".alert"
   end
 end
 

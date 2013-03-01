@@ -2,8 +2,8 @@ class Vote < ActiveRecord::Base
   attr_accessible :rank, :candidate_id
   attr_readonly :section_id, :candidate_id, :rank
 
-  belongs_to :candidate, :inverse_of => :votes
-  belongs_to :section, :inverse_of => :votes
+  belongs_to :candidate, inverse_of: :votes
+  belongs_to :section, inverse_of: :votes
 
   validates :rank, presence: true
   validates :candidate, presence: true
@@ -38,7 +38,7 @@ class Vote < ActiveRecord::Base
       errors.add :rank, 'is not unique for the race'
     end
     unless rank == 1 || ranks.include?(rank - 1)
-      errors.add :rank, "is ranked #{rank} but there is no vote ranked #{rank-1}"
+      errors.add :rank, "is #{rank} but there is no vote ranked #{rank-1}"
     end
   end
 

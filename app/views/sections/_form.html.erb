@@ -2,11 +2,10 @@
   <%=markdown form.object.race.description %>
 
   <% if form.object.warning %>
-    <%=content_tag :div, class: "warning_messages" do %>
-      <h2>Warning for this section</h2>
-      <%=content_tag :ul do %>
-        <%=content_tag :li, form.object.warning %>
-      <% end %>
+    <%=content_tag :div, class: "alert alert-block" do %>
+      <h3>Warning on <%= form.object %></h3>
+      <p><%=form.object.warning %>. Your ballot can be cast without changing
+      your selections for this section, but you may want to make more selections.</p>
     <% end %>
   <% end %>
 

@@ -58,6 +58,16 @@ Feature: Manage ballots
       | un | in |
       |    | in |
 
+  Scenario Outline: Show errors on ballot
+    Given I can vote in a <un>ranked election
+    When I prepare a ballot that is <error>
+    Then I should see an error about the ballot being <error>
+    Examples:
+      | un | error          |
+      | un | overchecked    |
+      |    | double-ranked  |
+      |    | nonconsecutive |
+
   @javascript
   Scenario: Modal candidate profiles
     Given I can vote in an unranked election

@@ -1,0 +1,7 @@
+<% if ballot.errors.any? %>
+  <%=content_tag :div, class: "alert alert-block alert-error" do %>
+    <%=content_tag :h3, "#{pluralize(ballot.errors.count, "error")} must be corrected before the ballot is cast." %>
+    <%=nested_errors ballot %>
+  <% end %>
+<% end %>
+

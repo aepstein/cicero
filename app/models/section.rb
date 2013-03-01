@@ -35,6 +35,14 @@ class Section < ActiveRecord::Base
     votes.collect { |vote| race.candidate_ids.index(vote.candidate_id) + 1 }.join(' ')
   end
 
+  def to_s
+    if new_record? && race
+      "section for #{race}"
+    else
+      super
+    end
+  end
+
   protected
 
   def user_must_be_in_race_roll
@@ -56,9 +64,19 @@ class Section < ActiveRecord::Base
     return unless race
     over = votes.size - race.max_votes
     if over > 0
-      errors.add :base, "#{over} choices are selected beyond the #{race.max_votes} allowed for #{race.name}"
+      predicate = if over == 1
+        "1 choice is"
+      else
+        "#{over} choices are"
+      end
+      errors.add :base, "#{predicate} selected beyond the #{race.max_votes} allowed for the section"
     elsif over < 0
-      self.warning = "#{over.abs} fewer choices are selected than the #{race.max_votes} allowed for #{race.name}"
+      predicate = if over == -1
+        "1 fewer choice is"
+      else
+        "#{over.abs} fewer choices are"
+      end
+      self.warning = "#{predicate} selected than the #{race.max_votes} allowed for the section"
     end
   end
 
