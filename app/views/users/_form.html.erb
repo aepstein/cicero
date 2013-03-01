@@ -9,26 +9,26 @@
 <%= form.input :password_confirmation, as: :password, label: "Confirm Password" %>
 
 <%= field_set_tag "Allowed races" do %>
+  <p>
+  Please select the rolls in which the user should be listed.
+  </p>
 
-<p>
-Please select the rolls in which the user should be listed.
-</p>
-
-<% Election.allowable.includes { rolls }.order { rolls.name }.each do |election| %>
-  <%=field_set_tag election.name do %>
-    <% election.rolls.each do |roll| %>
-      <%=content_tag :div, class: 'control-group' %>
-        <%=content_tag :label do %>
-          <%= check_box_tag 'user[roll_ids][]', roll.id, user.rolls.include?(roll) %> <%= roll.name %>
+  <% Election.allowable.includes { rolls }.order { rolls.name }.each do |election| %>
+    <%=field_set_tag election.name do %>
+      <% election.rolls.each do |roll| %>
+        <%=content_tag :div, class: 'control-group' do %>
+          <%=content_tag :label do %>
+            <%= check_box_tag 'user[roll_ids][]', roll.id, user.rolls.include?(roll) %> <%= roll.name %>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>
   <% end %>
-<% end %>
 
-<% ( Roll.where { election_id.not_in( Election.allowable.select { id } ) } &
-  form.object.rolls ).each do |roll| %>
-  <%= hidden_field_tag 'user[roll_ids][]', roll.id %>
+  <% ( Roll.where { election_id.not_in( Election.allowable.select { id } ) } &
+    form.object.rolls ).each do |roll| %>
+    <%= hidden_field_tag 'user[roll_ids][]', roll.id, id: "user_roll_id_#{roll.id}" %>
+  <% end %>
 <% end %>
 
 <%= form.button :wrapped, cancel: users_path %>
