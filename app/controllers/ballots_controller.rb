@@ -92,7 +92,7 @@ class BallotsController < ApplicationController
     ballot.destroy
 
     respond_to do |format|
-      format.html { redirect_to election_ballots_url ballot.election, flash: { success: 'Ballot destroyed.' } }
+      format.html { redirect_to election_ballots_url( ballot.election ), flash: { success: 'Ballot destroyed.' } }
       format.xml  { head :ok }
     end
   end
