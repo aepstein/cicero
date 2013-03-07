@@ -22,7 +22,7 @@ class Race < ActiveRecord::Base
       disqualified = proxy_association.owner.candidates.disqualified.map(&:id)
       sql = "SELECT sections.id, votes.rank, votes.candidate_id FROM " +
         "sections LEFT JOIN votes ON sections.id = votes.section_id " +
-        ( disqualified.any? ? "AND votes.candidate_id NOT IN (#{connection.quote disqualified}) " : "" ) +
+        ( disqualified.any? ? "AND votes.candidate_id NOT IN (#{disqualified.join ','}) " : "" ) +
         "WHERE sections.race_id = #{proxy_association.owner.id} " +
         "ORDER BY sections.id ASC, votes.rank ASC"
       last_section_id = nil

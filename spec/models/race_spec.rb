@@ -54,10 +54,11 @@ describe Election do
     let(:race) { create(:race, is_ranked: true) }
     let(:ballot) { create(:ballot, election: race.election ) }
     let(:section) { race.roll.users << ballot.user; create(:section, ballot: ballot, race: race) }
+    let(:top) { create(:candidate, name: "Top", race: race) }
+    let(:middle) { create(:candidate, name: "Middle", race: race) }
+    let(:bottom) { create(:candidate, name: "Bottom", race: race) }
     before(:each) do
-      top = create(:candidate, name: "Top", race: race)
-      middle = create(:candidate, name: "Middle", race: race, disqualified: true)
-      bottom = create(:candidate, name: "Bottom", race: race)
+      top; middle; bottom
       race.reload
       section.votes << build(:vote, rank: 1, candidate: top)
       section.votes << build(:vote, rank: 2, candidate: middle)
@@ -66,16 +67,23 @@ describe Election do
       race.reload
     end
 
-    it "should return correct data", focus: true do
+    it "should return correct data with disqualified candidate" do
+      middle.update_column :disqualified, true
       lines = race.to_blt.split "\r\n"
       lines[0].should eql "3 1" # "number of candidates, number of seats"
       lines[1].should eql "-2" # "disqualified candidate"
-      lines[2].should eql "1 3 2 1 0" # ballot itself "1 [indices of candidates] 0"
+      lines[2].should eql "1 3 1 0" # ballot itself "1 [indices of candidates] 0"
       lines[3].should eql "0" # end of ballots
       lines[4].should eql "\"Bottom\""
       lines[5].should eql "\"Middle\""
       lines[6].should eql "\"Top\""
       lines[7].should eql "\"#{race.name}\""
+    end
+
+    it "should return correct data without disqualified candidate" do
+      lines = race.to_blt.split "\r\n"
+      lines[0].should eql "3 1"
+      lines[1].should eql "1 3 2 1 0"
     end
   end
 
