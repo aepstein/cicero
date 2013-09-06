@@ -1,39 +1,62 @@
-Tabulous.setup do |config|
-  config.tabs do
-    basic = [ [ :home_tab, 'Home', home_path, true, true ] ]
-    basic += [
-      [ :admin_tab       ,'Administration',elections_path ,permitted_to?(:manage,:users),true ],
-      [ :elections_subtab,'Elections'     ,elections_path ,true                         ,true ],
-      [ :users_subtab    ,'Users'         ,users_path     ,true                         ,true ]
-    ]
-    basic += [
-      [ :logout_tab, 'Log Out', logout_path, current_user.present?, true ],
-      [ :login_tab , 'Log In' , login_path , current_user.blank?  , true ]
-    ] unless sso_net_id
-    basic
+Tabulous.setup do
+  tabs do
+    home_tab do
+      text { 'Home' }
+      link_path { home_path }
+      visible_when { true }
+      enabled_when { true }
+      active_when do
+        in_action('any').of_controller('home')
+        in_action('sso_failure').of_controller('user_sessions')
+      end
+    end
+    admin_tab do
+      text { 'Administration' }
+      link_path { elections_path }
+      visible_when { permitted_to?( :manage, :users ) }
+      enabled_when { true }
+      active_when do
+        a_subtab_is_active
+      end
+    end
+    elections_subtab do
+      text { 'Elections' }
+      link_path { elections_path }
+      visible_when { true }
+      enabled_when { true }
+      active_when do
+        in_action('any').of_controller('elections')
+        in_action('any').of_controller('petitioners')
+        in_action('any').of_controller('ballots')
+        in_action('any').of_controller('candidates')
+      end
+    end
+    users_subtab do
+      text { 'Users' }
+      link_path { users_path }
+      visible_when { true }
+      enabled_when { true }
+      active_when { in_action('any').of_controller('users') }
+    end
+    logout_tab do
+      text { 'Log Out' }
+      link_path { logout_path }
+      visible_when { current_user.present? }
+      enabled_when { true }
+      active_when { in_actions('destroy').of_controller('user_sessions') }
+    end
+    login_tab do
+      text { 'Log In' }
+      link_path { login_path }
+      visible_when { current_user.blank? }
+      enabled_when { true }
+      active_when { in_actions('new','create').of_controller('user_sessions') }
+    end
   end
-
-
-  config.actions do
-    [
-      [ :home          ,:all_actions,:home_tab         ],
-      [ :petitioners   ,:all_actions,:elections_subtab ],
-      [ :ballots       ,:all_actions,:elections_subtab ],
-      [ :elections     ,:all_actions,:elections_subtab ],
-      [ :candidates    ,:all_actions,:elections_subtab ],
-      [ :users         ,:all_actions,:users_subtab     ],
-      [ :user_sessions ,:new        ,:login_tab        ],
-      [ :user_sessions ,:create     ,:login_tab        ],
-      [ :user_sessions ,:sso_failure,:home_tab         ]
-    ]
-  end
-
-  config.active_tab_clickable = true
-  config.always_render_subtabs = false
-  config.when_action_has_no_tab = :raise_error      # the default behavior
-  config.html5 = false
-  config.css.scaffolding = false
-  config.tabs_ul_class = "nav nav-pills"
-  config.bootstrap_style_subtabs = true
+  
+  customize do
+    active_tab_clickable true
+    when_action_has_no_tab :raise_error
+    renderer :bootstrap_pill
+  end  
 end
-

@@ -68,9 +68,9 @@ When /^I create an election$/ do
   @start = (Time.zone.now + 1.day).floor
   @end = @start + 1.day
   @release = @end + 1.day
-  fill_in "Starts at", with: @start.to_s(:us_short)
-  fill_in "Ends at", with: @end.to_s(:us_short)
-  fill_in "Results available at", with: @release.to_s(:us_short)
+  fill_in "Starts at", with: @start.to_s(:datetime_picker)
+  fill_in "Ends at", with: @end.to_s(:datetime_picker)
+  fill_in "Results available at", with: @release.to_s(:datetime_picker)
   fill_in "Contact name", with: "Board of Elections"
   fill_in "Contact email", with: "elections@example.com"
   fill_in "Verify message", with: "Thank you for *voting*."
@@ -103,9 +103,9 @@ When /^I update the election$/ do
   @start += 1.day
   @end += 1.day
   @release += 1.day
-  fill_in "Starts at", with: @start.to_s(:us_short)
-  fill_in "Ends at", with: @end.to_s(:us_short)
-  fill_in "Results available at", with: @release.to_s(:us_short)
+  fill_in "Starts at", with: @start.to_s(:datetime_picker)
+  fill_in "Ends at", with: @end.to_s(:datetime_picker)
+  fill_in "Results available at", with: @release.to_s(:datetime_picker)
   fill_in "Contact name", with: "Elections Inc"
   fill_in "Contact email", with: "el@example.com"
   fill_in "Verify message", with: "Good job!"
