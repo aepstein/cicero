@@ -13,8 +13,16 @@ class ElectionsController < ApplicationController
     if params[:id]
       Election.find(params[:id])
     else
-      Election.new(params[:election])
+      Election.new(params[:election] ? election_attributes : {})
     end
+  end
+  expose :election_attributes do
+    params.require(:election).permit( :name, :starts_at, :ends_at,
+    :results_available_at, :verify_message, :contact_name, :contact_email,
+    rolls_attributes: [ :id, :name, :_destroy ],
+    races_attributes: [ :id, :name, :slots, :is_ranked, :roll_id, :description,
+    :_destroy, { candidates_attributes: [ :name, :eliminated, :statement,
+      :disqualified, :picture, :picture_cache, :_destroy ] } ] )
   end
   filter_access_to :new, :create, :edit, :update, :destroy, :show,
     load_method: :election, attribute_check: true
@@ -37,7 +45,7 @@ class ElectionsController < ApplicationController
   # PUT /elections/1.xml
   def update
     respond_to do |format|
-      if election.update_attributes(params[:election])
+      if election.update_attributes(params[:election] ? election_attributes : {})
         format.html { redirect_to(election, flash: { success: 'Election updated.' }) }
         format.xml  { head :ok }
       else

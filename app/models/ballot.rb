@@ -1,6 +1,5 @@
 class Ballot < ActiveRecord::Base
   SEARCHABLE = [ :user_name_contains ]
-  attr_accessible :confirmation, :sections_attributes
   attr_readonly :election_id, :user_id
 
   belongs_to :election, inverse_of: :ballots

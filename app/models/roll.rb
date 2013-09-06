@@ -1,9 +1,8 @@
 class Roll < ActiveRecord::Base
-  attr_accessible :name, :_destroy
   attr_readonly :election_id
 
-  belongs_to :election, :inverse_of => :rolls
-  has_many :candidates, :through => :races
+  belongs_to :election, inverse_of: :rolls
+  has_many :candidates, through: :races
   has_and_belongs_to_many :users do
     def find_by_net_id_or_name(search)
       q = "%#{search}%"

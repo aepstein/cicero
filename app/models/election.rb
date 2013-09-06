@@ -1,8 +1,4 @@
 class Election < ActiveRecord::Base
-  attr_accessible :name, :starts_at, :ends_at, :results_available_at,
-    :verify_message, :contact_name, :contact_email, :rolls_attributes,
-    :races_attributes
-
   has_many :rolls, include: [:races], order: :name,
     dependent: :destroy, inverse_of: :election
   has_many :races, include: [:candidates, :roll], order: :name,

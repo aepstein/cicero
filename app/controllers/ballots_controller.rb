@@ -24,9 +24,13 @@ class BallotsController < ApplicationController
     else
       election.ballots.build do |ballot|
         ballot.user = user || current_user
-        ballot.assign_attributes params[:ballot]
+        ballot.assign_attributes ballot_attributes if params[:ballot]
       end
     end
+  end
+  expose :ballot_attributes do
+    params.require(:ballot).permit( :confirmation, { sections_attributes: [ 
+      :race_id, { votes_attributes: [ :rank, :candidate_id ] } ] } )
   end
   filter_access_to :new, :create, :edit, :update, :destroy, :show, :confirm,
     :preview, load_method: :ballot, attribute_check: true

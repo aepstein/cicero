@@ -15,16 +15,21 @@ class UsersController < ApplicationController
     end
     scope
   end
-  expose(:current_user_attr_role) { current_user.admin? ? :admin : :default }
   expose(:users) { q_scope.with_permissions_to(:show).page(params[:page]) }
   expose(:user) do
     if params[:id]
       User.find params[:id]
     else
       out = User.new
-      out.assign_attributes params[:user], as: current_user_attr_role
+      out.assign_attributes user_attributes if params[:user]
       out
     end
+  end
+  expose(:user_attributes) do
+    attributes = [ :first_name, :last_name, :email, :password,
+    :password_confirmation ]
+    attributes += [ :net_id, :admin, :roll_ids ] if current_user.admin?
+    params.require(:user).permit( *attributes )
   end
   filter_access_to :new, :create, :edit, :update, :destroy, :show,
     attribute_check: true, load_method: :user
@@ -55,7 +60,7 @@ class UsersController < ApplicationController
   # PUT /users/1.xml
   def update
     respond_to do |format|
-      if user.update_attributes(params[:user], as: current_user_attr_role)
+      if user.update_attributes( params[:user] ? user_attributes : {} )
         format.html { redirect_to(user, flash: { success: 'User updated.' }) }
         format.xml  { head :ok }
       else

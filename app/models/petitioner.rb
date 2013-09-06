@@ -1,7 +1,5 @@
 class Petitioner < ActiveRecord::Base
   SEARCHABLE = [ :user_name_contains ]
-
-  attr_accessible :user_id, :user_name
   attr_readonly :candidate_id
 
   belongs_to :user

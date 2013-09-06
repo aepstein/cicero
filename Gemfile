@@ -16,6 +16,7 @@ gem 'carrierwave'
 gem 'whenever', require: false
 gem 'escape_utils'
 gem 'valium'
+gem 'strong_parameters'
 gem 'cornell_assemblies_rails',
   git: 'git://assembly.cornell.edu/git/cornell-assemblies-rails.git',
   branch: '0-0-3'
@@ -35,6 +36,8 @@ group :development, :test do
 end
 group :test do
   gem 'test-unit', require: false
+  gem 'selenium-webdriver', require: false
+  gem 'cucumber', '~> 1.2.1', require: false
   gem 'cucumber-rails', require: false
   gem 'database_cleaner', require: false
   gem 'spork', require: false

@@ -1,6 +1,5 @@
 class Section < ActiveRecord::Base
   attr_accessor :warning
-  attr_accessible :race_id, :votes_attributes
   attr_readonly :ballot_id, :race_id
 
   belongs_to :ballot, inverse_of: :sections

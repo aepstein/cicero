@@ -19,9 +19,12 @@ class PetitionersController < ApplicationController
       Petitioner.find params[:id]
     else
       candidate.petitioners.build do |petitioner|
-        petitioner.assign_attributes params[:petitioner]
+        petitioner.assign_attributes petitioner_attributes if params[:petitioner]
       end
     end
+  end
+  expose :petitioner_attributes do
+    params.require(:petitioner).permit( :user_id, :user_name )
   end
   filter_access_to :new, :create, :edit, :update, :destroy, :show,
     load_method: :petitioner, attribute_check: true

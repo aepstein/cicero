@@ -1,6 +1,4 @@
 class Candidate < ActiveRecord::Base
-  attr_accessible :name, :eliminated, :statement, :disqualified, :picture,
-    :picture_cache, :_destroy
   attr_readonly :race_id
 
   belongs_to :race, inverse_of: :candidates
