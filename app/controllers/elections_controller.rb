@@ -21,7 +21,7 @@ class ElectionsController < ApplicationController
     :results_available_at, :verify_message, :contact_name, :contact_email,
     rolls_attributes: [ :id, :name, :_destroy ],
     races_attributes: [ :id, :name, :slots, :is_ranked, :roll_id, :description,
-    :_destroy, { candidates_attributes: [ :name, :eliminated, :statement,
+    :_destroy, { candidates_attributes: [ :id, :name, :eliminated, :statement,
       :disqualified, :picture, :picture_cache, :_destroy ] } ] )
   end
   filter_access_to :new, :create, :edit, :update, :destroy, :show,
