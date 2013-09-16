@@ -28,7 +28,7 @@ class UsersController < ApplicationController
   expose(:user_attributes) do
     attributes = [ :first_name, :last_name, :email, :password,
     :password_confirmation ]
-    attributes += [ :net_id, :admin, :roll_ids ] if current_user.admin?
+    attributes += [ :net_id, :admin, { roll_ids: [] } ] if current_user.admin?
     params.require(:user).permit( *attributes )
   end
   filter_access_to :new, :create, :edit, :update, :destroy, :show,
