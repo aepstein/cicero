@@ -7,6 +7,12 @@
     <% end %>
   <% end %>
   <%=content_tag :div, class: 'span9' do %>
+    <%=content_tag :ul do %>
+      <%=content_tag :li, link_to( 'Download Races Summary (csv)',
+        election_path( election, format: :csv ) ) %>
+      <%=content_tag :li, link_to( 'Download PmWiki Source (txt)',
+        election_path( election, format: :txt ) ) %>
+    <% end %>
     <%=render partial: 'races/races', object: election.races %>
   <% end %>
 <% end %>

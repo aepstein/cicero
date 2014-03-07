@@ -6,3 +6,4 @@
 
 Mime::Type.register 'image/jpeg', :jpg
 Mime::Type.register 'text/blt', :blt
+Mime::Type.register 'text/plain', :txt

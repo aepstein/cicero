@@ -26,6 +26,16 @@ class ElectionsController < ApplicationController
   end
   filter_access_to :new, :create, :edit, :update, :destroy, :show,
     load_method: :election, attribute_check: true
+    
+  def show
+    respond_to do |format|
+      format.csv { send_data election.races.to_csv, type: 'text/csv',
+        filename: "{election.to_s :file}.csv" }
+      format.txt { send_data election.to_pmwiki, type: 'text/plain',
+        filename: "{election.to_s :file}.txt" }
+      format.html
+    end
+  end
 
   # POST /elections
   # POST /elections.xml

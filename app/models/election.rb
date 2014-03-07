@@ -2,7 +2,19 @@ class Election < ActiveRecord::Base
   has_many :rolls, include: [:races], order: :name,
     dependent: :destroy, inverse_of: :election
   has_many :races, include: [:candidates, :roll], order: :name,
-    dependent: :restrict, inverse_of: :election
+    dependent: :restrict, inverse_of: :election do
+    def to_csv
+      CSV.generate do |csv|
+        csv << %w[ race candidate ranked? ]
+        each do |race|
+          race.candidates.each do |candidate|
+            csv << [ race.name, candidate.name,
+              ( race.is_ranked? ? 'Ranked' : 'Checkbox' ) ]
+          end
+        end
+      end
+    end
+  end
   has_and_belongs_to_many :managers, class_name: 'User',
     join_table: 'elections_managers'
   has_many :ballots, dependent: :destroy, inverse_of: :election
@@ -51,7 +63,15 @@ class Election < ActiveRecord::Base
 
   def past?; ends_at < Time.zone.now; end
 
-  def to_s; name; end
+  def to_s(format=nil)
+    return super() if name.blank?
+    case format
+    when :file
+      name.strip.downcase.gsub(/[^a-z]/,'-').squeeze('-')
+    else
+      name
+    end
+  end
 
 end
 
