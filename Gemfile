@@ -1,5 +1,5 @@
 source 'http://rubygems.org'
-gem 'rails', '~>3.2.0'
+gem 'rails', '~>3.2'
 gem 'mysql2'
 gem 'rake'
 gem 'activerecord-import'
@@ -33,6 +33,7 @@ group :assets do
 end
 group :development, :test do
   gem 'rspec-rails'
+  gem 'capistrano'
 end
 group :test do
   gem 'test-unit', require: false
