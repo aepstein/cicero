@@ -8,7 +8,7 @@ set :deploy_to, "/var/www/assembly/#{fetch(:application)}"
 set :linked_files, %w{config/database.yml config/application.yml}
 set :linked_dirs, %w{db/uploads public/system}
 set :default_env, {
-  "RAILS_RELATIVE_URL_ROOT" => "/staffing"
+  "RAILS_RELATIVE_URL_ROOT" => "/cicero"
 }
 #set :ssh_options, { verbose: :debug }
 

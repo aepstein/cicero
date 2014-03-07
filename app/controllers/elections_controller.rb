@@ -30,9 +30,9 @@ class ElectionsController < ApplicationController
   def show
     respond_to do |format|
       format.csv { send_data election.races.to_csv, type: 'text/csv',
-        filename: "{election.to_s :file}.csv" }
+        filename: "#{election.to_s :file}.csv" }
       format.txt { send_data election.to_pmwiki, type: 'text/plain',
-        filename: "{election.to_s :file}.txt" }
+        filename: "#{election.to_s :file}.txt" }
       format.html
     end
   end
