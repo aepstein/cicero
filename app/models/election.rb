@@ -5,10 +5,10 @@ class Election < ActiveRecord::Base
     dependent: :restrict, inverse_of: :election do
     def to_csv
       CSV.generate do |csv|
-        csv << %w[ race candidate ranked? ]
+        csv << %w[ race roll candidate ranked? ]
         each do |race|
           race.candidates.each do |candidate|
-            csv << [ race.name, candidate.name,
+            csv << [ race.name, race.roll.name, candidate.name,
               ( race.is_ranked? ? 'Ranked' : 'Checkbox' ) ]
           end
         end
