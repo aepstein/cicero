@@ -76,6 +76,22 @@ class Election < ActiveRecord::Base
 
   def past?; ends_at < Time.zone.now; end
   
+  def unranked_results
+    @unranked_results ||= connection.select_rows "SELECT races.name AS race, " +
+      "candidates.name AS candidate, COUNT(votes.id) AS vote FROM races INNER " +
+      "JOIN candidates ON races.id = candidates.race_id LEFT JOIN votes ON " +
+      "candidates.id = votes.candidate_id AND votes.rank = 1 WHERE " +
+      "races.is_ranked = 0 AND races.election_id = #{id} GROUP BY candidates.id " +
+      "ORDER BY race, vote DESC, candidate"
+  end
+  
+  def unranked_results_csv
+    CSV.generate do |csv|
+      csv << ["Race", "Candidate", "Vote"]
+      unranked_results.each { |row| csv << row }
+    end
+  end
+  
   # Clear sensitive data associated with election (run only after you have captured results!)
   def purge!
     connection.send :delete_sql, "DELETE FROM votes WHERE votes.section_id IN " +

@@ -3,11 +3,17 @@ authorization do
     has_permission_on [ :candidates, :elections, :petitioners, :races,
       :rolls, :sections, :users ], to: [ :manage, :show ]
     has_permission_on [ :ballots ], to: [ :preview, :destroy, :show ]
-    has_permission_on [ :elections, :races, :users ], to: :tabulate
+    has_permission_on [ :users ], to: :tabulate
+    has_permission_on [ :elections ], to: :tabulate do
+      if_attribute results_available_at: lt { Time.zone.now }
+    end
   end
   role :user do
     has_permission_on [ :elections ], to: :show do
       if_attribute starts_at: lte { Time.zone.now }
+    end
+    has_permission_on [ :races ], to: :tabulate do
+      if_permitted_to :tabulate, :election
     end
     has_permission_on [ :rolls ], to: :show do
       if_permitted_to :show, :election

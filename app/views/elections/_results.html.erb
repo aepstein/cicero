@@ -1,0 +1,29 @@
+<%=content_tag :h3, "Unranked Race Results" %>
+
+<%=content_tag :table do %>
+  <%=content_tag :thead do %>
+    <%=content_tag :tr do %>
+      <%=content_tag :th, "Race" %>
+      <%=content_tag :th, "Candidate" %>
+      <%=content_tag :th, "Votes" %>
+    <% end %>
+  <% end %>
+  <%=content_tag :tbody do %>
+    <% election.unranked_results.each do |row| %>
+      <%=content_tag :tr do %>
+        <%=content_tag :td, row[0] %>
+        <%=content_tag :td, row[1] %>
+        <%=content_tag :td, row[2] %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%=content_tag :h3, "Ranked Race Results" %>
+
+<%=content_tag :ul do %>
+  <% election.races.ranked.each do |race| %>
+    <%=content_tag :li, link_to( race, race_ballots_path( race, format: :blt ) ) %>
+  <% end %>
+<% end %>
+

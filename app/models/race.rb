@@ -40,6 +40,7 @@ class Race < ActiveRecord::Base
 
   accepts_nested_attributes_for :candidates, allow_destroy: true
 
+  scope :ranked, lambda { where( is_ranked: true ) }
   scope :allowed_for_user, lambda { |user|
     where { |r| r.roll_id.in( user.rolls.scoped.select { id } ) }
   }

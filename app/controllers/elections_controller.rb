@@ -25,9 +25,16 @@ class ElectionsController < ApplicationController
     :_destroy, { candidates_attributes: [ :id, :name, :eliminated, :statement,
       :disqualified, :picture, :picture_cache, :_destroy ] } ] )
   end
-  filter_access_to :new, :create, :edit, :update, :destroy, :show,
+  filter_access_to :new, :create, :edit, :update, :destroy, :show, :tabulate,
     load_method: :election, attribute_check: true
     
+  def tabulate
+    respond_to do |format|
+      format.csv { send_data election.unranked_results_csv, type: 'text/csv',
+        filename: "#{election.to_s(:file)}_unranked_results.csv" }
+    end
+  end
+
   def show
     respond_to do |format|
       format.csv { send_data election.races.to_csv, type: 'text/csv',

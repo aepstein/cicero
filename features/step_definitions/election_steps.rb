@@ -25,6 +25,21 @@ Then /^I may( not)? see the election$/ do |negate|
   end
 end
 
+Then /^I may( not)? tabulate the election$/ do |negate|
+  visit(election_url(@election))
+  if negate.blank?
+    page.should have_selector( "#results" )
+  else
+    page.should have_no_selector( "#results" )
+  end
+  visit(tabulate_election_url(@election, format: :blt))
+  step %{I should#{negate} be authorized}
+  race = create(:race, election: @election)
+  visit(race_ballots_url(race, format: :blt))
+  step %{I should#{negate} be authorized}
+  race.destroy
+end
+
 Then /^I may( not)? create elections$/ do |negate|
   Capybara.current_session.driver.submit :post, elections_url, {}
   step %{I should#{negate} be authorized}

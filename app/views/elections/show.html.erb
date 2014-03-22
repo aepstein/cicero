@@ -3,6 +3,9 @@
     <%=content_tag :li, content_tag(:a, "Overview", href: "#overview", data: { toggle: "tab" }), class: "active" %>
     <%=content_tag :li, content_tag(:a, "Rolls", href: "#rolls", data: { toggle: "tab" }) %>
     <%=content_tag :li, content_tag(:a, "Races", href: "#races", data: { toggle: "tab" }) %>
+    <% if permitted_to? :tabulate, election %>
+      <%=content_tag :li, content_tag(:a, "Results", href: "#results", data: { toggle: "tab" }) %>
+    <% end %>
   <% end %>
   <%=content_tag :div, class: "tab-content" do %>
     <%=content_tag :div, class: "tab-pane active", id: "overview" do %>
@@ -13,6 +16,11 @@
     <% end %>
     <%=content_tag :div, class: "tab-pane", id: "races" do %>
       <%= render partial: "elections/races", election: election %>
+    <% end %>
+    <% if permitted_to? :tabulate, election %>
+      <%=content_tag :div, class: "tab-pane", id: "results" do %>
+        <%= render partial: "elections/results", election: election %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

@@ -7,17 +7,18 @@ Feature: Manage elections
     Given a <tense> election exists
     And I log in as the <role> user
     Then I <see> see the election
+    And I <tabulate> tabulate the election
     And I <update> update the election
     And I <create> create elections
     And I <destroy> destroy the election
     Examples:
-      |tense  |role |create |update |destroy|see    |
-      |current|admin|may    |may    |may    |may    |
-      |current|plain|may not|may not|may not|may    |
-      |past   |admin|may    |may    |may    |may    |
-      |past   |plain|may not|may not|may not|may    |
-      |future |admin|may    |may    |may    |may    |
-      |future |plain|may not|may not|may not|may not|
+      |tense  |role |create |update |destroy|see    |tabulate|
+      |current|admin|may    |may    |may    |may    |may not |
+      |current|plain|may not|may not|may not|may    |may not |
+      |past   |admin|may    |may    |may    |may    |may     |
+      |past   |plain|may not|may not|may not|may    |may not |
+      |future |admin|may    |may    |may    |may    |may not |
+      |future |plain|may not|may not|may not|may not|may not |
 
   @javascript
   Scenario: Create and edit election

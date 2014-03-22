@@ -10,6 +10,9 @@ Cicero::Application.routes.draw do
     collection do
       get :my
     end
+    member do
+      get :tabulate
+    end
     resources :ballots, only: [ :index, :new, :create ] do
       new do
         post :confirm
