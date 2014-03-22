@@ -108,6 +108,24 @@ describe Election do
     @election.past?.should eql false
     @future.past?.should eql false
   end
+  
+  it "should have a working purge method" do
+    @election = create(:vote).section.ballot.election
+    other = create(:vote).section.ballot.election
+    @election.votes.count.should > 0
+    @election.users.count.should > 0
+    @election.purge!
+    @election.votes.count.should eql 0
+    @election.users.count.should eql 0
+    other.votes.count.should > 0
+    other.users.count.should > 0
+  end
+  
+  it "should have a purgeable method" do
+    make_past_and_future
+    Election.purgeable.length.should eql 1
+    Election.purgeable.should include @past
+  end
 
   def make_past_and_future
     @past = create(:past_election)
