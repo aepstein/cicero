@@ -14,6 +14,10 @@
   <b>Results available at:</b> <%= election.results_available_at.to_formatted_s :us_ordinal %>
 </p>
 
+<%=content_tag :p do %>
+  <%=content_tag :b, "Purge results after:" %> <%= election.purge_results_after.to_formatted_s :long %>
+<% end %>
+
 <p>
   <b>Contact:</b> <%= election.contact_name %> &lt;<%=link_to election.contact_email, "mailto:#{election.contact_email}" %>&gt;
 </p>

@@ -4,6 +4,10 @@
 <%= form.input :starts_at, as: :date_time_picker %>
 <%= form.input :ends_at, as: :date_time_picker %>
 <%= form.input :results_available_at, as: :date_time_picker %>
+<%= form.input :purge_results_after, as: :date_picker,
+  hint: 'After this date, election results and voter rolls will be purged to ' +
+  'protect user privacy.  This should generally be when the terms the election ' +
+  'is filling are set to end.' %>
 <%= form.input :contact_name %>
 <%= form.input :contact_email %>
 <%= form.input :verify_message %>

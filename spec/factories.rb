@@ -4,6 +4,7 @@ FactoryGirl.define do
     starts_at { Time.zone.now - 1.day }
     ends_at { starts_at + 2.days  }
     results_available_at { ends_at + 1.week }
+    purge_results_after { results_available_at + 2.months }
     verify_message "Congratulations!"
     contact_name "Elections Committee"
     contact_email "elections@example.com"

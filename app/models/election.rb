@@ -38,10 +38,18 @@ class Election < ActiveRecord::Base
   validates :ends_at, timeliness: { type: :datetime,
     before: :results_available_at }
   validates :results_available_at, timeliness: { type: :datetime }
+  validates :purge_results_after, presence: true
   validates :verify_message, presence: true
   validates :contact_name, presence: true
   validates :contact_email, format: {
     with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, allow_nil: false }
+  validates_each :purge_results_after do |record, attr, value|
+    if value.present? && record.results_available_at? &&
+      value.to_time < ( record.results_available_at + 1.month )
+      record.errors.add attr,
+        'must be at least one month after results available'
+    end
+  end
 
   def to_pmwiki(statement_length=1250)
     races.map { |race|

@@ -36,6 +36,26 @@ describe Election do
     @election.ends_at = nil
     @election.save.should eql false
   end
+  
+  it "should not save without results_available_at" do
+    @election.results_available_at = nil
+    @election.save.should be_false
+  end
+  
+  it "should not save with invalid results_available_at" do
+    @election.results_available_at = @election.ends_at - 5.minutes
+    @election.save.should be_false
+  end
+  
+  it "should not save without purge_results_after" do
+    @election.purge_results_after = nil
+    @election.save.should be_false
+  end
+  
+  it "should not save with invalid purge_results_after" do
+    @election.purge_results_after = @election.results_available_at + 3.weeks
+    @election.save.should be_false
+  end
 
   it "should not save without contact name" do
     @election.contact_name = nil
