@@ -13,6 +13,7 @@ Cicero::Application.configure do
   config.assets.precompile += %w( ie6.css ie7.css print.css )
 #  config.force_ssl = true
   config.filter_parameters += [ :password, :password_confirmation, :ballot ]
+  config.threadsafe!
   config.middleware.use ExceptionNotification::Rack, email: {
     :email_prefix => "[cicero] ",
     :sender_address => %{"Assemblies IT Support" <assembly-it@cornell.edu>},

@@ -108,7 +108,7 @@ class Election < ActiveRecord::Base
     return super() if name.blank?
     case format
     when :file
-      name.strip.downcase.gsub(/[^a-z]/,'-').squeeze('-')
+      name.strip.downcase.gsub(/[^a-z0-9]/,'-').squeeze('-')
     else
       name
     end
