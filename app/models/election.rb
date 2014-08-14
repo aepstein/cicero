@@ -28,7 +28,7 @@ class Election < ActiveRecord::Base
 
   scope :ordered, -> { order { [ starts_at.desc, name ] } }
   scope :allowed_for_user, ->(user) {
-    where { |e| e.id.in( user.rolls.scoped.select { election_id } ) }
+    where { |e| e.id.in( user.rolls.scope.select { election_id } ) }
   }
   scope :allowable, -> { where { ends_at > Time.zone.now } }
   scope :past, -> { where { ends_at < Time.zone.now } }

@@ -6,7 +6,8 @@ class User < ActiveRecord::Base
   has_many :elections, through: :ballots do
     def allowed
       Election.current.allowed_for_user(proxy_association.owner).
-        where { |e| e.id.not_in( proxy_association.owner.ballots.scoped.select { election_id } ) }
+        where { |e| e.id.not_in( proxy_association.owner.ballots.scope.
+          select { election_id } ) }
     end
   end
 
