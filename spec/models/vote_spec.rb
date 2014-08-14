@@ -1,27 +1,27 @@
 require 'spec_helper'
 
-describe Vote do
+describe Vote, :type => :model do
   before(:each) do
     @vote = create(:vote)
   end
 
   it "should save with valid properties" do
-    @vote.id.should_not be_nil
+    expect(@vote.id).not_to be_nil
   end
 
   it "should not save without a candidate" do
     @vote.candidate = nil
-    @vote.save.should be_false
+    expect(@vote.save).to be false
   end
 
   it 'should not save without a section' do
     @vote.section = nil
-    @vote.save.should be_false
+    expect(@vote.save).to be false
   end
 
   it 'should not save without a rank' do
     @vote.rank = nil
-    @vote.save.should be_false
+    expect(@vote.save).to be false
   end
 
 

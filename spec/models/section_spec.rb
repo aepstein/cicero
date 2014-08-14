@@ -1,34 +1,34 @@
 require 'spec_helper'
 
-describe Section do
+describe Section, :type => :model do
   before(:each) do
     @section = create(:section)
   end
 
   it "should create a new instance given valid attributes" do
-    @section.id.should_not be_nil
+    expect(@section.id).not_to be_nil
   end
 
   it 'should not save without a ballot specified' do
     @section.ballot = nil
-    @section.save.should eql false
+    expect(@section.save).to eql false
   end
 
   it 'should not save without a race specified' do
     @section.race = nil
-    @section.save.should eql false
+    expect(@section.save).to eql false
   end
 
   it 'should not save with a duplicate race within a given ballot' do
     duplicate = build(:section, :ballot => @section.ballot, :race => @section.race)
-    duplicate.save.should eql false
+    expect(duplicate.save).to eql false
   end
 
   it "should not save with a race whose roll does not include the ballot's user" do
     race = create(:race, :election => @section.ballot.election)
-    race.roll.users.exists?(@section.ballot.user.id).should be_false
+    expect(race.roll.users.exists?(@section.ballot.user.id)).to be false
     @section.race = race
-    @section.save.should eql false
+    expect(@section.save).to eql false
   end
 
   it "should have a votes.populate method that generates votes for each candidate" do
@@ -36,10 +36,10 @@ describe Section do
     included = add_candidate_for_section( @section )
     @section.reload
     @section.votes.populate
-    @section.votes.size.should eql 1
+    expect(@section.votes.size).to eql 1
     candidates = @section.votes.map { |vote| vote.candidate }
-    candidates.should include included
-    candidates.should_not include excluded
+    expect(candidates).to include included
+    expect(candidates).not_to include excluded
   end
 
   it 'should not save duplicate ranks in a ranked race' do
@@ -49,8 +49,8 @@ describe Section do
     3.times { |i| @section.votes.build( :candidate_id => @section.race.candidates[i].id,
       :rank => (i+1) ) }
     @section.votes.last.rank = 2
-    @section.votes.map(&:rank).should eql [1,2,2]
-    @section.save.should be_false
+    expect(@section.votes.map(&:rank)).to eql [1,2,2]
+    expect(@section.save).to be false
   end
 
   it 'should not save votes for which there is no immediately lower rank in a ranked race' do
@@ -60,8 +60,8 @@ describe Section do
     2.times { |i| @section.votes.build( :candidate_id => @section.race.candidates[i].id,
       :rank => (i+1) ) }
     @section.votes.last.rank = 3
-    @section.votes.map(&:rank).should eql [1,3]
-    @section.save.should be_false
+    expect(@section.votes.map(&:rank)).to eql [1,3]
+    expect(@section.save).to be false
   end
 
   def add_candidate_for_section( section )

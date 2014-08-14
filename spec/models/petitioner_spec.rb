@@ -1,38 +1,38 @@
 require 'spec_helper'
 
-describe Petitioner do
+describe Petitioner, :type => :model do
   before(:each) do
     @petitioner = create(:petitioner)
   end
 
   it "should save with valid properties" do
-    @petitioner.id.should_not be_nil
+    expect(@petitioner.id).not_to be_nil
   end
 
   it 'should not save without a user' do
     @petitioner.user = nil
-    @petitioner.save.should eql false
+    expect(@petitioner.save).to eql false
   end
 
   it 'should not save without a candidate' do
     @petitioner.candidate = nil
-    @petitioner.save.should eql false
+    expect(@petitioner.save).to eql false
   end
 
   it 'should not save if the user is not in the roll of the candidate\'s race' do
     outside = create(:user)
-    @petitioner.candidate.race.roll.users.should_not include outside
+    expect(@petitioner.candidate.race.roll.users).not_to include outside
     @petitioner.user = outside
-    @petitioner.save.should eql false
+    expect(@petitioner.save).to eql false
   end
 
   it 'should not save a duplicate user id for the same candidate' do
     duplicate = build(:petitioner, :user => @petitioner.user, :candidate => @petitioner.candidate )
-    duplicate.save.should eql false
+    expect(duplicate.save).to eql false
   end
 
   it 'should return user\'s name when converted to string' do
-    @petitioner.to_s.should eql @petitioner.user.name
+    expect(@petitioner.to_s).to eql @petitioner.user.name
   end
 
 end

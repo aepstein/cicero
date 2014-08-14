@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Election do
+describe Election, :type => :model do
   let(:race) { build(:race) }
 
   it "should save a race with valid properties" do
@@ -9,44 +9,44 @@ describe Election do
 
   it 'should not save without an election' do
     race.election = nil
-    race.save.should eql false
+    expect(race.save).to eql false
   end
 
   it 'should not save without a name' do
     race.name = nil
-    race.save.should eql false
+    expect(race.save).to eql false
   end
 
   it 'should not save if the name duplicates another in the same election' do
     race.save!
     duplicate = build(:race, election: race.election)
     duplicate.name = race.name
-    duplicate.save.should eql false
+    expect(duplicate.save).to eql false
   end
 
   it 'should not save without number of slots specified' do
     race.slots = nil
-    race.save.should eql false
+    expect(race.save).to eql false
   end
 
   it 'should not save with invalid number of slots specified' do
     race.slots = 0
-    race.save.should eql false
+    expect(race.save).to eql false
     race.slots = 'not number'
-    race.save.should eql false
+    expect(race.save).to eql false
     race.slots = 2.2
-    race.save.should eql false
+    expect(race.save).to eql false
   end
 
   it 'should not save without a roll' do
     race.roll = nil
-    race.save.should eql false
+    expect(race.save).to eql false
   end
 
   it 'should not save with a roll from a different election' do
     race.roll = create(:roll)
-    race.election.rolls.should_not include race.roll
-    race.save.should eql false
+    expect(race.election.rolls).not_to include race.roll
+    expect(race.save).to eql false
   end
 
   context "to_blt" do
@@ -70,20 +70,20 @@ describe Election do
     it "should return correct data with disqualified candidate" do
       middle.update_column :disqualified, true
       lines = race.to_blt.split "\r\n"
-      lines[0].should eql "3 1" # "number of candidates, number of seats"
-      lines[1].should eql "-2" # "disqualified candidate"
-      lines[2].should eql "1 3 1 0" # ballot itself "1 [indices of candidates] 0"
-      lines[3].should eql "0" # end of ballots
-      lines[4].should eql "\"Bottom\""
-      lines[5].should eql "\"Middle\""
-      lines[6].should eql "\"Top\""
-      lines[7].should eql "\"#{race.name}\""
+      expect(lines[0]).to eql "3 1" # "number of candidates, number of seats"
+      expect(lines[1]).to eql "-2" # "disqualified candidate"
+      expect(lines[2]).to eql "1 3 1 0" # ballot itself "1 [indices of candidates] 0"
+      expect(lines[3]).to eql "0" # end of ballots
+      expect(lines[4]).to eql "\"Bottom\""
+      expect(lines[5]).to eql "\"Middle\""
+      expect(lines[6]).to eql "\"Top\""
+      expect(lines[7]).to eql "\"#{race.name}\""
     end
 
     it "should return correct data without disqualified candidate" do
       lines = race.to_blt.split "\r\n"
-      lines[0].should eql "3 1"
-      lines[1].should eql "1 3 2 1 0"
+      expect(lines[0]).to eql "3 1"
+      expect(lines[1]).to eql "1 3 2 1 0"
     end
   end
 

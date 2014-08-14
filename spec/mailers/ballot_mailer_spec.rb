@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe BallotMailer do
+describe BallotMailer, :type => :mailer do
   include MailerSpecHelpers
   let(:election) { create( :election, name: "2012 Federal", verify_message: "You are a *good* citizen!" ) }
   let(:ballot) do
@@ -13,9 +13,9 @@ describe BallotMailer do
     let(:mail) { BallotMailer.verification( ballot ) }
 
     it "has correct headers and content" do
-      mail.subject.should eq "Confirmation of 2012 Federal ballot"
-      mail.from.should eq([election.contact_email])
-      mail.to.should eq([ballot.user.email])
+      expect(mail.subject).to eq "Confirmation of 2012 Federal ballot"
+      expect(mail.from).to eq([election.contact_email])
+      expect(mail.to).to eq([ballot.user.email])
 
       both_parts_should_match /Dear #{ballot.user.first_name},/
       html_part_should_match /You are a <em>good<\/em> citizen./
