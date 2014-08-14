@@ -1,23 +1,18 @@
 <h1>Login</h1>
 
-<%= form_tag user_session_path, class: 'form-horizontal' do %>
-  <%=content_tag :div, class: 'control-group' do %>
-    <%=label_tag :net_id, nil, class: 'control-label' %>
-    <%=content_tag :div, class: 'controls' do %>
-      <%= text_field_tag :net_id, params[:net_id] %>
-    <% end %>
+<%= form_tag user_session_path, class: "form-inline" do %>
+  <%=content_tag :div, class: 'form-group' do %>
+    <%=label_tag :net_id, 'Net Id', class: "sr-only" %>
+    <%=text_field_tag :net_id, params[:net_id], class: 'form-control',
+      placeholder: "Enter Username" %>
   <% end %>
 
-  <%=content_tag :div, class: 'control-group' do %>
-    <%=label_tag :password, nil, class: 'control-label' %>
-    <%=content_tag :div, class: 'controls' do %>
-      <%= password_field_tag :password %>
-    <% end %>
+  <%=content_tag :div, class: 'form-group' do %>
+    <%=label_tag :password, 'Password', class: "sr-only" %>
+    <%=password_field_tag :password, "", class: 'form-control',
+      placeholder: "Enter Password" %>
   <% end %>
 
-  <%=content_tag :div, class: 'control-group' do %>
-    <%= submit_tag "Login", class: 'btn btn-primary' %>
-  <% end %>
-
+  <%=button_tag "Log in", type: 'submit', class: 'btn btn-primary' %>
 <% end %>
 

@@ -3,7 +3,7 @@ Given /^I log in with net_id: "([^"]+)" and password: "([^"]+)"$/ do |net_id, pa
     visit login_path
     fill_in "Net", with: net_id
     fill_in "Password", with: password
-    click_button "Login"
+    click_button "Log in"
   end
 end
 

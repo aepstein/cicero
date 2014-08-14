@@ -1,20 +1,24 @@
-<%=content_tag :div, id: "candidate-#{candidate.id}", class: 'modal fade hide' do %>
-  <%=content_tag :div, class: 'modal-header' do %>
-    <button type="button" class="close" data-dismiss="modal">&times;</button>
-    <%=content_tag :h2, candidate.name %>
-  <% end %>
-  <%=content_tag :div, class: 'modal-body' do %>
-    <%=content_tag :div, class: 'media' do %>
-      <%=content_tag :div, class: 'pull-left' do %>
-        <% if candidate.picture.url(:thumb) %>
-          <%= image_tag candidate.picture.url(:thumb), alt: "Picture of #{candidate.name}" %>
+<%=content_tag :div, id: "candidate-#{candidate.id}", class: 'modal fade' do %>
+  <%=content_tag :div, class: "modal-dialog" do %>
+    <%=content_tag :div, class: "modal-content" do %>
+      <%=content_tag :div, class: 'modal-header' do %>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <%=content_tag :h2, candidate.name %>
+      <% end %>
+      <%=content_tag :div, class: 'modal-body' do %>
+        <%=content_tag :div, class: 'media' do %>
+          <%=content_tag :div, class: 'pull-left' do %>
+            <% if candidate.picture.url(:thumb) %>
+              <%= image_tag candidate.picture.url(:thumb), alt: "Picture of #{candidate.name}" %>
+            <% end %>
+          <% end %>
+          <%=markdown candidate.statement %>
         <% end %>
       <% end %>
-      <%=markdown candidate.statement %>
+      <%=content_tag :div, class: 'modal-footer' do %>
+        <%=button_tag 'Close', class: 'btn', data: { dismiss: 'modal' } %>
+      <% end %>
     <% end %>
-  <% end %>
-  <%=content_tag :div, class: 'modal-footer' do %>
-    <%=button_tag 'Close', class: 'btn', data: { dismiss: 'modal' } %>
   <% end %>
 <% end %>
 

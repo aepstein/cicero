@@ -34,10 +34,11 @@ Given /^a ballot is cast for the race to which I have a (admin|voter|enrolled|pl
 end
 
 Then /^I should( not)? be authorized for the ballot$/ do |negate|
-  if negate.present? && page.has_no_selector?(".alert")
-    current_path.should eql new_election_ballot_path( @election )
+  if negate.present?
+    step %{I should be alerted that I am unauthorized}
+    # TODO verify that we are not on the sought page
   else
-    step %{I should#{negate} be authorized}
+    step %{I should be authorized}
   end
 end
 

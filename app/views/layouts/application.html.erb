@@ -6,7 +6,7 @@
 	<title>Campus Elections &gt; <%= controller.controller_name.titleize %> &gt; <%= controller.action_name.titleize %></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 	<meta http-equiv="Content-Language" content="en-us" />
-	<link rel="shortcut icon" href="<%= image_path('favicon.ico') %>" type="image/x-icon" />
+	<link rel="SHORTCUT ICON" href="<%= image_path('favicon.ico') %>" type="image/x-icon" />
 	<%=raw stylesheet_link_tag 'application' %>
 	<%=raw stylesheet_link_tag 'print', media: :print %>
 	<!--[if IE 6]><%=raw stylesheet_link_tag 'ie6' %><![endif]-->
@@ -40,19 +40,19 @@
 
 <hr class="banner-separator" />
 
-<div class="navbar navbar-inverse">
-  <div class="navbar-inner">
-    <div class="container">
-      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-      <a class="brand" href="#">Campus Elections</a>
-      <div class="nav-collapse collapse">
-      <%= tabs %>
-      </div><!--/.nav-collapse -->
-    </div>
+<div class="navbar navbar-inverse" role="navigation">
+  <div class="container">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" 
+      data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="#">Campus Elections</a>
+    <div class="collapse navbar-collapse">
+    <%= tabs %>
+    </div><!--/.navbar-collapse -->
   </div>
 </div>
 
