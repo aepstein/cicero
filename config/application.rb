@@ -12,8 +12,7 @@ module Cicero
     config.action_mailer.default_url_options = {
       host: "assembly.cornell.edu/cicero", protocol: 'https' }
     config.time_zone = 'Eastern Time (US & Canada)'
-    config.active_record.disable_implicit_join_references = true
-    
+    config.action_dispatch.cookies_serializer = :hybrid
     config.assets.enabled = true
     config.assets.version = '1.0'
 
