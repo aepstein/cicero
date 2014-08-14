@@ -1,6 +1,6 @@
 <%=content_tag :h1, "New petitioner" %>
 
-<%= simple_form_for( petitioner,
+<%= simple_form_for( petitioner, wrapper: :horizontal_form,
   url: candidate_petitioners_url( petitioner.candidate ) ) do |f| %>
   <%= render partial: 'form', object: f %>
 <% end %>

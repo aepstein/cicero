@@ -16,7 +16,7 @@ class PetitionersController < ApplicationController
   end
   expose :petitioner do
     if params[:id]
-      Petitioner.find params[:id]
+      Petitioner.unscoped.find params[:id]
     else
       candidate.petitioners.build do |petitioner|
         petitioner.assign_attributes petitioner_attributes if params[:petitioner]

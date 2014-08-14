@@ -32,7 +32,7 @@ Then /^I may( not)? tabulate the election$/ do |negate|
   else
     page.should have_no_selector( "#results" )
   end
-  visit(tabulate_election_url(@election, format: :blt))
+  visit(tabulate_election_url(@election, format: :csv))
   step %{I should#{negate} be authorized}
   race = create(:race, election: @election)
   visit(race_ballots_url(race, format: :blt))

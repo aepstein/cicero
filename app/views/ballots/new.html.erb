@@ -1,6 +1,7 @@
 <%=content_tag :h1, "Ballot of #{ballot.user} for #{ballot.election}" %>
 
-<%= simple_form_for( ballot, url: confirm_new_election_ballot_path( ballot.election ) ) do |f| %>
+<%= simple_form_for( ballot, wrapper: :horizontal_form,
+  url: confirm_new_election_ballot_path( ballot.election ) ) do |f| %>
   <%= render "ballots/errors", locals: { ballot: f.object } %>
   <%= render partial: 'form', object: f %>
   <%= f.button :wrapped, label: 'Continue', cancel: home_path %>

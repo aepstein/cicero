@@ -5,7 +5,8 @@ class Petitioner < ActiveRecord::Base
   belongs_to :user
   belongs_to :candidate
 
-  default_scope -> { joins(:user).merge( User.unscoped.ordered ) }
+  default_scope -> { ordered }
+  scope :ordered, -> { joins(:user).merge( User.unscoped.ordered ) }
   scope :user_name_contains, ->(name) {
     where { |p| p.user_id.in( User.unscoped.name_contains( name ) ) }
   }

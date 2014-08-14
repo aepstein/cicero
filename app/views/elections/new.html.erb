@@ -1,6 +1,6 @@
 <%=content_tag :h1, "New election" %>
 
-<%= simple_form_for(election) do |f| %>
+<%= simple_form_for(election, wrapper: :horizontal_form) do |f| %>
   <%= render partial: 'form', object: f %>
 <% end %>
 

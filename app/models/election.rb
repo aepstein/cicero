@@ -77,7 +77,7 @@ class Election < ActiveRecord::Base
   def past?; ends_at < Time.zone.now; end
   
   def unranked_results
-    @unranked_results ||= connection.select_rows "SELECT races.name AS race, " +
+    @unranked_results ||= self.class.connection.select_rows "SELECT races.name AS race, " +
       "candidates.name AS candidate, COUNT(votes.id) AS vote FROM races INNER " +
       "JOIN candidates ON races.id = candidates.race_id LEFT JOIN votes ON " +
       "candidates.id = votes.candidate_id AND votes.rank = 1 WHERE " +

@@ -1,6 +1,6 @@
 <%=content_tag :h1, "Edit user" %>
 
-<%= simple_form_for(user) do |f| %>
+<%= simple_form_for(user, wrapper: :horizontal_form) do |f| %>
   <%= render partial: 'form', object: f %>
 <% end %>
 

@@ -1,7 +1,7 @@
 <h1>Bulk add users to <%= roll %></h1>
 
 <%= form_tag bulk_create_roll_users_path( roll ), multipart: true, class: "form-horizontal" do %>
-  <%=content_tag :div, class: 'control-group' do %>
+  <%=content_tag :div, class: 'form-group' do %>
     <%=content_tag :label, "Raw User Data", class: 'control-label', for: "users" %>
     <%=content_tag :div, class: 'controls' do %>
       <%= text_area_tag 'users' %>
@@ -15,7 +15,7 @@
     <% end %>
   <% end %>
 
-  <%=content_tag :div, class: 'control-group' do %>
+  <%=content_tag :div, class: 'form-group' do %>
     <%=content_tag :label, "User File", class: 'control-label', for: "users_file" %>
     <%=content_tag :div, class: 'controls' do %>
       <%= file_field_tag 'users_file' %>
@@ -25,7 +25,7 @@
     <% end %>
   <% end %>
 
-  <%=content_tag :div, class: 'control-group' do %>
+  <%=content_tag :div, class: 'form-group' do %>
     <%=content_tag :div, class: 'controls' do %>
       <%= button_tag 'Import users', class: "btn btn-primary" %>
     <% end %>
