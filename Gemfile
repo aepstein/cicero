@@ -37,7 +37,7 @@ group :production do
   gem 'libv8'
 end
 group :development, :test do
-  gem 'rspec-rails', '~> 2.0'
+  gem 'rspec-rails', '~> 3.0'
   gem 'spring', require: false
   gem 'spring-commands-rspec', require: false
   gem 'spring-commands-cucumber', require: false
