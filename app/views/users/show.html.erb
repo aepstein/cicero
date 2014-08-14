@@ -20,7 +20,7 @@
 
 <h2>Allowed elections</h2>
 
-<% Election.allowable.all(include: :rolls, order: 'rolls.name ASC').each do |election| %>
+<% Election.allowable.each do |election| %>
   <% if user.rolls.where( election_id: election.id ).length > 0 %>
   <h3><%= election.name %></h3>
       <ul>

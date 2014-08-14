@@ -13,10 +13,11 @@
   Please select the rolls in which the user should be listed.
   </p>
 
-  <% Election.allowable.includes { rolls }.order { rolls.name }.each do |election| %>
+  <% Election.allowable.includes(:rolls).references(:rolls).
+    order { rolls.name }.each do |election| %>
     <%=field_set_tag election.name do %>
       <% election.rolls.each do |roll| %>
-        <%=content_tag :div, class: 'control-group' do %>
+        <%=content_tag :div, class: 'form-group' do %>
           <%=content_tag :label do %>
             <%= check_box_tag 'user[roll_ids][]', roll.id, user.rolls.include?(roll) %> <%= roll.name %>
           <% end %>
