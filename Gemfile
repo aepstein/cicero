@@ -49,7 +49,7 @@ group :test do
   gem 'test-unit', require: false
   gem 'selenium-webdriver', require: false
   gem 'capybara', require: false
-  gem 'capybara-screenshot', require: false
+  gem 'capybara-screenshot'
   gem 'cucumber', require: false
   gem 'cucumber-rails', require: false
   gem 'database_cleaner', require: false
