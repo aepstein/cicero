@@ -1,7 +1,7 @@
 class ElectionsController < ApplicationController
   before_filter :require_user
   expose :q_scope do
-    Election.scoped
+    Election.all
   end
   expose :q do
     q_scope.with_permissions_to(:show).ordered.search( params[:q] )

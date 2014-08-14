@@ -3,7 +3,7 @@ class Race < ActiveRecord::Base
 
   belongs_to :election, inverse_of: :races
   belongs_to :roll, inverse_of: :races
-  has_many :candidates, order: 'candidates.name ASC', dependent: :destroy,
+  has_many :candidates, -> { order(:name) }, dependent: :destroy,
     inverse_of: :race do
     def open_to(user)
       self.reject { |c| user.candidates.include?(c) }
@@ -15,7 +15,7 @@ class Race < ActiveRecord::Base
       end
     end
   end
-  has_many :sections, inverse_of: :race, dependent: :restrict do
+  has_many :sections, inverse_of: :race, dependent: :restrict_with_error do
     def to_blt_values
       disqualified = proxy_association.owner.candidates.disqualified.map(&:id)
       sql = "SELECT sections.id, votes.rank, votes.candidate_id FROM " +
@@ -40,9 +40,9 @@ class Race < ActiveRecord::Base
 
   accepts_nested_attributes_for :candidates, allow_destroy: true
 
-  scope :ranked, lambda { where( is_ranked: true ) }
-  scope :allowed_for_user, lambda { |user|
-    where { |r| r.roll_id.in( user.rolls.scoped.select { id } ) }
+  scope :ranked, -> { where( is_ranked: true ) }
+  scope :allowed_for_user, ->(user) {
+    where { |r| r.roll_id.in( user.rolls.scope.select { id } ) }
   }
 
   validates :name, presence: true, uniqueness: { scope: :election_id }

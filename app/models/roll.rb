@@ -62,7 +62,7 @@ class Roll < ActiveRecord::Base
       end
     end
   end
-  has_many :races, order: 'races.name ASC', dependent: :restrict
+  has_many :races, -> { order(:name) }, dependent: :restrict_with_error
 
   validates :election, presence: true
   validates :name, presence: true, uniqueness: { scope: :election_id }

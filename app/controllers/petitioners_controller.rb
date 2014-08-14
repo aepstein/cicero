@@ -3,7 +3,7 @@ class PetitionersController < ApplicationController
   expose :candidate
   expose( :q ) { params[:q] || Hash.new }
   expose :q_scope do
-    scope = candidate.petitioners.scoped
+    scope = candidate.petitioners
     q.each do |k,v|
       if !v.blank? && Petitioner::SEARCHABLE.include?( k.to_sym )
         scope = scope.send k, v

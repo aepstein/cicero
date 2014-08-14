@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   SEARCHABLE = [ :name_contains ]
 
   has_many :ballots, dependent: :destroy, inverse_of: :user
-  has_and_belongs_to_many :rolls, order: 'rolls.name'
+  has_and_belongs_to_many :rolls, -> { order { rolls.name } }
   has_many :elections, through: :ballots do
     def allowed
       Election.current.allowed_for_user(proxy_association.owner).
@@ -10,8 +10,9 @@ class User < ActiveRecord::Base
     end
   end
 
-  default_scope order( 'users.last_name ASC, users.first_name ASC, users.net_id ASC' )
-  scope :name_contains, lambda { |name|
+  default_scope -> { ordered }
+  scope :ordered, -> { order { [ users.last_name, users.first_name, users.net_id ] } } 
+  scope :name_contains, ->(name) {
     sql = %w( first_name last_name net_id ).map do |field|
       "users.#{field} LIKE :name"
     end

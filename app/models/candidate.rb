@@ -2,12 +2,12 @@ class Candidate < ActiveRecord::Base
   attr_readonly :race_id
 
   belongs_to :race, inverse_of: :candidates
-  has_many :votes, inverse_of: :candidate, dependent: :restrict
+  has_many :votes, inverse_of: :candidate, dependent: :restrict_with_error
   has_many :sections, through: :votes
-  has_many :petitioners, inverse_of: :candidate
+  has_many :petitioners, inverse_of: :candidate, dependent: :restrict_with_error
   has_many :users, through: :petitioners
 
-  scope :disqualified, where( disqualified: true )
+  scope :disqualified, -> { where( disqualified: true ) }
 
   mount_uploader :picture, PortraitUploader
 

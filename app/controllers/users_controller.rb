@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   end
   expose(:q_scope) do
     scope = roll.users if roll
-    scope ||= User.scoped
+    scope ||= User.all
     q.each do |k,v|
       if !v.blank? && User::SEARCHABLE.include?( k.to_sym )
         scope = scope.send k, v

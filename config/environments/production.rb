@@ -7,7 +7,7 @@ Cicero::Application.configure do
   config.i18n.fallbacks = true
   config.active_support.deprecation = :notify
   config.assets.js_compressor  = :uglifier
-  config.assets.compress = true
+#  config.assets.compress = true
   config.assets.compile = false
   config.assets.digest = true
   config.assets.precompile += %w( ie6.css ie7.css print.css )
@@ -19,5 +19,6 @@ Cicero::Application.configure do
     :sender_address => %{"Assemblies IT Support" <assembly-it@cornell.edu>},
     :exception_recipients => %w{assembly-it@cornell.edu}
   }
+  config.eager_load = true
 end
 

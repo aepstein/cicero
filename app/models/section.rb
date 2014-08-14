@@ -4,8 +4,8 @@ class Section < ActiveRecord::Base
 
   belongs_to :ballot, inverse_of: :sections
   belongs_to :race, inverse_of: :sections
-  has_many :votes, inverse_of: :section, dependent: :destroy,
-    order: 'votes.rank' do
+  has_many :votes, -> { order(:rank) }, inverse_of: :section,
+    dependent: :destroy do
     def populate
       proxy_association.owner.race.candidates.each do |candidate|
         unless candidate_ids.include? candidate.id

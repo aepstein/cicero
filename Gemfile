@@ -1,47 +1,58 @@
 source 'http://rubygems.org'
-gem 'rails', '~>3.2'
+gem 'rails', '~> 4.0.8'
 gem 'mysql2'
 gem 'rake'
 gem 'activerecord-import'
-gem 'exception_notification'
+gem 'exception_notification', '~> 4.0'
 gem 'validates_timeliness'
-gem 'bcrypt-ruby', '~> 3.0.0'
-gem 'squeel'
+gem 'bcrypt-ruby'
+gem 'squeel', '~> 1.2'
 gem 'ransack'
-gem 'declarative_authorization'
+gem 'declarative_authorization',
+  git: 'git://github.com/aepstein/declarative_authorization.git',
+  branch: 'rails4'
 gem 'rmagick'
 gem 'acts_as_list'
 gem 'daemons'
 gem 'carrierwave'
 gem 'whenever', require: false
 gem 'escape_utils'
-gem 'valium'
-gem 'strong_parameters'
+gem 'valium', :git => 'git://github.com/jayrowe/valium.git'
 gem 'cornell_assemblies_rails',
-  git: 'git://assembly.cornell.edu/git/cornell-assemblies-rails.git',
-  branch: '0-0-3'
+  path: '/home/ari/code/cornell-assemblies-rails'
+#  git: 'git://assembly.cornell.edu/git/cornell-assemblies-rails.git',
+#  branch: '0-0-3'
 gem 'cornell-assemblies-branding',
-  git: 'git://assembly.cornell.edu/git/cornell-assemblies-branding.git',
-  branch: '0-0-3'
-group :assets do
-  gem 'sass-rails'
-  gem 'coffee-rails', '~> 3.2'
+  path: '/home/ari/code/cornell-assemblies-branding'
+#  git: 'git://assembly.cornell.edu/git/cornell-assemblies-branding.git',
+#  branch: '0-0-3'
+gem 'fullcalendar-rails',
+  git: 'https://github.com/bokmann/fullcalendar-rails.git'
+group :production do
+  gem 'sass-rails', '~> 4.0.2'
+  gem 'coffee-rails'
   gem 'uglifier'
   gem 'execjs'
-  gem 'therubyracer', '~> 0.10.1'
-  gem 'libv8', '~> 3.3.10'
+  gem 'therubyracer', require: 'v8'
+  gem 'libv8'
 end
 group :development, :test do
-  gem 'rspec-rails'
-  gem 'capistrano'
+  gem 'rspec-rails', '~> 2.0'
+  gem 'spring', require: false
+  gem 'spring-commands-rspec', require: false
+  gem 'spring-commands-cucumber', require: false
+end
+group :development do
+  gem 'capistrano-rails', require: false
 end
 group :test do
   gem 'test-unit', require: false
   gem 'selenium-webdriver', require: false
-  gem 'cucumber', '~> 1.2.1', require: false
+  gem 'capybara', require: false
+  gem 'capybara-screenshot', require: false
+  gem 'cucumber', require: false
   gem 'cucumber-rails', require: false
   gem 'database_cleaner', require: false
-  gem 'spork', require: false
   gem 'factory_girl_rails', require: false
   gem 'email_spec', require: false
   gem 'launchy'
