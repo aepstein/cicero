@@ -1,9 +1,10 @@
 require 'rubygems'
-
 require 'cucumber/rails'
-Capybara.default_selector = :css
+require 'capybara-screenshot/cucumber'
 
+Capybara.default_selector = :css
 ActionController::Base.allow_rescue = false
+
 begin
   require 'database_cleaner'
   require 'database_cleaner/cucumber'
