@@ -6,7 +6,8 @@ When you have finished please click the link at the end to cast your ballot.  Yo
 further modify your ballot after you have confirmed.
 </p>
 
-<%= simple_form_for( ballot, url: election_ballots_path( ballot.election ) ) do |f| %>
+<%= simple_form_for( ballot, wrapper: :horizontal_form,
+  url: election_ballots_path( ballot.election ) ) do |f| %>
   <%= render partial: 'form', object: f %>
   <%= field_set_tag "Confirmation" do %>
   <%= f.input :confirmation, as: :radio_buttons, label: 'I want to',
