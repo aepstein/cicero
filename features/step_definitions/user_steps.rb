@@ -21,9 +21,9 @@ Then /^I may( not)? see the user$/ do |negate|
   step %{I should#{negate} be authorized}
   visit(users_url)
   if negate.blank?
-    page.should have_selector( "#user-#{@user.id}" )
+    expect( page ).to have_selector( "#user-#{@user.id}" )
   else
-    page.should have_no_selector( "#user-#{@user.id}" )
+    expect( page ).to have_no_selector( "#user-#{@user.id}" )
   end
 end
 
@@ -32,9 +32,9 @@ Then /^I may( not)? create users$/ do |negate|
   step %{I should#{negate} be authorized}
   visit(users_url)
   if negate.blank?
-    page.should have_text('New user')
+    expect( page ).to have_text('New user')
   else
-    page.should have_no_text('New user')
+    expect( page ).to have_no_text('New user')
   end
   Capybara.current_session.driver.submit :post, users_url, {}
   step %{I should#{negate} be authorized}
@@ -47,10 +47,10 @@ Then /^I may( not)? update the user$/ do |negate|
   step %{I should#{negate} be authorized}
   visit(users_url)
   if negate.blank?
-    within("#user-#{@user.id}") { page.should have_text('Edit') }
+    within("#user-#{@user.id}") { expect( page ).to have_text('Edit') }
   else
     if page.has_selector? "#user-#{@user.id}"
-      within("#user-#{@user.id}") { page.should have_no_text('Edit') }
+      within("#user-#{@user.id}") { expect( page ).to have_no_text('Edit') }
     end
   end
 end
@@ -58,9 +58,9 @@ end
 Then /^I may( not)? destroy the user$/ do |negate|
   visit(users_url)
   if negate.blank?
-    within("#user-#{@user.id}") { page.should have_text('Destroy') }
+    within("#user-#{@user.id}") { expect( page ).to have_text('Destroy') }
   else
-    page.should have_no_text('Destroy')
+    expect( page ).to have_no_text('Destroy')
   end
   Capybara.current_session.driver.submit :delete, user_url(@user), {}
   step %{I should#{negate} be authorized}
@@ -78,29 +78,29 @@ When /^I create a user as (admin|staff)$/ do |role|
     within_control_group("Administrator?") { choose "Yes" }
 #    within_control_group("Staff?") { choose "Yes" }
   else
-    within_control_group("Administrator?") { page.should have_selector "input.disabled" }
-#    within_control_group("Staff?") { page.should have_selector "input.disabled" }
+    within_control_group("Administrator?") { expect( page ).to have_selector "input.disabled" }
+#    within_control_group("Staff?") { expect( page ).to have_selector "input.disabled" }
   end
   within_fieldset("Current Election") do
     check "Current Roll"
   end
-  page.should have_no_fieldset "Past Election"
+  expect( page ).to have_no_fieldset "Past Election"
   click_button 'Create'
   @user = User.find( URI.parse(current_url).path.match(/[\d]+$/)[0].to_i )
 end
 
 Then /^I should see the new user as (admin|staff)$/ do |role|
-  within( ".alert" ) { page.should have_text( "User created." ) }
+  within( ".alert" ) { expect( page ).to have_text( "User created." ) }
   within( "#user-#{@user.id}" ) do
-    page.should have_text "First name: Andrew"
-    page.should have_text "Last name: White"
-    page.should have_text "Email: jd@example.com"
+    expect( page ).to have_text "First name: Andrew"
+    expect( page ).to have_text "Last name: White"
+    expect( page ).to have_text "Email: jd@example.com"
     if role == 'admin'
-      page.should have_text "Administrator? Yes"
-#      page.should have_text "Staff? Yes"
+      expect( page ).to have_text "Administrator? Yes"
+#      expect( page ).to have_text "Staff? Yes"
     else
-      page.should have_text "Administrator? No"
-#      page.should have_text "Staff? No"
+      expect( page ).to have_text "Administrator? No"
+#      expect( page ).to have_text "Staff? No"
     end
   end
 end
@@ -113,8 +113,8 @@ When /^I fill in the user as (admin|staff|owner)$/ do |role|
     within_control_group("Administrator?") { choose "No" }
 #    within_control_group("Staff?") { choose "No" }
   else
-    within_control_group("Administrator?") { page.should have_selector "input.disabled" }
-#    within_control_group("Staff?") { page.should have_selector "input.disabled" }
+    within_control_group("Administrator?") { expect( page ).to have_selector "input.disabled" }
+#    within_control_group("Staff?") { expect( page ).to have_selector "input.disabled" }
   end
   if role == 'owner'
   else
@@ -132,20 +132,20 @@ When /^I update the user as (admin|staff|owner)$/ do |role|
 end
 
 Then /^I should see the edited user as (admin|staff|owner)$/ do |role|
-  within('.alert') { page.should have_text( "User updated." ) }
+  within('.alert') { expect( page ).to have_text( "User updated." ) }
   within("#user-#{@user.id}") do
-    page.should have_text "First name: David"
-    page.should have_text "Last name: Skorton"
-    page.should have_text "Email: dj@example.com"
-    page.should have_text "Administrator? No"
-    page.should have_no_text "Current Election"
-    page.should have_no_text "Current Roll"
+    expect( page ).to have_text "First name: David"
+    expect( page ).to have_text "Last name: Skorton"
+    expect( page ).to have_text "Email: dj@example.com"
+    expect( page ).to have_text "Administrator? No"
+    expect( page ).to have_no_text "Current Election"
+    expect( page ).to have_no_text "Current Roll"
     if role == 'owner'
     else
     end
   end
   @user.association(:rolls).reset
-  @user.rolls.should include @past_roll
+  expect( @user.rolls ).to include @past_roll
 end
 
 Given /^there are (\d+) users$/ do |quantity|
@@ -158,7 +158,7 @@ When /^I "(.+)" the (\d+)(?:st|nd|rd|th) user$/ do |text, user|
   within("table > tbody > tr:nth-child(#{user.to_i})") do
     click_link "#{text}"
   end
-  within(".alert") { page.should have_text("User destroyed.") }
+  within(".alert") { expect( page ).to have_text("User destroyed.") }
 end
 
 Then /^I should see the following users:$/ do |table|
@@ -190,7 +190,7 @@ When /^I set users for the roll via (text|attachment)$/ do |method|
 end
 
 Then /^I should see users enrolled$/ do
-  within(".alert") { page.should have_text "Processed new voters: 2 new voters and 1 new users." }
-  @roll.users.should include( @user, User.find_by_net_id( 'faker2' ) )
+  within(".alert") { expect( page ).to have_text "Processed new voters: 2 new voters and 1 new users." }
+  expect( @roll.users ).to include( @user, User.find_by_net_id( 'faker2' ) )
 end
 

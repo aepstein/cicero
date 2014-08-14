@@ -17,9 +17,9 @@ end
 Then /^I may( not)? see the petitioner$/ do |negate|
   visit candidate_petitioners_url( @petitioner.candidate )
   if negate.blank?
-    page.should have_selector "#petitioner-#{@petitioner.id}"
+    expect( page ).to have_selector "#petitioner-#{@petitioner.id}"
   else
-    page.should have_no_selector "#petitioner-#{@petitioner.id}"
+    expect( page ).to have_no_selector "#petitioner-#{@petitioner.id}"
   end
 end
 
@@ -27,12 +27,12 @@ Then /^I may( not)? destroy the petitioner$/ do |negate|
   visit candidate_petitioners_url( @petitioner.candidate )
   if negate.blank?
     within "#petitioner-#{@petitioner.id}" do
-      page.should have_text "Destroy"
+      expect( page ).to have_text "Destroy"
     end
   else
     if page.has_selector? "#petitioner-#{@petitioner.id}"
       within "#petitioner-#{@petitioner.id}" do
-        page.should have_no_text "Destroy"
+        expect( page ).to have_no_text "Destroy"
       end
     end
   end
@@ -45,9 +45,9 @@ Then /^I may( not)? create a petitioner for the candidate$/ do |negate|
   step %{I should#{negate} be authorized}
   visit candidate_petitioners_url( @candidate )
   if negate.blank?
-    page.should have_text "New petitioner"
+    expect( page ).to have_text "New petitioner"
   else
-    page.should have_no_text "New petitioner"
+    expect( page ).to have_no_text "New petitioner"
   end
 end
 
@@ -60,8 +60,8 @@ When /^I create a petitioner$/ do
 end
 
 Then /^I should see the new petitioner$/ do
-  within(".alert") { page.should have_text "Petitioner created." }
-  within("#petitioners") { page.should have_text @user.net_id }
+  within(".alert") { expect( page ).to have_text "Petitioner created." }
+  within("#petitioners") { expect( page ).to have_text @user.net_id }
 end
 
 Given /^there are (\d+) petitioners for the candidate$/ do |quantity|
@@ -75,7 +75,7 @@ When /^I "(.+)" the (\d+)(?:st|nd|rd|th) petitioner for the candidate$/ do |text
   within("table > tbody > tr:nth-child(#{petitioner.to_i})") do
     click_link "#{text}"
   end
-  within(".alert") { page.should have_text("Petitioner destroyed.") }
+  within(".alert") { expect( page ).to have_text("Petitioner destroyed.") }
 end
 
 Then /^I should see the following petitioners:$/ do |table|

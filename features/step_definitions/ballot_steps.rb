@@ -59,7 +59,7 @@ end
 Then /^I may( not)? destroy the ballot$/ do |negate|
   visit election_ballots_url( @election )
   if negate.blank?
-    within("#ballot-#{@ballot.id}") { page.should have_text "Destroy" }
+    within("#ballot-#{@ballot.id}") { expect( page ).to have_text "Destroy" }
   end
   Capybara.current_session.driver.submit :delete, ballot_url( @ballot ), {}
   step %{I should#{negate} be authorized for the ballot}
@@ -97,18 +97,18 @@ end
 
 Then /^I should see an error about the ballot being (overchecked|double-ranked|nonconsecutive)$/ do |error|
   within("div.alert-error") do
-    page.should have_text "Ballot of #{@current_user.name} for 2012 President has the following errors:"
-    page.should have_text "section for President has the following errors:"
+    expect( page ).to have_text "Ballot of #{@current_user.name} for 2012 President has the following errors:"
+    expect( page ).to have_text "section for President has the following errors:"
     case error
     when 'overchecked'
-      page.should have_text "1 choice is selected beyond the 1 allowed for the section"
+      expect( page ).to have_text "1 choice is selected beyond the 1 allowed for the section"
     when 'double-ranked'
-      page.should have_text "vote for Barack Obama has the following errors:"
-      page.should have_text "rank is not unique for the race"
-      page.should have_text "vote for Mitt Romney has the following errors:"
+      expect( page ).to have_text "vote for Barack Obama has the following errors:"
+      expect( page ).to have_text "rank is not unique for the race"
+      expect( page ).to have_text "vote for Mitt Romney has the following errors:"
     when 'missing a rank'
-      page.should have_text "vote for Barack Obama has the following errors:"
-      page.should have_text "rank is 2 but there is no vote ranked 1"
+      expect( page ).to have_text "vote for Barack Obama has the following errors:"
+      expect( page ).to have_text "rank is 2 but there is no vote ranked 1"
     end
   end
 end
@@ -130,14 +130,14 @@ end
 Then /^I should see the confirmation page for the (in)?complete (un)?ranked ballot$/ do |incomplete, unranked|
   if incomplete.present?
     within("div.alert:nth-of-type(1)") do
-      page.should have_text(
+      expect( page ).to have_text(
         "1 fewer choice is selected than the #{unranked.present? ? 1 : 2} " +
         "allowed for the section. Your ballot can be cast without changing " +
         "your selections for this section, but you may want to make more selections."
       )
     end
   else
-    page.should have_no_selector ".alert"
+    expect( page ).to have_no_selector ".alert"
   end
 end
 
@@ -166,25 +166,25 @@ When /^I confirm my choices$/ do
 end
 
 Then /^I should have successfully cast my (un)?changed (in)?complete (un)?ranked ballot$/ do |unchanged, incomplete, unranked|
-  page.should have_text "Ballot cast."
-  page.should have_text "Congrats on voting!"
+  expect( page ).to have_text "Ballot cast."
+  expect( page ).to have_text "Congrats on voting!"
   @ballot = Ballot.find( URI.parse(current_url).path.match(/[\d]+$/)[0].to_i )
   section = @ballot.sections.first
   if unranked.present?
     if incomplete.present?
-      section.votes.length.should eql 0
+      expect( section.votes.length ).to eql 0
     else
-      section.votes.length.should eql 1
-      section.votes.first.candidate.name.should eql ( unchanged.present? ? "Barack Obama" : "Mitt Romney" )
+      expect( section.votes.length ).to eql 1
+      expect( section.votes.first.candidate.name ).to eql ( unchanged.present? ? "Barack Obama" : "Mitt Romney" )
     end
   else
     if incomplete.present?
-      section.votes.length.should eql 1
-      section.votes.first.candidate.name.should eql ( unchanged.present? ? "Barack Obama" : "Mitt Romney" )
+      expect( section.votes.length ).to eql 1
+      expect( section.votes.first.candidate.name ).to eql ( unchanged.present? ? "Barack Obama" : "Mitt Romney" )
     else
-      section.votes.length.should eql 2
-      section.votes.first.candidate.name.should eql ( unchanged.present? ? "Barack Obama" : "Mitt Romney" )
-      section.votes.last.candidate.name.should eql ( unchanged.present? ? "Mitt Romney" : "Barack Obama" )
+      expect( section.votes.length ).to eql 2
+      expect( section.votes.first.candidate.name ).to eql ( unchanged.present? ? "Barack Obama" : "Mitt Romney" )
+      expect( section.votes.last.candidate.name ).to eql ( unchanged.present? ? "Mitt Romney" : "Barack Obama" )
     end
   end
 end
@@ -199,9 +199,9 @@ end
 
 Then /^the candidate profile should pop up$/ do
   within("#candidate-#{@race.candidates.first.id}") do
-    page.should have_text 'The audacity of hope.'
+    expect( page ).to have_text 'The audacity of hope.'
     click_button 'Close'
   end
-  page.should have_no_text 'The audacity of hope.'
+  expect( page ).to have_no_text 'The audacity of hope.'
 end
 

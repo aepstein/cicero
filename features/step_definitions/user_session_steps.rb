@@ -42,22 +42,22 @@ end
 
 Then /^I can log out$/ do
   step %{I log out}
-  URI.parse(current_url).path.should eql '/login'
+  expect( URI.parse(current_url).path ).to eql '/login'
   within '.alert' do
-    page.should have_content "You logged out successfully."
+    expect( page ).to have_content "You logged out successfully."
   end
 end
 
 Then /^I should be logged in$/ do
-  URI.parse(current_url).path.should eql '/'
+  expect( URI.parse(current_url).path ).to eql '/'
   within '.alert' do
-    page.should have_content "You logged in successfully."
+    expect( page ).to have_content "You logged in successfully."
   end
 end
 
 
 Then /^I should automatically log in when required$/ do
   visit home_path
-  current_path.should eql home_path
+  expect( current_path ).to eql home_path
 end
 

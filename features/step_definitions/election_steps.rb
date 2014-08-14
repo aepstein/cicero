@@ -19,18 +19,18 @@ Then /^I may( not)? see the election$/ do |negate|
   step %{I should#{negate} be authorized}
   visit(elections_url)
   if negate.blank?
-    page.should have_selector( "#election-#{@election.id}" )
+    expect( page ).to have_selector( "#election-#{@election.id}" )
   else
-    page.should have_no_selector( "#election-#{@election.id}" )
+    expect( page ).to have_no_selector( "#election-#{@election.id}" )
   end
 end
 
 Then /^I may( not)? tabulate the election$/ do |negate|
   visit(election_url(@election))
   if negate.blank?
-    page.should have_selector( "#results" )
+    expect( page ).to have_selector( "#results" )
   else
-    page.should have_no_selector( "#results" )
+    expect( page ).to have_no_selector( "#results" )
   end
   visit(tabulate_election_url(@election, format: :csv))
   step %{I should#{negate} be authorized}
@@ -47,9 +47,9 @@ Then /^I may( not)? create elections$/ do |negate|
   step %{I should#{negate} be authorized}
   visit(elections_url)
   if negate.blank?
-    page.should have_text('New election')
+    expect( page ).to have_text('New election')
   else
-    page.should have_no_text('New election')
+    expect( page ).to have_no_text('New election')
   end
 end
 
@@ -60,18 +60,18 @@ Then /^I may( not)? update the election$/ do |negate|
   step %{I should#{negate} be authorized}
   visit(elections_url)
   if negate.blank?
-    within("#election-#{@election.id}") { page.should have_text('Edit') }
+    within("#election-#{@election.id}") { expect( page ).to have_text('Edit') }
   else
-    page.should have_no_text('Edit')
+    expect( page ).to have_no_text('Edit')
   end
 end
 
 Then /^I may( not)? destroy the election$/ do |negate|
   visit(elections_url)
   if negate.blank?
-    within("#election-#{@election.id}") { page.should have_text('Destroy') }
+    within("#election-#{@election.id}") { expect( page ).to have_text('Destroy') }
   else
-    page.should have_no_text('Destroy')
+    expect( page ).to have_no_text('Destroy')
   end
   Capybara.current_session.driver.submit :delete, election_url(@election), {}
   step %{I should#{negate} be authorized}
@@ -99,19 +99,19 @@ When /^I create an election$/ do
 end
 
 Then /^I should see the new election$/ do
-  within(".alert") { page.should have_text "Election created." }
+  within(".alert") { expect( page ).to have_text "Election created." }
   @election = Election.find( URI.parse(current_url).path.match(/[\d]+$/)[0].to_i )
-  page.should have_text "Election name: 2008 Election"
-  page.should have_text "Starts at: #{@start.to_s :us_ordinal}"
-  page.should have_text "Ends at: #{@end.to_s :us_ordinal}"
-  page.should have_text "Results available at: #{@release.to_s :us_ordinal}"
-  page.should have_text "Purge results after: #{@purge.to_s :long}"
-  page.should have_text "Contact: Board of Elections <elections@example.com>"
-  page.should have_text "Thank you for voting."
+  expect( page ).to have_text "Election name: 2008 Election"
+  expect( page ).to have_text "Starts at: #{@start.to_s :us_ordinal}"
+  expect( page ).to have_text "Ends at: #{@end.to_s :us_ordinal}"
+  expect( page ).to have_text "Results available at: #{@release.to_s :us_ordinal}"
+  expect( page ).to have_text "Purge results after: #{@purge.to_s :long}"
+  expect( page ).to have_text "Contact: Board of Elections <elections@example.com>"
+  expect( page ).to have_text "Thank you for voting."
   click_link "Rolls"
   within("table#rolls > tbody tr:nth-of-type(1)") {
-    within("td:nth-of-type(1)") { page.should have_text "City residents" }
-    within("td:nth-of-type(2)") { page.should have_text "0" }
+    within("td:nth-of-type(1)") { expect( page ).to have_text "City residents" }
+    within("td:nth-of-type(2)") { expect( page ).to have_text "0" }
   }
 end
 
@@ -148,24 +148,24 @@ When /^I update the election$/ do
 end
 
 Then /^I should see the edited election$/ do
-  within(".alert") { page.should have_text "Election updated." }
-  page.should have_text "Election name: 2009 Election"
-  page.should have_text "Starts at: #{@start.to_s :us_ordinal}"
-  page.should have_text "Ends at: #{@end.to_s :us_ordinal}"
-  page.should have_text "Results available at: #{@release.to_s :us_ordinal}"
-  page.should have_text "Purge results after: #{@purge.to_s :long}"
-  page.should have_text "Contact: Elections Inc <el@example.com>"
-  page.should have_text "Good job!"
+  within(".alert") { expect( page ).to have_text "Election updated." }
+  expect( page ).to have_text "Election name: 2009 Election"
+  expect( page ).to have_text "Starts at: #{@start.to_s :us_ordinal}"
+  expect( page ).to have_text "Ends at: #{@end.to_s :us_ordinal}"
+  expect( page ).to have_text "Results available at: #{@release.to_s :us_ordinal}"
+  expect( page ).to have_text "Purge results after: #{@purge.to_s :long}"
+  expect( page ).to have_text "Contact: Elections Inc <el@example.com>"
+  expect( page ).to have_text "Good job!"
   click_link "Races"
-  page.should have_text "Race name: President"
-  page.should have_text "Slots: 1"
-  page.should have_text "Ranked? Yes"
-  page.should have_text "Roll: City residents"
-  page.should have_text "Special instructions for this race."
-  page.should have_text "Barack Obama"
-  page.should have_text "A thoughtful statement."
-  page.should have_selector "img.candidate-thumb"
-  page.should have_text "Disqualified? Yes"
+  expect( page ).to have_text "Race name: President"
+  expect( page ).to have_text "Slots: 1"
+  expect( page ).to have_text "Ranked? Yes"
+  expect( page ).to have_text "Roll: City residents"
+  expect( page ).to have_text "Special instructions for this race."
+  expect( page ).to have_text "Barack Obama"
+  expect( page ).to have_text "A thoughtful statement."
+  expect( page ).to have_selector "img.candidate-thumb"
+  expect( page ).to have_text "Disqualified? Yes"
 end
 
 
@@ -179,7 +179,7 @@ When /^I "(.+)" the (\d+)(?:st|nd|rd|th) election$/ do |text, election|
   within("table > tbody > tr:nth-child(#{election.to_i})") do
     click_link "#{text}"
   end
-  within(".alert") { page.should have_text("Election destroyed.") }
+  within(".alert") { expect( page ).to have_text("Election destroyed.") }
 end
 
 Then /^I should see the following elections:$/ do |table|
