@@ -22,14 +22,15 @@ Feature: Manage ballots
     And a race exists for the election
     And a ballot is cast for the race to which I have a <relation> relationship
     Then I <see> see the ballot
+    And I <list> list the ballots for the election
     And I <tabulate> tabulate the ballot
     And I <destroy> destroy the ballot
     Examples:
-      | tense   | relation | see     | tabulate | destroy |
-      | past    | admin    | may     | may      | may     |
-      | current | voter    | may     | may not  | may not |
-      | current | enrolled | may not | may not  | may not |
-      | current | plain    | may not | may not  | may not |
+      | tense   | relation | see     | list    | tabulate | destroy |
+      | past    | admin    | may     | may     | may      | may     |
+      | current | voter    | may     | may not | may not  | may not |
+      | current | enrolled | may not | may not | may not  | may not |
+      | current | plain    | may not | may not | may not  | may not |
 
   Scenario Outline: Cast new ballot (without changing choices)
     Given I can vote in a <un>ranked election

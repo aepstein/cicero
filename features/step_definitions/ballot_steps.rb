@@ -49,6 +49,11 @@ Then /^I may( not)? see the ballot$/ do |negate|
   step %{I should#{negate} be authorized for the ballot}
 end
 
+Then /^I may( not)? list the ballots for the election$/ do |negate|
+  visit election_ballots_url( @ballot.election )
+  step %{I should#{negate} be authorized for the ballot}
+end
+
 Then /^I may( not)? tabulate the ballot$/ do |negate|
   visit election_ballots_url( @ballot.election )
   step %{I should#{negate} be authorized for the ballot}

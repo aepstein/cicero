@@ -37,7 +37,7 @@ class BallotsController < ApplicationController
   filter_access_to :index do
     permitted_to! :show, user if user
     permitted_to! :tabulate, race if race
-    permitted_to! :tabulate, election if election
+    permitted_to! :manage, election if election
     true
   end
 
