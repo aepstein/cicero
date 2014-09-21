@@ -25,7 +25,9 @@
   <% end %>
 <% end %>
 
+<% if permitted_to? :manage, election %>
 <p>
 <%= link_to 'List ballots', election_ballots_path(election) %>
 </p>
+<% end %>
 

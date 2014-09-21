@@ -52,6 +52,12 @@ end
 Then /^I may( not)? list the ballots for the election$/ do |negate|
   visit election_ballots_url( @ballot.election )
   step %{I should#{negate} be authorized for the ballot}
+  visit election_url( @ballot.election )
+  if negate.blank?
+    expect( page ).to have_text "List ballots"
+  else
+    expect( page ).to have_no_text "List ballots"
+  end
 end
 
 Then /^I may( not)? tabulate the ballot$/ do |negate|
