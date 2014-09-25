@@ -35,6 +35,9 @@ Cicero::Application.routes.draw do
     end
   end
   resources :users do
+    collection do
+      get :admin
+    end
     resources :ballots, only: [ :index ]
   end
   resource :user_session, only: [ :create ]

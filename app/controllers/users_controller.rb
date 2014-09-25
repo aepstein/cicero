@@ -13,9 +13,12 @@ class UsersController < ApplicationController
         scope = scope.send k, v
       end
     end
+    scope = scope.where(admin: true) if params[:action] == 'admin'
     scope
   end
-  expose(:users) { q_scope.with_permissions_to(:show).page(params[:page]) }
+  expose(:users) do
+    q_scope.with_permissions_to(:show).page(params[:page])
+  end
   expose(:user) do
     if params[:id]
       User.find params[:id]
@@ -33,7 +36,7 @@ class UsersController < ApplicationController
   end
   filter_access_to :new, :create, :edit, :update, :destroy, :show,
     attribute_check: true, load_method: :user
-  filter_access_to :index do
+  filter_access_to :index, :admin do
     permitted_to! :show, roll if roll
     permitted_to! :index, :users
   end
@@ -41,6 +44,17 @@ class UsersController < ApplicationController
 
   # GET /rolls/:roll_id/users/new/bulk
   def bulk; end
+  
+  def admin
+    index
+  end
+  
+  def index
+    respond_to do |format|
+      format.html { render :action => 'index' }
+      format.json { render :action => 'index' }
+    end
+  end
 
   # POST /users
   # POST /users.xml

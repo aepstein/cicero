@@ -1,4 +1,4 @@
-Given /^(?:an? )user exists to whom I have an? (admin|staff|owner|plain) relationship$/ do |relationship|
+Given /^(?:an? )(admin |regular )?user exists to whom I have an? (admin|staff|owner|plain) relationship$/ do |admin, relationship|
   role = case relationship
   when 'admin'
     'admin'
@@ -14,12 +14,22 @@ Given /^(?:an? )user exists to whom I have an? (admin|staff|owner|plain) relatio
   else
     @user = create( :user )
   end
+  @user.update_column(:admin, true) if admin == "admin "
 end
 
 Then /^I may( not)? see the user$/ do |negate|
   visit(user_url(@user))
   step %{I should#{negate} be authorized}
   visit(users_url)
+  if negate.blank?
+    expect( page ).to have_selector( "#user-#{@user.id}" )
+  else
+    expect( page ).to have_no_selector( "#user-#{@user.id}" )
+  end
+end
+
+Then /^I may( not)? see the user as an admin$/ do |negate|
+  visit(admin_users_url)
   if negate.blank?
     expect( page ).to have_selector( "#user-#{@user.id}" )
   else

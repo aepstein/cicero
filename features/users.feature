@@ -4,15 +4,18 @@ Feature: Manage users
   I want to create, list, edit, and delete users
 
   Scenario Outline: Access control
-    Given a user exists to whom I have a <relation> relationship
+    Given a <type> user exists to whom I have a <relation> relationship
     Then I <show> see the user
+    And I <admin> see the user as an admin
     And I <create> create users
     And I <update> update the user
     And I <destroy> destroy the user
     Examples:
-      |relation|show   |create |update |destroy|
-      |admin   |may    |may    |may    |may    |
-      |plain   |may not|may not|may not|may not|
+      |type   |relation|show   |admin  |create |update |destroy|
+      |admin  |admin   |may    |may    |may    |may    |may    |
+      |regular|admin   |may    |may not|may    |may    |may    |
+      |admin  |plain   |may not|may not|may not|may not|may not|
+      |regular|plain   |may not|may not|may not|may not|may not|
 
   Scenario Outline: Create/edit a user
     Given I log in as the <role> user
