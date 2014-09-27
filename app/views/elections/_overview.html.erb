@@ -3,6 +3,10 @@
 </p>
 
 <p>
+  <b>Confidential?</b> <%= election.confidential? ? "Yes" : "No" %>
+</p>
+
+<p>
   <b>Starts at:</b> <%= election.starts_at.to_formatted_s :us_ordinal %>
 </p>
 

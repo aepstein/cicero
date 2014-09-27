@@ -36,7 +36,15 @@ Tabulous.setup do
       link_path { users_path }
       visible_when { true }
       enabled_when { true }
-      active_when { in_action('any').of_controller('users') }
+      active_when { in_actions('show','index','bulk','new','edit','update',
+        'create','bulk_create').of_controller('users') }
+    end
+    admin_users_subtab do
+      text { 'Admins' }
+      link_path { admin_users_path }
+      visible_when { true }
+      enabled_when { true }
+      active_when { in_action('admin').of_controller('users') }
     end
     logout_tab do
       text { 'Log Out' }

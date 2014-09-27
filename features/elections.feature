@@ -4,21 +4,30 @@ Feature: Manage elections
   I want to create, edit, list, and delete elections
 
   Scenario Outline: Test permissions for elections controller actions
-    Given a <tense> election exists
+    Given a <tense> <type> election exists
     And I log in as the <role> user
+    And I <vote> vote in the election
     Then I <see> see the election
     And I <tabulate> tabulate the election
     And I <update> update the election
     And I <create> create elections
     And I <destroy> destroy the election
     Examples:
-      |tense  |role |create |update |destroy|see    |tabulate|
-      |current|admin|may    |may    |may    |may    |may not |
-      |current|plain|may not|may not|may not|may    |may not |
-      |past   |admin|may    |may    |may    |may    |may     |
-      |past   |plain|may not|may not|may not|may    |may not |
-      |future |admin|may    |may    |may    |may    |may not |
-      |future |plain|may not|may not|may not|may not|may not |
+      |tense  |type   |role |vote   |create |update |destroy|see    |tabulate|
+      |current|public |admin|may not|may    |may    |may    |may    |may not |
+      |current|public |plain|may not|may not|may not|may not|may    |may not |
+      |past   |public |admin|may not|may    |may    |may    |may    |may     |
+      |past   |public |plain|may not|may not|may not|may not|may    |may not |
+      |future |public |admin|may not|may    |may    |may    |may    |may not |
+      |future |public |plain|may not|may not|may not|may not|may not|may not |
+      |current|private|admin|may not|may    |may    |may    |may    |may not |
+      |current|private|plain|may not|may not|may not|may not|may not|may not |
+      |current|private|plain|may    |may not|may not|may not|may    |may not |
+      |past   |private|admin|may not|may    |may    |may    |may    |may     |
+      |past   |private|plain|may not|may not|may not|may not|may not|may not |
+      |past   |private|plain|may    |may not|may not|may not|may    |may not |
+      |future |private|admin|may not|may    |may    |may    |may    |may not |
+      |future |private|plain|may not|may not|may not|may not|may not|may not |
 
   @javascript
   Scenario: Create and edit election

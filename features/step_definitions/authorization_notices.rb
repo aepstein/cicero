@@ -7,6 +7,14 @@ Then /^I should( not)? be authorized$/ do |negate|
   end
 end
 
+Then /^I should( not)? appear to be authorized$/ do |negate|
+  if negate.blank?
+    step %{I should not be alerted that I am unauthorized}
+  else
+    step %{I should be alerted that I am unauthorized}
+  end
+end
+
 Then /^I should( not)? be alerted that I am unauthorized$/ do |negate|
   if negate.blank?
     expect( find('.alert') ).to(

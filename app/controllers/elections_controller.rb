@@ -19,7 +19,7 @@ class ElectionsController < ApplicationController
   expose :election_attributes do
     params.require(:election).permit( :name, :starts_at, :ends_at,
     :results_available_at, :purge_results_after, :verify_message, :contact_name,
-    :contact_email,
+    :contact_email, :confidential,
     rolls_attributes: [ :id, :name, :_destroy ],
     races_attributes: [ :id, :name, :slots, :is_ranked, :roll_id, :description,
     :_destroy, { candidates_attributes: [ :id, :name, :eliminated, :statement,

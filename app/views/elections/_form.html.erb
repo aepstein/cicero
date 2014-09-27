@@ -1,6 +1,9 @@
 <%= render "shared/error_messages", target: form.object %>
 
 <%= form.input :name, label: "Election name" %>
+<%= form.input :confidential, as: :radio_buttons, label: "Confidential?",
+  hint: "Do you want to restrict knowledge of the election and its candidates " +
+    "to eligible voters?" %>
 <%= form.input :starts_at, as: :date_time_picker %>
 <%= form.input :ends_at, as: :date_time_picker %>
 <%= form.input :results_available_at, as: :date_time_picker %>

@@ -1,5 +1,8 @@
-Given /^(?:an? )(current|future|past) election exists$/ do |tense|
+Given /^(?:an? )(current|future|past) (public |private )?election exists$/ do |tense, exposure|
   @election = create("#{tense}_election".to_sym)
+  if exposure == "private "
+    @election.update_column :confidential, true
+  end
 end
 
 Given /^I have an? (admin|voter|plain) relationship to the election$/ do |relation|
@@ -14,9 +17,16 @@ Given /^I have an? (admin|voter|plain) relationship to the election$/ do |relati
   end
 end
 
+Given /^I may( not)? vote in the election$/ do |negate|
+  if negate.blank?
+    create(:roll, election: @election).users << @current_user
+  end
+end
+
+
 Then /^I may( not)? see the election$/ do |negate|
   visit(election_url(@election))
-  step %{I should#{negate} be authorized}
+  step %{I should#{negate} appear to be authorized}
   visit(elections_url)
   if negate.blank?
     expect( page ).to have_selector( "#election-#{@election.id}" )
@@ -33,18 +43,18 @@ Then /^I may( not)? tabulate the election$/ do |negate|
     expect( page ).to have_no_selector( "#results" )
   end
   visit(tabulate_election_url(@election, format: :csv))
-  step %{I should#{negate} be authorized}
+  step %{I should#{negate} appear to be authorized}
   race = create(:race, election: @election)
   visit(race_ballots_url(race, format: :blt))
-  step %{I should#{negate} be authorized}
+  step %{I should#{negate} appear to be authorized}
   race.destroy
 end
 
 Then /^I may( not)? create elections$/ do |negate|
   Capybara.current_session.driver.submit :post, elections_url, {}
-  step %{I should#{negate} be authorized}
+  step %{I should#{negate} appear to be authorized}
   visit(new_election_url)
-  step %{I should#{negate} be authorized}
+  step %{I should#{negate} appear to be authorized}
   visit(elections_url)
   if negate.blank?
     expect( page ).to have_text('New election')
@@ -55,9 +65,9 @@ end
 
 Then /^I may( not)? update the election$/ do |negate|
   Capybara.current_session.driver.submit :put, election_url(@election), {}
-  step %{I should#{negate} be authorized}
+  step %{I should#{negate} appear to be authorized}
   visit(edit_election_url(@election))
-  step %{I should#{negate} be authorized}
+  step %{I should#{negate} appear to be authorized}
   visit(elections_url)
   if negate.blank?
     within("#election-#{@election.id}") { expect( page ).to have_text('Edit') }
@@ -74,12 +84,13 @@ Then /^I may( not)? destroy the election$/ do |negate|
     expect( page ).to have_no_text('Destroy')
   end
   Capybara.current_session.driver.submit :delete, election_url(@election), {}
-  step %{I should#{negate} be authorized}
+  step %{I should#{negate} appear to be authorized}
 end
 
 When /^I create an election$/ do
   visit new_election_path
   fill_in "Election name", with: "2008 Election"
+  within_control_group("Confidential?") { choose "Yes" }
   @start = (Time.zone.now + 1.day).floor
   @end = @start + 1.day
   @release = @end + 1.day
@@ -102,6 +113,7 @@ Then /^I should see the new election$/ do
   within(".alert") { expect( page ).to have_text "Election created." }
   @election = Election.find( URI.parse(current_url).path.match(/[\d]+$/)[0].to_i )
   expect( page ).to have_text "Election name: 2008 Election"
+  expect( page ).to have_text "Confidential? Yes"
   expect( page ).to have_text "Starts at: #{@start.to_s :us_ordinal}"
   expect( page ).to have_text "Ends at: #{@end.to_s :us_ordinal}"
   expect( page ).to have_text "Results available at: #{@release.to_s :us_ordinal}"
@@ -118,6 +130,7 @@ end
 When /^I update the election$/ do
   visit edit_election_path(@election)
   fill_in "Election name", with: "2009 Election"
+  within_control_group("Confidential?") { choose "No" }
   @start += 1.day
   @end += 1.day
   @release += 1.day
@@ -150,6 +163,7 @@ end
 Then /^I should see the edited election$/ do
   within(".alert") { expect( page ).to have_text "Election updated." }
   expect( page ).to have_text "Election name: 2009 Election"
+  expect( page ).to have_text "Confidential? No"
   expect( page ).to have_text "Starts at: #{@start.to_s :us_ordinal}"
   expect( page ).to have_text "Ends at: #{@end.to_s :us_ordinal}"
   expect( page ).to have_text "Results available at: #{@release.to_s :us_ordinal}"

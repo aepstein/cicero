@@ -10,7 +10,12 @@ authorization do
   end
   role :user do
     has_permission_on [ :elections ], to: :show do
-      if_attribute starts_at: lte { Time.zone.now }
+      if_attribute starts_at: lte { Time.zone.now },
+        confidential: is_not { true }
+    end
+    has_permission_on [ :elections ], to: :show do
+      if_attribute starts_at: lte { Time.zone.now },
+        rolls: { id: is_in { user.roll_ids } }
     end
     has_permission_on [ :races ], to: :tabulate do
       if_permitted_to :tabulate, :election
