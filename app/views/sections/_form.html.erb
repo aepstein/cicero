@@ -19,9 +19,13 @@
       If you choose not to include a candidate at all it means you would rather have your vote not
       count than have it count for that candidate.
       </p>
+    <% elsif form.object.race.available_slots == 1 %>
+      <p>
+      Please mark your choice for this section.
+      </p>
     <% else %>
       <p>
-      Please select your choices for this section.
+      Please mark your choices for this section.
       You may choose up to <%=h form.object.race.available_slots %>.
       </p>
     <% end %>

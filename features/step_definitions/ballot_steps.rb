@@ -13,6 +13,20 @@ Then /^I may( not)? cast a ballot for the election$/ do |negate|
   step %{I should#{negate} be authorized}
 end
 
+Then /^I should see (un)?ranked instructions for ([0-9]+)? slots$/ do |unranked,slots|
+  slots = slots.to_i
+  visit new_election_ballot_url( @election )
+  if unranked.present?
+    if slots == 1
+      expect( page ).to have_text "Please mark your choice for this section."
+    else
+      expect( page ).to have_text "Please mark your choices for this section.  You may choose up to #{slots}."
+    end
+  else
+    expect( page ).to have_text "Please rank all options in your order of preference."
+  end
+end
+
 Given /^a ballot is cast for the race to which I have a (admin|voter|enrolled|plain) relationship$/ do |relation|
   case relation
   when 'admin'
@@ -76,12 +90,13 @@ Then /^I may( not)? destroy the ballot$/ do |negate|
   step %{I should#{negate} be authorized for the ballot}
 end
 
-Given /^I can vote in an? (un)?ranked election$/ do |unranked|
+Given /^I can vote in an? (un)?ranked election(?: with ([0-9]+) slots)?$/ do |unranked,slots|
+  slots = slots.present? ? slots.to_i : 1
   step %{I log in as the plain user}
   @election = create(:election, name: "2012 President",
     verify_message: "Congrats on *voting*!" )
   @race = create( :race, election: @election, name: 'President',
-    is_ranked: ( unranked.present? ? false : true ) )
+    is_ranked: ( unranked.present? ? false : true ), slots: slots )
   @race.roll.users << @current_user
   PortraitUploader.enable_processing = true
   create :candidate, name: "Barack Obama", race: @race, statement: "The audacity of *hope*."

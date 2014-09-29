@@ -32,6 +32,15 @@ Feature: Manage ballots
       | current | enrolled | may not | may not | may not  | may not |
       | current | plain    | may not | may not | may not  | may not |
 
+  Scenario Outline: See correct instructions
+    Given I can vote in a <un>ranked election with <slots> slots
+    Then I should see <un>ranked instructions for <slots> slots
+    Examples:
+      | un | slots |
+      |    | 1     |
+      | un | 1     |
+      | un | 2     |
+
   Scenario Outline: Cast new ballot (without changing choices)
     Given I can vote in a <un>ranked election
     When I fill in a <in>complete <un>ranked ballot
