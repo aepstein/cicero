@@ -20,11 +20,13 @@ gem 'escape_utils'
 gem 'valium', :git => 'git://github.com/jayrowe/valium.git'
 gem 'cornell_assemblies_rails',
 #  path: '/home/ari/code/cornell-assemblies-rails'
-  git: 'git://assembly.cornell.edu/git/cornell-assemblies-rails.git',
+#  git: 'git://assembly.cornell.edu/git/cornell-assemblies-rails.git',
+  git: 'https://github.com/aepstein/cornell-assemblies-rails.git',
   branch: '0-0-4'
 gem 'cornell-assemblies-branding',
 #  path: '/home/ari/code/cornell-assemblies-branding'
-  git: 'git://assembly.cornell.edu/git/cornell-assemblies-branding.git',
+#  git: 'git://assembly.cornell.edu/git/cornell-assemblies-branding.git',
+  git: 'https://github.com/aepstein/cornell-assemblies-branding.git',
   branch: '0-0-4'
 gem 'fullcalendar-rails',
   git: 'https://github.com/bokmann/fullcalendar-rails.git'
